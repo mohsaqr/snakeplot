@@ -138,7 +138,7 @@ line_snake <- function(data,
     gcol <- if (grepl("^rgba", "rgba(255,255,255,0.15)")) {
       parse_rgba("rgba(255,255,255,0.15)")
     } else {
-      "rgba(255,255,255,0.15)"
+      "rgba(255,255,255,0.15)" # nocov
     }
     hour_mins <- seq(ceiling(day_start / 60) * 60,
                      floor(day_end / 60) * 60, by = 60)

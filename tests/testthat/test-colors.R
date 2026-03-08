@@ -80,6 +80,23 @@ describe("shade_by_value()", {
     expect_no_error(shade_by_value(0, 1, 5))
     expect_no_error(shade_by_value(10, 1, 5))
   })
+
+  it("accepts custom palette", {
+    col <- shade_by_value(3, 1, 5, palette = c("#000000", "#FFFFFF"))
+    expect_true(grepl("^#[0-9A-Fa-f]{6}$", col))
+    # Midpoint of black-to-white should be gray
+    rgb_val <- grDevices::col2rgb(col)[, 1L]
+    expect_equal(unname(rgb_val["red"]), 128, tolerance = 2)
+  })
+
+  it("custom palette maps endpoints correctly", {
+    col_low  <- shade_by_value(1, 1, 5, palette = c("#FF0000", "#0000FF"))
+    col_high <- shade_by_value(5, 1, 5, palette = c("#FF0000", "#0000FF"))
+    rgb_low  <- grDevices::col2rgb(col_low)
+    rgb_high <- grDevices::col2rgb(col_high)
+    expect_equal(unname(rgb_low["red", 1]), 255)
+    expect_equal(unname(rgb_high["blue", 1]), 255)
+  })
 })
 
 describe("cycle_colors()", {

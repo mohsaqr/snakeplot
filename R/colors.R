@@ -47,11 +47,12 @@ alpha_col <- function(col, alpha = 0.5) {
 #' @param max_val Numeric, maximum of the scale.
 #' @return Character, hex color.
 #' @noRd
-shade_by_value <- function(value, min_val = 1, max_val = 5) {
+shade_by_value <- function(value, min_val = 1, max_val = 5, palette = NULL) {
   frac <- (value - min_val) / (max_val - min_val)
   frac <- max(0, min(1, frac))
   # Rich dark warm-to-cool ramp (brown -> dark slate)
-  ramp <- grDevices::colorRampPalette(c("#5c2a0e", "#3a3a5c"))(101)
+  anchors <- if (is.null(palette)) c("#5c2a0e", "#3a3a5c") else palette
+  ramp <- grDevices::colorRampPalette(anchors)(101)
   ramp[round(frac * 100) + 1L]
 }
 
@@ -76,4 +77,78 @@ blend_colors <- function(col1, col2) {
 #' @noRd
 cycle_colors <- function(colors, n) {
   rep_len(colors, n)
+}
+
+#' Built-in Color Palettes
+#'
+#' A named list of 10 color palettes for snake plots. Each palette contains
+#' 7 anchor colors that can be interpolated to any length with
+#' \code{\link{snake_palette}}.
+#'
+#' \describe{
+#'   \item{classic}{Diverging red-to-blue. Clean Likert default.}
+#'   \item{earth}{Diverging brown-to-teal. Natural, understated.}
+#'   \item{ocean}{Diverging coral-to-navy. Warm/cool contrast.}
+#'   \item{sunset}{Diverging orange-to-indigo. Vivid but balanced.}
+#'   \item{berry}{Diverging rose-to-green. High contrast.}
+#'   \item{blues}{Sequential light-to-dark blue.}
+#'   \item{greens}{Sequential light-to-dark green.}
+#'   \item{grays}{Sequential light-to-dark gray.}
+#'   \item{warm}{Sequential cream-to-dark red.}
+#'   \item{viridis}{Sequential yellow-green-blue-purple (viridis-inspired).}
+#' }
+#'
+#' @format A named list of 10 character vectors, each with 7 hex color strings.
+#'
+#' @examples
+#' snake_palettes$ocean
+#' survey_snake(ema_emotions, colors = snake_palettes$earth,
+#'              tick_shape = "bar", sort_by = "mean")
+#'
+#' @export
+snake_palettes <- list(
+  classic = c("#B2182B", "#D6604D", "#F4A582", "#D1D1D1",
+              "#92C5DE", "#4393C3", "#2166AC"),
+  earth   = c("#8C510A", "#BF812D", "#DFC27D", "#C7C7C7",
+              "#80CDC1", "#35978F", "#01665E"),
+  ocean   = c("#D73027", "#F46D43", "#FDAE61", "#E0E0E0",
+              "#ABD9E9", "#74ADD1", "#4575B4"),
+  sunset  = c("#B35806", "#E08214", "#FDB863", "#D8D8D8",
+              "#B2ABD2", "#8073AC", "#542788"),
+  berry   = c("#C51B7D", "#DE77AE", "#F1B6DA", "#D4D4D4",
+              "#B8E186", "#7FBC41", "#4D9221"),
+  blues   = c("#EFF3FF", "#C6DBEF", "#9ECAE1", "#6BAED6",
+              "#4292C6", "#2171B5", "#084594"),
+  greens  = c("#EDF8E9", "#C7E9C0", "#A1D99B", "#74C476",
+              "#41AB5D", "#238B45", "#005A32"),
+  grays   = c("#F7F7F7", "#D9D9D9", "#BDBDBD", "#969696",
+              "#737373", "#525252", "#252525"),
+  warm    = c("#FFF5EB", "#FDD0A2", "#FDAE6B", "#FD8D3C",
+              "#F16913", "#D94801", "#8C2D04"),
+  viridis = c("#FDE725", "#ADDC30", "#5EC962", "#28AE80",
+              "#21918C", "#2C728E", "#3B528B")
+)
+
+#' Get a Snake Plot Palette
+#'
+#' Returns a color palette interpolated to \code{n} colors.
+#'
+#' @param name Character, palette name (see \code{\link{snake_palettes}}).
+#' @param n Integer, number of colors to return (default 7).
+#' @return Character vector of \code{n} hex color strings.
+#'
+#' @examples
+#' snake_palette("ocean", 5)
+#' snake_palette("earth", 7)
+#' snake_palette("blues", 3)
+#'
+#' @export
+snake_palette <- function(name = "classic", n = 7L) {
+  pal <- snake_palettes[[name]]
+  if (is.null(pal)) {
+    stop("Unknown palette '", name, "'. Available: ",
+         paste(names(snake_palettes), collapse = ", "))
+  }
+  if (n == length(pal)) return(pal)
+  grDevices::colorRampPalette(pal)(n)
 }

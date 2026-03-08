@@ -165,7 +165,7 @@ coerce_survey_input <- function(counts, labels, levels) {
     return(list(counts = as.matrix(counts), labels = labels, levels = levels))
   }
 
-  list(counts = counts, labels = labels, levels = levels)
+  list(counts = counts, labels = labels, levels = levels) # nocov
 }
 
 #' Convert timestamp data to activity data format

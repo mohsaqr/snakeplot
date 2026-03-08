@@ -375,4 +375,57 @@ describe("survey_snake()", {
                            legend_cex = 0.9)
     expect_type(result, "list")
   })
+
+  it("band_palette darkens band shading", {
+    counts <- make_counts(4, 5)
+    pdf(nullfile())
+    on.exit(dev.off())
+    result <- survey_snake(counts, paste0("Q", 1:4), as.character(1:5),
+                           band_palette = c("#1a1228", "#1a2a42"))
+    expect_s3_class(result, "snake_layout")
+  })
+
+  it("band_palette works with arc_fill modes", {
+    counts <- make_counts(4, 5)
+    pdf(nullfile())
+    on.exit(dev.off())
+    expect_no_error(
+      survey_snake(counts, paste0("Q", 1:4), as.character(1:5),
+                   arc_fill = "correlation",
+                   band_palette = c("#0a0a1a", "#1a1a3a"))
+    )
+    expect_no_error(
+      survey_snake(counts, paste0("Q", 1:4), as.character(1:5),
+                   arc_fill = "blend",
+                   band_palette = c("#0a0a1a", "#1a1a3a"))
+    )
+  })
+
+  it("band_palette works with dot tick_shape", {
+    survey_df <- data.frame(
+      A = sample(1:5, 50, replace = TRUE),
+      B = sample(1:5, 50, replace = TRUE),
+      C = sample(1:5, 50, replace = TRUE)
+    )
+    pdf(nullfile())
+    on.exit(dev.off())
+    result <- survey_snake(survey_df, tick_shape = "dot",
+                           band_palette = c("#1a1228", "#1a2a42"))
+    expect_s3_class(result, "snake_layout")
+  })
+
+  it("band_palette passes through facet dispatch", {
+    set.seed(90)
+    survey_df <- data.frame(
+      A1 = sample(1:5, 30, replace = TRUE),
+      A2 = sample(1:5, 30, replace = TRUE),
+      B1 = sample(1:5, 30, replace = TRUE),
+      B2 = sample(1:5, 30, replace = TRUE)
+    )
+    pdf(nullfile())
+    on.exit(dev.off())
+    result <- survey_snake(survey_df, facet = TRUE,
+                           band_palette = c("#1a1228", "#1a2a42"))
+    expect_type(result, "list")
+  })
 })

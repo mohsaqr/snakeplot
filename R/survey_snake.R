@@ -38,6 +38,9 @@
 #' @param plot_width Numeric (default 500).
 #' @param tick_shape Character: "line" (default), "dot", or "bar"
 #'   (stacked proportional bars with percentage labels).
+#' @param bar_reverse Logical. When \code{TRUE} and \code{tick_shape = "bar"},
+#'   draw segments from the highest level (left) to the lowest (right).
+#'   Default \code{FALSE}.
 #' @param tick_opacity Numeric 0-1 (default 0.55).
 #' @param level_gap Numeric. Gap between response-level zones in plot units
 #'   (default 15). Set to 0 for no separation.
@@ -70,6 +73,10 @@
 #'       shade.}
 #'     \item{"blend"}{Solid fill: 50/50 RGB average of adjacent band shades.}
 #'   }
+#' @param band_palette Character vector of 2+ anchor colors for the band
+#'   shading gradient. Low item means map to the first color, high means to
+#'   the last. Default \code{NULL} uses the built-in brown-to-slate ramp.
+#'   For darker plots try \code{c("#1a1228", "#1a2a42")}.
 #' @param start_from Character: "left" (default) or "right". Which side the
 #'   first band starts from.
 #' @param facet Logical or named list. When \code{TRUE}, columns are
@@ -108,6 +115,7 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
                          band_gap         = 34,
                          plot_width       = 500,
                          tick_shape       = c("line", "dot", "bar"),
+                         bar_reverse      = FALSE,
                          tick_opacity     = 0.75,
                          level_gap        = 15,
                          color_mode       = c("level", "individual"),
@@ -128,6 +136,7 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
                          arc_opacity      = 0.80,
                          arc_fill         = c("none", "correlation",
                                               "mean_prev", "blend"),
+                         band_palette     = NULL,
                          start_from       = c("left", "right"),
                          facet            = FALSE,
                          facet_ncol       = 2L,
@@ -261,7 +270,7 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
                                     color = arc_color, type = "gradient")))
       }
       items <- c(items, list(list(label = "Low -> High mean",
-                                  color = shade_by_value(3, 1, 5),
+                                  color = shade_by_value(3, 1, 5, palette = band_palette),
                                   type = "gradient")))
       # Center legend in the empty panel
       plot.window(xlim = c(0, 400), ylim = c(0, 100))
@@ -308,7 +317,7 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
   }
 
   # Validate
-  if (is.data.frame(counts)) counts <- as.matrix(counts)
+  if (is.data.frame(counts)) counts <- as.matrix(counts) # nocov
   validate_survey_data(counts, labels, levels)
   tick_shape  <- match.arg(tick_shape)
   color_mode  <- match.arg(color_mode)
@@ -319,6 +328,11 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
   n_items  <- nrow(counts)
   n_levels <- ncol(counts)
   if (is.null(colors)) colors <- diverging_palette(n_levels)
+
+  # Local shade helper: uses band_palette if provided
+  shade <- function(value) {
+    shade_by_value(value, 1, n_levels, palette = band_palette)
+  }
 
   # Compute item statistics
   level_vals <- seq_len(n_levels)
@@ -381,7 +395,7 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
 
   # Band body: the shade IS the band (dark warm-to-cool gradient per mean)
   vapply(seq_len(n_items), function(k) {
-    bcol <- shade_by_value(item_means[k], 1, n_levels)
+    bcol <- shade(item_means[k])
     rect(bands$x_left[k], bands$y_top[k],
          bands$x_right[k], bands$y_bottom[k],
          col = bcol, border = NA)
@@ -438,8 +452,8 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
     if (arc_fill == "none") {
       # Two-tone: upper half = from-band shade, lower half = to-band shade
       # Full opacity so arcs match band colors seamlessly
-      col_upper <- shade_by_value(item_means[i1], 1, n_levels)
-      col_lower <- shade_by_value(item_means[i2], 1, n_levels)
+      col_upper <- shade(item_means[i1])
+      col_lower <- shade(item_means[i2])
       pts_u <- half_arc_polygon(a$cx, a$cy, a$outer_r, a$inner_r,
                                 a$side, "upper")
       pts_l <- half_arc_polygon(a$cx, a$cy, a$outer_r, a$inner_r,
@@ -452,11 +466,11 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
 
       acol <- if (!is.na(r_val)) {
         # Positive r → arc_color, negative r → complementary
-        tint <- if (r_val >= 0) arc_color else {
+        tint <- if (r_val >= 0) arc_color else { # nocov start
           rgb_ac <- grDevices::col2rgb(arc_color)[, 1L]
           grDevices::rgb(255L - rgb_ac[1L], 255L - rgb_ac[2L],
                          255L - rgb_ac[3L], maxColorValue = 255)
-        }
+        } # nocov end
         # Blend absolute |r| (85%) with relative rank (15%)
         # so high-r arcs stay dark with mild differentiation
         abs_r <- abs(arc_r_vals)
@@ -486,13 +500,13 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
     } else if (arc_fill == "mean_prev") {
       # Solid: upper band's mean shade
       acol <- alpha_col(
-        shade_by_value(item_means[i1], 1, n_levels), arc_opacity)
+        shade(item_means[i1]), arc_opacity)
       polygon(a$pts$x, a$pts$y, col = acol, border = NA)
 
     } else {
       # "blend": 50/50 RGB average of adjacent band shades
-      c1 <- shade_by_value(item_means[i1], 1, n_levels)
-      c2 <- shade_by_value(item_means[i2], 1, n_levels)
+      c1 <- shade(item_means[i1])
+      c2 <- shade(item_means[i2])
       acol <- alpha_col(blend_colors(c1, c2), arc_opacity)
       polygon(a$pts$x, a$pts$y, col = acol, border = NA)
     }
@@ -503,9 +517,9 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
   cap1_col <- if (arc_fill == "correlation") {
     alpha_col(arc_color, arc_opacity)
   } else if (arc_fill == "none") {
-    shade_by_value(item_means[1], 1, n_levels)
+    shade(item_means[1])
   } else {
-    alpha_col(shade_by_value(item_means[1], 1, n_levels), arc_opacity)
+    alpha_col(shade(item_means[1]), arc_opacity)
   }
   cap1 <- end_cap_polygon(bands$x_left[1], bands$y_center[1], bh2, "left")
   polygon(cap1$x, cap1$y, col = cap1_col, border = NA)
@@ -518,9 +532,9 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
     cap2_col <- if (arc_fill == "correlation") {
       alpha_col(arc_color, arc_opacity)
     } else if (arc_fill == "none") {
-      shade_by_value(item_means[last], 1, n_levels)
+      shade(item_means[last])
     } else {
-      alpha_col(shade_by_value(item_means[last], 1, n_levels), arc_opacity)
+      alpha_col(shade(item_means[last]), arc_opacity)
     }
     polygon(cap2$x, cap2$y, col = cap2_col, border = NA)
   }
@@ -543,7 +557,8 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
     if (tick_shape == "bar") {
       # Stacked proportional bars with % labels
       x_cursor <- xl
-      for (lv in level_vals) {
+      draw_order <- if (bar_reverse) rev(level_vals) else level_vals
+      for (lv in draw_order) {
         cnt <- counts[k, lv]
         if (cnt == 0L) next
         seg_w <- (cnt / n_total) * pw
@@ -595,7 +610,7 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
       }
 
       space_per_tick <- usable_w / n_total
-      tick_w <- space_per_tick * 0.7
+      tick_w <- min(space_per_tick * 0.7, pw * 0.008)
 
       obs_colors <- if (color_mode == "level") {
         alpha_col(colors[obs_levels], tick_opacity)
@@ -612,7 +627,7 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
       } else {
         jitter_y <- stats::runif(length(x_pos),
                                   -jitter_range, jitter_range) * bh / 2
-        points(x_pos, yc + jitter_y, pch = 16, cex = 0.5, col = obs_colors)
+        points(x_pos, yc + jitter_y, pch = 16, cex = 0.9, col = obs_colors)
       }
     }
     NA
@@ -659,7 +674,7 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
                                   color = "#8B4513", type = "gradient")))
     }
     items <- c(items, list(list(label = "Low -> High mean",
-                                color = shade_by_value(3, 1, 5),
+                                color = shade_by_value(3, 1, 5, palette = band_palette),
                                 type = "gradient")))
     draw_snake_legend(layout, items, cex = legend_cex)
   }

@@ -63,14 +63,13 @@ names(student_survey) <- c(
   "Eng_Expectations", "Eng_ConsiderQuitting"
 )
 
-# --- ema_beeps: beep-level sample for daily plots ---
+# --- ema_beeps: full beep-level data for daily plots ---
 esm_daily <- df[, c("id", "day", "start_time", "happy", "angry")]
 esm_daily <- esm_daily[complete.cases(esm_daily), ]
-set.seed(42)
-idx <- sample(nrow(esm_daily), min(500, nrow(esm_daily)))
-ema_beeps <- esm_daily[idx, ]
-ema_beeps <- ema_beeps[order(ema_beeps$day, ema_beeps$start_time), ]
-ema_beeps$day <- ema_beeps$day + 1L
+ema_beeps <- esm_daily[order(esm_daily$day, esm_daily$start_time), ]
+# Sequential day labels (1-based)
+ema_beeps$day <- as.integer(factor(ema_beeps$day,
+                                    levels = sort(unique(ema_beeps$day))))
 rownames(ema_beeps) <- NULL
 
 # --- Save ---

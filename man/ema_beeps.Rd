@@ -5,7 +5,7 @@
 \alias{ema_beeps}
 \title{EMA Beep-Level Data (Daily Emotions)}
 \format{
-A data.frame with 500 rows and 5 columns.
+A data.frame with 11 474 rows and 5 columns.
 }
 \source{
 Neubauer, A. B., & Schmiedek, F. (2024). Approaching academic adjustment
@@ -21,7 +21,7 @@ License: CC-BY 4.0
 ema_beeps
 }
 \description{
-A sample of 500 experience-sampling beeps from a 14-day study of
+All 11 474 experience-sampling beeps from a 14-day study of 321
 university students. Each row is one beep with the participant's emotion
 ratings and a timestamp. Use with the \code{var}/\code{day}/\code{timestamp}
 interface of \code{\link{survey_snake}} for daily snake plots.

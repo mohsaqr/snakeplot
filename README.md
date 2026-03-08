@@ -17,7 +17,7 @@ install.packages("snakeplot")
 
 Snake plots arrange data as horizontal bands in a serpentine layout — each
 row reverses direction and connects to the next through a U-turn arc. The
-package provides six functions:
+package provides six plotting functions and 10 built-in color palettes:
 
 | Function | Purpose |
 |----------|---------|
@@ -36,77 +36,70 @@ Three datasets from Neubauer & Schmiedek (2024) are included:
 |---------|------|-------------|
 | `ema_emotions` | 280 | Person-level means for 10 emotions (1-7 scale) |
 | `student_survey` | 280 | 34 items across 4 constructs, prefixed for faceting |
-| `ema_beeps` | 500 | Beep-level timestamps + anger/happiness ratings (14 days) |
+| `ema_beeps` | 11 474 | Beep-level timestamps + anger/happiness ratings (14 days) |
 
 ## Examples
-
-### `survey_snake()` — distribution bars
 
 ```r
 library(snakeplot)
 
-cols7 <- c("#C0392B", "#E67E22", "#F1C40F", "#95A5A6",
-           "#2ECC71", "#3498DB", "#8E44AD")
 labs7 <- c("1" = "Not at all", "2" = "Slightly", "3" = "Somewhat",
            "4" = "Moderate",   "5" = "Quite",    "6" = "Very",
            "7" = "Extremely")
-
-survey_snake(ema_emotions, tick_shape = "bar", sort_by = "mean",
-             colors = cols7, level_labels = labs7,
-             label_cex = 1.0, legend_cex = 0.85,
-             title = "Emotions — distribution bars, sorted by mean")
 ```
 
-<img src="man/figures/survey_snake_bars.png" width="100%">
+### `survey_snake()` — daily value distribution ticks
+
+```r
+survey_snake(ema_beeps, var = "angry", day = "day",
+             colors = snake_palettes$ocean, level_labels = labs7,
+             title = "Anger — 14 days, value distribution")
+```
+
+<img src="man/figures/survey_snake_daily.png" width="100%">
 
 ### `survey_snake()` — correlation arcs
 
 ```r
 survey_snake(ema_emotions, tick_shape = "line",
              arc_fill = "correlation", sort_by = "mean",
-             colors = cols7, level_labels = labs7,
-             label_cex = 1.0, legend_cex = 0.85,
+             colors = snake_palettes$ocean, level_labels = labs7,
              title = "Emotions — correlations at U-turns")
 ```
 
 <img src="man/figures/survey_snake_corr.png" width="100%">
 
-### `survey_snake()` — daily EMA, ticks by time-of-day
+### `survey_snake()` — dot plot with dark bands
 
 ```r
-survey_snake(ema_beeps, var = "angry", day = "day",
-             timestamp = "start_time",
-             colors = cols7, arc_fill = "none",
-             level_labels = labs7,
-             label_cex = 1.0, legend_cex = 0.85,
-             title = "Anger — 14 days, ticks by time-of-day")
+survey_snake(ema_emotions, tick_shape = "dot", sort_by = "mean",
+             colors = snake_palettes$ocean, level_labels = labs7,
+             band_palette = c("#1a1228", "#1a2a42"),
+             title = "Emotions — dots on dark bands")
 ```
 
-<img src="man/figures/survey_snake_daily.png" width="100%">
-
-### `survey_snake()` — daily EMA, distribution bars
-
-```r
-survey_snake(ema_beeps, var = "happy", day = "day",
-             tick_shape = "bar",
-             colors = cols7, arc_fill = "none",
-             level_labels = labs7,
-             label_cex = 1.0, legend_cex = 0.85,
-             title = "Happiness — 14 days, distribution bars")
-```
-
-<img src="man/figures/survey_snake_daily_bars.png" width="100%">
+<img src="man/figures/survey_snake_dots.png" width="100%">
 
 ### `survey_snake()` — faceted multi-construct
 
 ```r
 survey_snake(student_survey, facet = TRUE, facet_ncol = 2L,
              tick_shape = "bar", sort_by = "mean",
-             colors = cols7, level_labels = labs7,
-             label_cex = 1.0, legend_cex = 0.85)
+             colors = snake_palettes$ocean, level_labels = labs7)
 ```
 
 <img src="man/figures/survey_snake_facet.png" width="100%">
+
+### `survey_snake()` — daily distribution bars
+
+```r
+survey_snake(ema_beeps, var = "happy", day = "day",
+             tick_shape = "bar", bar_reverse = TRUE,
+             colors = snake_palettes$ocean, level_labels = labs7,
+             title = "Happiness — 14 days, distribution bars")
+```
+
+<img src="man/figures/survey_snake_daily_bars.png" width="100%">
 
 ### `activity_snake()` — rug ticks
 
@@ -139,12 +132,41 @@ activity_snake(d2, event_color = "#e09480", band_color = "#3d2518")
 ### `survey_sequence()` — stacked bars
 
 ```r
-set.seed(1)
-counts <- matrix(sample(20:80, 25, replace = TRUE), nrow = 5)
-survey_sequence(counts, paste0("Item ", 1:5), as.character(1:5))
+survey_sequence(ema_emotions, colors = snake_palettes$ocean)
 ```
 
 <img src="man/figures/survey_sequence.png" width="100%">
+
+### `line_snake()` — continuous intensity
+
+```r
+set.seed(42)
+hours <- seq(0, 1440, by = 10)
+d_line <- data.frame(
+  day   = rep(c("Mon", "Tue", "Wed", "Thu", "Fri"), each = length(hours)),
+  time  = rep(hours, 5),
+  value = sin(rep(hours, 5) / 1440 * 4 * pi) * 50 + 50 +
+          rnorm(5 * length(hours), 0, 8)
+)
+line_snake(d_line, fill_color = "#e74c3c")
+```
+
+<img src="man/figures/line_snake.png" width="100%">
+
+## Built-in palettes
+
+10 palettes ship with the package — 5 diverging, 5 sequential:
+
+```r
+names(snake_palettes)
+#> "classic" "earth" "ocean" "sunset" "berry" "blues" "greens" "grays" "warm" "viridis"
+
+# Use directly
+survey_snake(ema_emotions, colors = snake_palettes$earth, tick_shape = "bar")
+
+# Interpolate to any length
+snake_palette("sunset", n = 5)
+```
 
 ## Key parameters for `survey_snake()`
 
@@ -153,12 +175,12 @@ survey_sequence(counts, paste0("Item ", 1:5), as.character(1:5))
 | `tick_shape` | `"line"` (default), `"dot"`, or `"bar"` (stacked proportional) |
 | `sort_by` | `"none"`, `"mean"`, or `"net"` |
 | `arc_fill` | `"none"` (two-tone), `"correlation"`, `"mean_prev"`, `"blend"` |
-| `colors` | Custom color palette for response levels |
+| `colors` | Custom color palette or `snake_palettes$name` |
+| `band_palette` | 2+ anchor colors for band shading (default: brown-to-slate) |
+| `bar_reverse` | `TRUE` to draw bars from highest level first |
 | `level_labels` | Named vector mapping levels to display labels |
 | `facet` | `TRUE` (auto-group by prefix) or named list of column groups |
-| `facet_ncol` | Number of columns in facet grid |
 | `var`, `day`, `timestamp` | Auto-pivot EMA data into daily bands |
-| `label_cex`, `legend_cex` | Text size scaling |
 | `show_mean`, `show_median` | Toggle diamond/dashed-line markers |
 
 ## Data source

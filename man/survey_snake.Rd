@@ -16,6 +16,7 @@ survey_snake(
   band_gap = 34,
   plot_width = 500,
   tick_shape = c("line", "dot", "bar"),
+  bar_reverse = FALSE,
   tick_opacity = 0.75,
   level_gap = 15,
   color_mode = c("level", "individual"),
@@ -35,6 +36,7 @@ survey_snake(
   arc_color = "#2c3e6b",
   arc_opacity = 0.8,
   arc_fill = c("none", "correlation", "mean_prev", "blend"),
+  band_palette = NULL,
   start_from = c("left", "right"),
   facet = FALSE,
   facet_ncol = 2L,
@@ -90,6 +92,10 @@ positionally.}
 \item{tick_shape}{Character: "line" (default), "dot", or "bar"
 (stacked proportional bars with percentage labels).}
 
+\item{bar_reverse}{Logical. When \code{TRUE} and \code{tick_shape = "bar"},
+draw segments from the highest level (left) to the lowest (right).
+Default \code{FALSE}.}
+
 \item{tick_opacity}{Numeric 0-1 (default 0.55).}
 
 \item{level_gap}{Numeric. Gap between response-level zones in plot units
@@ -140,6 +146,11 @@ by |r|. The original behavior.}
 shade.}
 \item{"blend"}{Solid fill: 50/50 RGB average of adjacent band shades.}
 }}
+
+\item{band_palette}{Character vector of 2+ anchor colors for the band
+shading gradient. Low item means map to the first color, high means to
+the last. Default \code{NULL} uses the built-in brown-to-slate ramp.
+For darker plots try \code{c("#1a1228", "#1a2a42")}.}
 
 \item{start_from}{Character: "left" (default) or "right". Which side the
 first band starts from.}

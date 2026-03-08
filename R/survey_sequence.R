@@ -75,7 +75,7 @@ survey_sequence <- function(counts, labels = NULL, levels = NULL,
   labels  <- coerced$labels
   levels  <- coerced$levels
 
-  if (is.data.frame(counts)) counts <- as.matrix(counts)
+  if (is.data.frame(counts)) counts <- as.matrix(counts) # nocov
   validate_survey_data(counts, labels, levels)
   arc_mode   <- match.arg(arc_mode)
   sort_by    <- match.arg(sort_by)
@@ -285,7 +285,7 @@ sequential_dist <- function(counts, labels = NULL, levels = NULL,
   labels  <- coerced$labels
   levels  <- coerced$levels
 
-  if (is.data.frame(counts)) counts <- as.matrix(counts)
+  if (is.data.frame(counts)) counts <- as.matrix(counts) # nocov
   n_levels <- ncol(counts)
   if (is.null(colors)) colors <- sequential_palette(n_levels, hue)
 
