@@ -1,3 +1,16 @@
+# snakeplot 0.2.0
+
+* 10 built-in color palettes via `snake_palettes` and `snake_palette()`:
+  5 diverging (classic, earth, ocean, sunset, berry) and
+  5 sequential (blues, greens, grays, warm, viridis).
+* New `band_palette` parameter for custom band shading colors.
+* New `bar_reverse` parameter to draw bars from highest level first.
+* `ema_beeps` expanded from 500 sampled rows to full 11 474 beeps.
+* Tick width capped for sparse daily data to prevent overly thick ticks.
+* Dot size increased (cex 0.5 → 0.9) for better visibility.
+* Vignette and README rewritten with `snake_palettes$ocean` examples.
+* 100% test coverage (292 tests).
+
 # snakeplot 0.1.0
 
 * Initial release.
