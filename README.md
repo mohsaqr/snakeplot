@@ -23,6 +23,8 @@ package provides six plotting functions and 10 built-in color palettes:
 |----------|---------|
 | `survey_snake()` | Survey/EMA responses with ticks, bars, correlations, faceting |
 | `activity_snake()` | Daily activity timelines with event blocks or rug ticks |
+| `sequence_snake()` | State sequence as colored blocks flowing through serpentine layout |
+| `timeline_snake()` | Career/life-event timeline from a 3-column data.frame (role, start, end) |
 | `survey_sequence()` | Stacked 100% horizontal bars in serpentine layout |
 | `sequential_dist()` | Sequential (monochrome) variant of `survey_sequence()` |
 | `line_snake()` | Continuous intensity line plot (experimental) |
@@ -128,6 +130,39 @@ activity_snake(d2, event_color = "#e09480", band_color = "#3d2518")
 ```
 
 <img src="man/figures/activity_snake_blocks.png" width="100%">
+
+### `sequence_snake()` — state sequence
+
+```r
+set.seed(42)
+verbs <- c("Read", "Write", "Discuss", "Listen",
+           "Search", "Plan", "Code", "Review")
+seq75 <- character(0)
+while (length(seq75) < 75) {
+  seq75 <- c(seq75, rep(sample(verbs, 1), sample(1:4, 1)))
+}
+seq75 <- seq75[seq_len(75)]
+sequence_snake(seq75, title = "75-step learning sequence")
+```
+
+<img src="man/figures/sequence_snake.png" width="100%">
+
+### `timeline_snake()` — career/event timeline
+
+```r
+career <- data.frame(
+  role  = c("Intern", "Junior Dev", "Mid Dev",
+            "Senior Dev", "Tech Lead", "Architect"),
+  start = c("2015-01", "2015-07", "2017-01",
+            "2019-07", "2022-07", "2024-01"),
+  end   = c("2015-06", "2016-12", "2019-06",
+            "2022-06", "2023-12", "2024-12")
+)
+timeline_snake(career,
+               title = "Software Engineer — Career Path (2015-2024)")
+```
+
+<img src="man/figures/timeline_snake.png" width="100%">
 
 ### `survey_sequence()` — stacked bars
 

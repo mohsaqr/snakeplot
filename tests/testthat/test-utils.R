@@ -51,13 +51,6 @@ describe("time_to_x()", {
   })
 })
 
-describe("recycle()", {
-  it("recycles to target length", {
-    expect_equal(recycle(c("a", "b"), 5), c("a", "b", "a", "b", "a"))
-    expect_equal(recycle("x", 3), c("x", "x", "x"))
-  })
-})
-
 describe("validate_activity_data()", {
   it("accepts valid data", {
     d <- data.frame(day = "Mon", start = 420, duration = 30)

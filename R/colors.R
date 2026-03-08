@@ -23,9 +23,7 @@ sequential_palette <- function(n = 5L, hue = 210) {
   stopifnot(is.numeric(n), length(n) == 1L, n >= 2L)
   s_range <- seq(0.15, 0.75, length.out = n)
   v_range <- seq(0.95, 0.35, length.out = n)
-  vapply(seq_len(n), function(i) {
-    grDevices::hsv(hue / 360, s_range[i], v_range[i])
-  }, character(1))
+  grDevices::hsv(rep(hue / 360, n), s_range, v_range)
 }
 
 #' Add alpha transparency to a color

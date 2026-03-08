@@ -215,6 +215,39 @@ half_arc_polygon <- function(cx, cy, outer_r, inner_r, side = "right",
   list(x = c(outer_x, inner_x), y = c(outer_y, inner_y))
 }
 
+#' Compute polygon coordinates for an annular sector (wedge)
+#'
+#' Draws a slice of a half-annulus between two theta angles.
+#' Used by \code{sequence_snake} to render colored blocks inside arcs.
+#'
+#' @param cx,cy Numeric, center of the arc.
+#' @param outer_r Numeric, outer radius.
+#' @param inner_r Numeric, inner radius.
+#' @param theta1,theta2 Numeric, start and end angles in radians
+#'   (within the -pi/2 to pi/2 range).
+#' @param side Character: "right", "left", "top", or "bottom".
+#' @param n_pts Integer, number of points per arc edge.
+#' @return List with x, y numeric vectors forming a closed polygon.
+#' @noRd
+arc_sector_polygon <- function(cx, cy, outer_r, inner_r, theta1, theta2,
+                                side = "right", n_pts = 20L) {
+  theta <- seq(theta1, theta2, length.out = n_pts)
+  if (side %in% c("right", "left")) {
+    sign_x <- if (side == "right") 1 else -1
+    outer_x <- cx + sign_x * outer_r * cos(theta)
+    outer_y <- cy + outer_r * sin(theta)
+    inner_x <- cx + sign_x * inner_r * cos(rev(theta))
+    inner_y <- cy + inner_r * sin(rev(theta))
+  } else {
+    sign_y <- if (side == "bottom") 1 else -1
+    outer_x <- cx + outer_r * sin(theta)
+    outer_y <- cy + sign_y * outer_r * cos(theta)
+    inner_x <- cx + inner_r * sin(rev(theta))
+    inner_y <- cy + sign_y * inner_r * cos(rev(theta))
+  }
+  list(x = c(outer_x, inner_x), y = c(outer_y, inner_y))
+}
+
 #' Compute polygon coordinates for a semicircular end cap
 #'
 #' @param x Numeric, x- or center coordinate of the band edge.

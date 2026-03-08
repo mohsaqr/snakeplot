@@ -68,16 +68,6 @@ time_to_y <- function(time, day_start, day_end, y_top, y_bottom,
   }
 }
 
-#' Recycle a vector to length n
-#'
-#' @param x Vector to recycle.
-#' @param n Target length.
-#' @return Vector of length n.
-#' @noRd
-recycle <- function(x, n) {
-  rep_len(x, n)
-}
-
 #' Validate that a value is a positive number
 #'
 #' @param x Value to check.
@@ -129,7 +119,7 @@ coerce_survey_input <- function(counts, labels, levels) {
          all(col == round(col), na.rm = TRUE))
     }, logical(1))
 
-    if (all(is_raw) && nrow(counts) > max(sapply(counts, function(c) length(unique(c)))) * 2) {
+    if (all(is_raw) && nrow(counts) > max(vapply(counts, function(col) length(unique(col)), integer(1))) * 2) {
       # Raw responses — tabulate each column
       all_levels <- if (!is.null(levels)) {
         levels

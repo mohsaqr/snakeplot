@@ -162,7 +162,7 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
       if (!inherits(ts_col, "POSIXct")) ts_col <- as.POSIXct(ts_col)
       dates <- as.Date(ts_col)
       day_start <- as.POSIXct(paste(dates, "00:00:00"),
-                               tz = attr(ts_col, "tzone") %||% "")
+                               tz = if (is.null(attr(ts_col, "tzone"))) "" else attr(ts_col, "tzone"))
       as.numeric(difftime(ts_col, day_start, units = "hours")) / 24
     } else {
       NULL
@@ -340,11 +340,14 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
   item_means <- vapply(seq_len(n_items), function(i) {
     stats::weighted.mean(level_vals, counts[i, ])
   }, numeric(1))
-  item_medians <- vapply(seq_len(n_items), function(i) {
-    # Expand counts to raw values, then take median
-    raw <- rep(level_vals, counts[i, ])
-    stats::median(raw)
-  }, numeric(1))
+  item_medians <- if (show_median) {
+    vapply(seq_len(n_items), function(i) {
+      cum_p <- cumsum(counts[i, ]) / row_totals[i]
+      level_vals[which(cum_p >= 0.5)[1L]]
+    }, numeric(1))
+  } else {
+    numeric(n_items)
+  }
 
   # Net score: (agree + strongly agree) - (disagree + strongly disagree)
   # Assuming first levels are negative, last are positive
@@ -368,11 +371,14 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
   item_means  <- item_means[item_order]
   item_medians <- item_medians[item_order]
 
-  # Correlation matrix (for adjacent items in display order)
-  # Reconstruct raw data for correlation
-  raw_data <- lapply(seq_len(n_items), function(i) {
-    rep(level_vals, counts[i, ])
-  })
+  # Reconstruct raw data only when correlations are needed
+  raw_data <- if (arc_fill == "correlation") {
+    lapply(seq_len(n_items), function(i) {
+      rep(level_vals, counts[i, ])
+    })
+  } else {
+    NULL
+  }
 
   # Adjust margins for legend
   if (show_legend) margin["bottom"] <- margin["bottom"] + 15

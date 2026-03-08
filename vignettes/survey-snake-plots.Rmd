@@ -108,6 +108,42 @@ d <- data.frame(
 activity_snake(d)
 ```
 
+## Sequence snake
+
+`sequence_snake()` displays a state sequence as colored blocks flowing
+through the serpentine layout — each block is one time point colored by
+its state:
+
+```{r sequence_snake, fig.height = 7}
+set.seed(42)
+verbs <- c("Read", "Write", "Discuss", "Listen",
+           "Search", "Plan", "Code", "Review")
+seq75 <- character(0)
+while (length(seq75) < 75) {
+  seq75 <- c(seq75, rep(sample(verbs, 1), sample(1:4, 1)))
+}
+seq75 <- seq75[seq_len(75)]
+sequence_snake(seq75, title = "75-step learning sequence")
+```
+
+## Timeline snake
+
+`timeline_snake()` takes a 3-column data.frame (role, start, end) and
+auto-generates monthly blocks, transition labels, and band year labels:
+
+```{r timeline_snake}
+career <- data.frame(
+  role  = c("Intern", "Junior Dev", "Mid Dev",
+            "Senior Dev", "Tech Lead", "Architect"),
+  start = c("2015-01", "2015-07", "2017-01",
+            "2019-07", "2022-07", "2024-01"),
+  end   = c("2015-06", "2016-12", "2019-06",
+            "2022-06", "2023-12", "2024-12")
+)
+timeline_snake(career,
+               title = "Software Engineer — Career Path (2015-2024)")
+```
+
 ## Survey sequence
 
 `survey_sequence()` renders 100% stacked horizontal bars in a
