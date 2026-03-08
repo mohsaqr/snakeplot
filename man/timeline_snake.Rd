@@ -92,6 +92,11 @@ Implies \code{show_ticks = TRUE}.}
 transition points (e.g., \code{c("Oct 2017", "Apr 2019")}). One
 label per transition (length = number of state changes).}
 
+\item{transition_pos}{Numeric vector of fractional block positions for
+transition labels (e.g., \code{c(6.5, 24.3)}). When provided, labels
+are placed at exact interpolated positions along the serpentine path
+rather than at state-change boundaries.}
+
 \item{tick_col}{Color for tick marks (default \code{"#333333"}).}
 
 \item{tick_len}{Numeric, length of tick marks in pixels (default 5).}
@@ -104,6 +109,9 @@ for no borders (default \code{NA}).}
 
 \item{block_labels}{Optional character vector of labels to display inside
 each block (same length as \code{sequence}). Overrides \code{show_index}.}
+
+\item{band_labels}{Character vector of labels to display centered below
+each band (e.g., year labels). Length must equal \code{n_rows}.}
 
 \item{title}{Optional character string for plot title.}
 

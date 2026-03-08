@@ -37,6 +37,10 @@
 #' @param transition_labels Character vector of date labels for state
 #'   transition points (e.g., \code{c("Oct 2017", "Apr 2019")}). One
 #'   label per transition (length = number of state changes).
+#' @param transition_pos Numeric vector of fractional block positions for
+#'   transition labels (e.g., \code{c(6.5, 24.3)}). When provided, labels
+#'   are placed at exact interpolated positions along the serpentine path
+#'   rather than at state-change boundaries.
 #' @param tick_col Color for tick marks (default \code{"#333333"}).
 #' @param tick_len Numeric, length of tick marks in pixels (default 5).
 #' @param tick_cex Numeric, text size for tick labels (default 0.4).
@@ -47,6 +51,8 @@
 #' @param shadow Logical, draw drop shadows (default \code{TRUE}).
 #' @param block_labels Optional character vector of labels to display inside
 #'   each block (same length as \code{sequence}). Overrides \code{show_index}.
+#' @param band_labels Character vector of labels to display centered below
+#'   each band (e.g., year labels). Length must equal \code{n_rows}.
 #' @param cex Numeric, text size multiplier for block labels (default 0.5).
 #' @param legend_cex Numeric, legend text size (default 0.8).
 #'
