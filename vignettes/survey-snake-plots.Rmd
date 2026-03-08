@@ -1,0 +1,170 @@
+---
+title: "Survey Snake Plots"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Survey Snake Plots}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 10,
+  fig.height = 8
+)
+```
+
+Snake plots display survey items as horizontal bands in a serpentine
+layout — each row reverses direction and connects to the next through a
+U-turn arc. This compact layout lets you compare many items at once while
+preserving adjacency information such as inter-item correlations.
+
+The package ships with three datasets from an experience sampling study of
+university students (Neubauer & Schmiedek, 2024):
+
+| Dataset | Rows | Description |
+|---------|------|-------------|
+| `ema_emotions` | 280 | Person-level means for 10 emotions (1--7) |
+| `student_survey` | 280 | 34 items across 4 constructs, prefixed for faceting |
+| `ema_beeps` | 500 | Beep-level timestamps + anger/happiness ratings |
+
+```{r load}
+library(snakeplot)
+
+cols7 <- c("#C0392B", "#E67E22", "#F1C40F", "#95A5A6",
+           "#2ECC71", "#3498DB", "#8E44AD")
+labs7 <- c("1" = "Not at all", "2" = "Slightly", "3" = "Somewhat",
+           "4" = "Moderate",   "5" = "Quite",    "6" = "Very",
+           "7" = "Extremely")
+```
+
+## Daily EMA — ticks by time-of-day
+
+When you have timestamped beep-level data, `var`, `day`, and `timestamp`
+auto-pivot into one band per day. Ticks are positioned by time-of-day
+with hour gridlines:
+
+```{r angry_time, fig.height = 12}
+survey_snake(ema_beeps, var = "angry", day = "day",
+             timestamp = "start_time",
+             colors = cols7, arc_fill = "none",
+             level_labels = labs7,
+             label_cex = 1.0, legend_cex = 0.85,
+             title = "Anger — 14 days, ticks by time-of-day")
+```
+
+```{r happy_time, fig.height = 12}
+survey_snake(ema_beeps, var = "happy", day = "day",
+             timestamp = "start_time",
+             colors = cols7, arc_fill = "none",
+             level_labels = labs7,
+             label_cex = 1.0, legend_cex = 0.85,
+             title = "Happiness — 14 days, ticks by time-of-day")
+```
+
+## Daily EMA — distribution bars
+
+The same daily data with `tick_shape = "bar"` shows how response
+distributions shift across days:
+
+```{r angry_bar, fig.height = 12}
+survey_snake(ema_beeps, var = "angry", day = "day",
+             tick_shape = "bar",
+             colors = cols7, arc_fill = "none",
+             level_labels = labs7,
+             label_cex = 1.0, legend_cex = 0.85,
+             title = "Anger — 14 days, distribution bars")
+```
+
+```{r happy_bar, fig.height = 12}
+survey_snake(ema_beeps, var = "happy", day = "day",
+             tick_shape = "bar",
+             colors = cols7, arc_fill = "none",
+             level_labels = labs7,
+             label_cex = 1.0, legend_cex = 0.85,
+             title = "Happiness — 14 days, distribution bars")
+```
+
+## Cross-sectional survey — distribution bars
+
+Pass a data.frame directly — each column becomes a band. Sorting by
+mean reorders items from lowest to highest average:
+
+```{r bars, fig.height = 10}
+survey_snake(ema_emotions, tick_shape = "bar", sort_by = "mean",
+             colors = cols7, level_labels = labs7,
+             label_cex = 1.0, legend_cex = 0.85,
+             title = "Emotions — distribution bars, sorted by mean")
+```
+
+## Cross-sectional survey — tick lines
+
+Individual responses shown as colored tick marks within proportional
+zones:
+
+```{r basic, fig.height = 10}
+survey_snake(ema_emotions, sort_by = "mean",
+             colors = cols7, level_labels = labs7,
+             label_cex = 1.0, legend_cex = 0.85,
+             title = "Emotions — tick lines, sorted by mean")
+```
+
+## Arc fill modes
+
+The `arc_fill` parameter controls how U-turn arcs are colored:
+
+- `"none"` (default) — two-tone split matching adjacent band shades
+- `"correlation"` — tinted by inter-item Pearson *r*
+- `"mean_prev"` — solid fill using the preceding band's shade
+- `"blend"` — 50/50 average of adjacent band shades
+
+```{r arc_corr, fig.height = 10}
+survey_snake(ema_emotions, tick_shape = "line",
+             arc_fill = "correlation", sort_by = "mean",
+             colors = cols7, level_labels = labs7,
+             label_cex = 1.0, legend_cex = 0.85,
+             title = "Emotions — correlations at U-turns")
+```
+
+## Faceted plots
+
+When column names share a prefix (e.g., `Emo_`, `Mot_`), `facet = TRUE`
+auto-groups them into a multi-panel layout. The prefix is stripped from
+labels automatically:
+
+```{r facet, fig.width = 12, fig.height = 16}
+survey_snake(student_survey,
+             facet = TRUE, facet_ncol = 2L,
+             tick_shape = "bar", sort_by = "mean",
+             colors = cols7, level_labels = labs7,
+             label_cex = 1.0, legend_cex = 0.85)
+```
+
+You can also provide explicit groups as a named list:
+
+```{r facet_explicit, fig.width = 12, fig.height = 10}
+survey_snake(student_survey,
+             facet = list(
+               Emotions   = grep("^Emo_", names(student_survey), value = TRUE),
+               Motivation = grep("^Mot_", names(student_survey), value = TRUE)
+             ),
+             facet_ncol = 2L,
+             tick_shape = "bar", sort_by = "mean",
+             colors = cols7, level_labels = labs7,
+             label_cex = 1.0, legend_cex = 0.85)
+```
+
+## Mean and median markers
+
+A diamond shows the item mean; a dashed line shows the median:
+
+```{r markers, fig.height = 10}
+survey_snake(ema_emotions,
+             tick_shape = "bar", sort_by = "mean",
+             show_mean = TRUE, show_median = TRUE,
+             colors = cols7, level_labels = labs7,
+             label_cex = 1.0, legend_cex = 0.85,
+             title = "Emotions — mean (diamond) and median (dashed)")
+```

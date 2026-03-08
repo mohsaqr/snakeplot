@@ -1,0 +1,13 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^snake-plots-spec\.md$
+^.*\.png$
+^LICENSE\.md$
+^tmp$
+^LEARNINGS\.md$
+^HANDOFF\.md$
+^CHANGES\.md$
+^data-raw$
+^\.claude$
+^Rplots\.pdf$
+^cran-comments\.md$
