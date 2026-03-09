@@ -5,7 +5,7 @@
 \alias{ema_emotions}
 \title{EMA Emotion Ratings (Person-Level)}
 \format{
-A data.frame with 280 rows and 10 columns (integers 1--7):
+A data.frame with 280 rows and 10 columns (integers 1--5):
 Happy, Afraid, Sad, Balanced, Exhausted, Cheerful, Worried, Lively,
 Angry, Relaxed.
 }
@@ -25,7 +25,8 @@ ema_emotions
 \description{
 Person-level mean emotion ratings (rounded to integers) from a 14-day
 experience sampling study of 280 university students. Ten emotion items
-measured on a 1--7 Likert scale. Ready to pass directly to
+rescaled to a 1--5 Likert scale (original study used 1--7; rescaled via
+linear transformation for simplicity). Ready to pass directly to
 \code{\link{survey_snake}}.
 }
 \examples{

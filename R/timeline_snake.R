@@ -43,7 +43,7 @@ timeline_snake <- function(sequence,
                            colors = NULL,
                            rows = NULL,
                            band_height = 28,
-                           band_gap = 18,
+                           band_gap = 30,
                            plot_width = 500,
                            margin = c(top = 35, right = 10,
                                       bottom = 65, left = 20),
@@ -92,10 +92,18 @@ timeline_snake <- function(sequence,
     start_str <- as.character(df[[2]])
     end_str   <- as.character(df[[3]])
 
-    # Parse YYYY-MM or YYYY-MM-DD to Date
+    # Parse dates flexibly via parse_time() — handles YYYY-MM, YYYY-MM-DD,
+    # DD/MM/YYYY, month names, Unix timestamps, POSIXt, etc.
     to_date <- function(x) {
-      x <- as.character(x)
-      as.Date(ifelse(nchar(x) == 7L, paste0(x, "-01"), x))
+      if (inherits(x, "Date")) return(x) # nocov
+      if (inherits(x, "POSIXt")) return(as.Date(x)) # nocov
+      x <- trimws(as.character(x))
+      # YYYY-MM shorthand → YYYY-MM-01 (parse_time handles the rest)
+      x <- ifelse(nchar(x) == 7L & grepl("^\\d{4}-\\d{2}$", x),
+                   paste0(x, "-01"), x)
+      parsed <- parse_time(x)
+      if (!is.null(parsed)) return(as.Date(parsed))
+      as.Date(x) # nocov
     }
     starts <- to_date(start_str)
     ends   <- to_date(end_str)

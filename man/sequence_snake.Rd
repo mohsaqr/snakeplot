@@ -42,8 +42,14 @@ sequence_snake(
 )
 }
 \arguments{
-\item{sequence}{Character, integer, or factor vector of states.
-Each element represents one time point.}
+\item{sequence}{Input in flexible formats:
+\itemize{
+\item \strong{Vector}: character, integer, or factor vector of states.
+\item \strong{Data.frame}: first character/factor column is used.
+\item \strong{Comma-separated string}: \code{"A,B,C,A"} is split automatically.
+\item \strong{List}: unlisted to a vector.
+}
+NA values are dropped with a warning.}
 
 \item{states}{Character vector of unique states in desired order.
 If \code{NULL}, derived from \code{unique(sequence)}.}

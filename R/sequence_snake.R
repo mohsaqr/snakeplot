@@ -5,8 +5,14 @@
 #' its state. Blocks flow continuously through both bands AND arcs, wrapping
 #' a long sequence into a compact multi-row display.
 #'
-#' @param sequence Character, integer, or factor vector of states.
-#'   Each element represents one time point.
+#' @param sequence Input in flexible formats:
+#'   \itemize{
+#'     \item \strong{Vector}: character, integer, or factor vector of states.
+#'     \item \strong{Data.frame}: first character/factor column is used.
+#'     \item \strong{Comma-separated string}: \code{"A,B,C,A"} is split automatically.
+#'     \item \strong{List}: unlisted to a vector.
+#'   }
+#'   NA values are dropped with a warning.
 #' @param states Character vector of unique states in desired order.
 #'   If \code{NULL}, derived from \code{unique(sequence)}.
 #' @param colors Named character vector of colors keyed by state, or an
@@ -121,12 +127,8 @@ sequence_snake <- function(sequence,
                            legend_text_size = 0.8) {
   style <- match.arg(style)
 
-  # --- Input validation ---
-  stopifnot(length(sequence) >= 1L)
-  sequence <- as.character(sequence)
-  if (any(is.na(sequence))) {
-    stop("'sequence' contains NA values", call. = FALSE)
-  }
+  # --- Smart input coercion ---
+  sequence <- coerce_sequence_input(sequence)
   n_blocks <- length(sequence)
 
   if (is.null(states)) {
@@ -222,7 +224,7 @@ sequence_snake <- function(sequence,
     n_segments <- nrow(seg_info)
     lapply(seq_len(n_segments), function(seg) {
       m <- alloc[seg]
-      if (m == 0L) return(invisible(NULL))
+      if (m == 0L) return(invisible(NULL)) # nocov
       block_start <- cum_start[seg] + 1L
       block_states <- sequence[block_start:(block_start + m - 1L)]
       block_cols <- alpha_col(state_colors[block_states], rug_opacity)
@@ -346,13 +348,21 @@ sequence_snake <- function(sequence,
     }
   }
 
-  # --- Band labels (centered below each band) ---
+  # --- Band labels (centered in gap between bands) ---
   if (!is.null(band_labels)) {
     lapply(seq_len(rows), function(k) {
       b <- bands[k, ]
       mid_x <- (b$x_left + b$x_right) / 2
-      text(mid_x, b$y_bottom + tick_length * 1.5 + 8, band_labels[k],
-           cex = tick_size * 1.3, col = tick_color, font = 1)
+      if (k < rows) {
+        # Place in the middle of the gap between this band and the next
+        b_next <- bands[k + 1L, ]
+        label_y <- (b$y_bottom + b_next$y_top) / 2
+      } else {
+        # Last band: place below
+        label_y <- b$y_bottom + band_gap / 2
+      }
+      text(mid_x, label_y, band_labels[k],
+           cex = tick_size, col = tick_color, font = 1)
     })
   }
 
@@ -537,8 +547,13 @@ draw_band_blocks <- function(b, m, block_cols, border_color,
     lapply(seq_along(runs$values), function(r) {
       run_x0 <- coords$x0[start_pos[r]]
       run_x1 <- coords$x1[end_pos[r]]
-      text((run_x0 + run_x1) / 2, y_st, runs$values[r],
-           cex = state_size, col = "#FFFFFF", font = 2)
+      run_width <- abs(run_x1 - run_x0)
+      label_width <- strwidth(runs$values[r], cex = state_size, font = 2)
+      # Only draw label if the run is wide enough to fit it
+      if (run_width >= label_width * 1.1) {
+        text((run_x0 + run_x1) / 2, y_st, runs$values[r],
+             cex = state_size, col = "#FFFFFF", font = 2)
+      }
     })
   }
   invisible(NULL)
@@ -655,32 +670,15 @@ draw_transition_mark <- function(pos, label, seg_info, alloc, cum_start,
       tx <- coords$x0[local_pos]
     }
 
-    # Overlaid label inside band at the transition edge
-    text(tx, b$y_center, label,
-         cex = tick_size, col = "#FFFFFF", font = 2)
+    # Transition label inside band near the bottom edge
+    bh <- b$y_bottom - b$y_top
+    ty <- b$y_bottom - bh * 0.28
+    text(tx, ty, label,
+         cex = tick_size, col = "#FFFFFFBB", font = 3)
 
   } else if (seg_info$type[seg] == "arc") {
-    a <- arcs[[seg_info$index[seg]]]
-    m <- alloc[seg]
-    local_pos <- pos - cum_start[seg]
-
-    # Exit edge angle — the actual juncture where state changes
-    theta_per <- pi / m
-    theta_exit <- -pi / 2 + local_pos * theta_per
-    r_mid <- (outer_r + a$inner_r) / 2
-
-    if (a$side %in% c("right", "left")) {
-      sign_x <- if (a$side == "right") 1 else -1
-      lx <- a$cx + sign_x * r_mid * cos(theta_exit)
-      ly <- a$cy + r_mid * sin(theta_exit)
-    } else {
-      sign_y <- if (a$side == "bottom") 1 else -1
-      lx <- a$cx + r_mid * sin(theta_exit)
-      ly <- a$cy + sign_y * r_mid * cos(theta_exit)
-    }
-
-    text(lx, ly, label,
-         cex = tick_size, col = "#FFFFFF", font = 2)
+    # Skip transition labels in arcs — not enough space
+    invisible(NULL)
   }
   invisible(NULL)
 }
@@ -711,22 +709,13 @@ draw_transition_mark_at <- function(frac_pos, label, seg_info, alloc,
         } else {
           lx <- b$x_right - frac * (b$x_right - b$x_left)
         }
-        text(lx, b$y_center, label,
-             cex = tick_size, col = "#FFFFFF", font = 2)
+        bh <- b$y_bottom - b$y_top
+        ty <- b$y_bottom - bh * 0.28
+        text(lx, ty, label,
+             cex = tick_size, col = "#FFFFFFBB", font = 3)
       } else {
-        a <- arcs[[seg_info$index[s]]]
-        theta <- -pi / 2 + frac * pi
-        if (a$side %in% c("right", "left")) {
-          sign_x <- if (a$side == "right") 1 else -1
-          lx <- a$cx + sign_x * r_mid * cos(theta)
-          ly <- a$cy + r_mid * sin(theta)
-        } else { # nocov start
-          sign_y <- if (a$side == "bottom") 1 else -1
-          lx <- a$cx + r_mid * sin(theta)
-          ly <- a$cy + sign_y * r_mid * cos(theta)
-        } # nocov end
-        text(lx, ly, label,
-             cex = tick_size, col = "#FFFFFF", font = 2)
+        # Skip transition labels in arcs
+        invisible(NULL)
       }
       return(invisible(NULL))
     }

@@ -1,3 +1,118 @@
+#' Parse timestamps from flexible formats
+#'
+#' Robust date/time parser inspired by tna's \code{parse_time()}. Accepts
+#' POSIXct (pass-through), character strings in 40+ formats, or numeric Unix
+#' timestamps. Tries each format until one works.
+#'
+#' @param time Character, numeric, or POSIXct vector.
+#' @param custom_format Optional strptime format string to try first.
+#' @return POSIXct vector, or \code{NULL} if parsing fails completely.
+#' @noRd
+parse_time <- function(time, custom_format = NULL) {
+  # Already POSIXct — pass through
+  if (inherits(time, "POSIXct")) return(time)
+  if (inherits(time, "POSIXlt")) return(as.POSIXct(time))
+
+  # Numeric — assume Unix timestamps
+  if (is.numeric(time)) {
+    # Auto-detect unit: seconds vs milliseconds vs microseconds
+    med <- stats::median(abs(time), na.rm = TRUE)
+    if (med > 1e15) {
+      return(as.POSIXct(time / 1e6, origin = "1970-01-01"))
+    } else if (med > 1e12) {
+      return(as.POSIXct(time / 1e3, origin = "1970-01-01"))
+    } else {
+      return(as.POSIXct(time, origin = "1970-01-01"))
+    }
+  }
+
+  # Character — try formats
+  time <- trimws(as.character(time))
+
+  # Handle empty/NA
+  empty <- is.na(time) | !nzchar(time)
+  if (all(empty)) return(NULL)
+
+  # Strip trailing timezone letters (Z), milliseconds, trailing whitespace
+  clean <- gsub("(\\.\\d{1,6})?[Zz]?\\s*$", "", time)
+
+  # Try custom format first
+
+  if (!is.null(custom_format)) {
+    parsed <- as.POSIXct(strptime(clean, format = custom_format))
+    if (sum(!is.na(parsed)) > sum(empty)) return(parsed)
+  }
+
+  # Special case: YYYY-MM → append -01
+  is_ym <- grepl("^\\d{4}-\\d{2}$", clean)
+  if (any(is_ym)) {
+    clean[is_ym] <- paste0(clean[is_ym], "-01")
+  }
+
+  # Comprehensive format list (adapted from tna::parse_time)
+  formats <- c(
+    # Standard YYYY-MM-DD with time
+    "%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M",
+    "%Y/%m/%d %H:%M:%S", "%Y/%m/%d %H:%M",
+    "%Y.%m.%d %H:%M:%S", "%Y.%m.%d %H:%M",
+
+    # ISO 8601 with T separator
+    "%Y-%m-%dT%H:%M:%S", "%Y-%m-%dT%H:%M",
+
+    # With timezone offset
+    "%Y-%m-%d %H:%M:%S%z", "%Y-%m-%d %H:%M%z",
+
+    # Compact (no separators)
+    "%Y%m%d%H%M%S", "%Y%m%d%H%M",
+
+    # Day first
+    "%d-%m-%Y %H:%M:%S", "%d-%m-%Y %H:%M",
+    "%d/%m/%Y %H:%M:%S", "%d/%m/%Y %H:%M",
+    "%d.%m.%Y %H:%M:%S", "%d.%m.%Y %H:%M",
+
+    # Month first (US)
+    "%m-%d-%Y %H:%M:%S", "%m-%d-%Y %H:%M",
+    "%m/%d/%Y %H:%M:%S", "%m/%d/%Y %H:%M",
+
+    # Month names
+    "%d %b %Y %H:%M:%S", "%d %b %Y %H:%M",
+    "%d %B %Y %H:%M:%S", "%d %B %Y %H:%M",
+    "%b %d %Y %H:%M:%S", "%b %d %Y %H:%M",
+    "%B %d %Y %H:%M:%S", "%B %d %Y %H:%M",
+    "%b %d, %Y %H:%M:%S", "%b %d, %Y %H:%M",
+    "%B %d, %Y %H:%M:%S", "%B %d, %Y %H:%M",
+
+    # Date-only formats
+    "%Y-%m-%d", "%Y/%m/%d", "%Y.%m.%d",
+    "%d-%m-%Y", "%d/%m/%Y", "%d.%m.%Y",
+    "%m-%d-%Y", "%m/%d/%Y",
+    "%d %b %Y", "%d %B %Y",
+    "%b %d %Y", "%B %d %Y",
+    "%b %d, %Y", "%B %d, %Y"
+  )
+
+  for (fmt in formats) {
+    parsed <- as.POSIXct(strptime(clean, format = fmt))
+    n_ok <- sum(!is.na(parsed))
+    if (n_ok > sum(empty)) {
+      # Sanity check: years should be in 1900-2100 range
+      years <- as.integer(format(parsed[!is.na(parsed)], "%Y"))
+      if (all(years >= 1900L & years <= 2100L)) return(parsed)
+    }
+  }
+
+  # Last resort: try numeric conversion (maybe stringified Unix timestamps)
+  nums <- suppressWarnings(as.numeric(time))
+  if (!all(is.na(nums))) {
+    med <- stats::median(abs(nums), na.rm = TRUE)
+    if (med > 1e15) return(as.POSIXct(nums / 1e6, origin = "1970-01-01")) # nocov
+    if (med > 1e12) return(as.POSIXct(nums / 1e3, origin = "1970-01-01")) # nocov
+    if (med > 1e8) return(as.POSIXct(nums, origin = "1970-01-01"))
+  }
+
+  NULL
+}
+
 #' Format minutes as human-readable duration
 #'
 #' @param minutes Numeric, duration in minutes.
@@ -80,16 +195,147 @@ assert_positive <- function(x, name = deparse(substitute(x))) {
   }
 }
 
+#' Coerce flexible input to a character vector for sequence_snake
+#'
+#' Accepts a character/factor/integer vector, a data.frame (extracts first
+#' character/factor column), a list (unlists), or a single comma-separated
+#' string (splits). NAs are dropped with a warning.
+#'
+#' @param x Input to coerce.
+#' @return Character vector of states.
+#' @noRd
+coerce_sequence_input <- function(x) {
+  # Single string: split by comma (with optional spaces)
+  if (is.character(x) && length(x) == 1L && grepl(",", x)) {
+    x <- trimws(strsplit(x, ",\\s*")[[1L]])
+  }
+
+  # Data.frame: extract first character/factor column
+  if (is.data.frame(x)) {
+    char_cols <- vapply(x, function(col) {
+      is.character(col) || is.factor(col)
+    }, logical(1))
+    if (any(char_cols)) {
+      col_idx <- which(char_cols)[1L]
+      message(sprintf("Using column '%s' as sequence", names(x)[col_idx]))
+      x <- x[[col_idx]]
+    } else {
+      stop("data.frame has no character or factor column to use as sequence",
+           call. = FALSE)
+    }
+  }
+
+  # List: unlist
+  if (is.list(x)) {
+    x <- unlist(x)
+  }
+
+  x <- as.character(x)
+
+  # Drop NAs with warning
+  na_count <- sum(is.na(x))
+  if (na_count > 0L) {
+    warning(sprintf("Dropped %d NA values from sequence", na_count),
+            call. = FALSE)
+    x <- x[!is.na(x)]
+  }
+
+  if (length(x) < 1L) {
+    stop("'sequence' is empty after removing NAs", call. = FALSE)
+  }
+
+  x
+}
+
+#' Find a column by name, case-insensitive
+#'
+#' @param df A data.frame.
+#' @param candidates Character vector of candidate column names to try.
+#' @return The actual column name found, or NULL if none match.
+#' @noRd
+find_column <- function(df, candidates) {
+  nms <- names(df)
+  nms_lower <- tolower(nms)
+  for (cand in candidates) {
+    # Exact match first
+    if (cand %in% nms) return(cand)
+    # Case-insensitive
+    idx <- which(nms_lower == tolower(cand))
+    if (length(idx) > 0L) return(nms[idx[1L]])
+  }
+  NULL
+}
+
 #' Coerce input to a data.frame for activity_snake
 #'
-#' Accepts a bare POSIXct vector, a data.frame, or a matrix.
-#' @param data POSIXct vector, or data.frame.
+#' Accepts a bare POSIXct vector, a character vector of timestamp strings,
+#' a data.frame (with case-insensitive column matching), or a matrix.
+#' @param data POSIXct vector, character vector of timestamps, or data.frame.
 #' @return A data.frame suitable for prepare_timestamps / validate_activity_data.
 #' @noRd
 coerce_activity_input <- function(data) {
+  # Bare POSIXct vector
   if (inherits(data, "POSIXt")) {
     return(data.frame(timestamp = data))
   }
+
+  # Character or numeric vector: try to parse as timestamps
+  if ((is.character(data) || is.numeric(data)) && length(data) > 0L) {
+    parsed <- parse_time(data)
+    if (!is.null(parsed) && !all(is.na(parsed))) {
+      return(data.frame(timestamp = parsed))
+    }
+  }
+
+  # Data.frame: case-insensitive column matching
+  if (is.data.frame(data)) {
+    nms <- names(data)
+    nms_lower <- tolower(nms)
+
+    # Map common column name variants to canonical names
+    col_map <- list(
+      timestamp = c("timestamp", "time", "datetime", "date_time"),
+      start     = c("start", "start_time", "begin"),
+      end       = c("end", "end_time", "stop"),
+      day       = c("day", "date", "weekday"),
+      duration  = c("duration", "dur", "length"),
+      label     = c("label", "name", "activity", "event", "category")
+    )
+
+    # Find and rename columns
+    renamed <- FALSE
+    for (canonical in names(col_map)) {
+      if (canonical %in% nms) next
+      for (variant in col_map[[canonical]]) {
+        idx <- which(nms_lower == tolower(variant))
+        if (length(idx) > 0L) {
+          names(data)[idx[1L]] <- canonical
+          renamed <- TRUE
+          break
+        }
+      }
+    }
+
+    # Auto-detect POSIXct columns if no timestamp/start found
+    if (!("timestamp" %in% names(data)) && !("start" %in% names(data))) {
+      posix_cols <- vapply(data, inherits, logical(1), what = "POSIXt")
+      if (any(posix_cols)) {
+        idx <- which(posix_cols)[1L]
+        names(data)[idx] <- "timestamp"
+      }
+    }
+
+    # Try parsing character columns that look like timestamps
+    # (do NOT parse numeric columns — they may be minutes-from-midnight)
+    for (col in names(data)) {
+      if (col %in% c("timestamp", "start", "end") &&
+          is.character(data[[col]])) {
+        parsed <- parse_time(data[[col]])
+        if (!is.null(parsed)) data[[col]] <- parsed
+      }
+    }
+  }
+
   data
 }
 
@@ -105,6 +351,13 @@ coerce_activity_input <- function(data) {
 #' @noRd
 coerce_survey_input <- function(counts, labels, levels) {
   if (is.matrix(counts)) {
+    # Auto-generate labels/levels from dimnames if not provided
+    if (is.null(labels) && !is.null(rownames(counts))) {
+      labels <- rownames(counts)
+    }
+    if (is.null(levels) && !is.null(colnames(counts))) {
+      levels <- colnames(counts)
+    }
     return(list(counts = counts, labels = labels, levels = levels))
   }
 
@@ -115,11 +368,15 @@ coerce_survey_input <- function(counts, labels, levels) {
     # values relative to nrow, treat as raw responses
     is_raw <- vapply(counts, function(col) {
       is.factor(col) || is.character(col) ||
-        (is.numeric(col) && length(unique(col)) <= 20 &&
+        (is.numeric(col) && length(unique(na.omit(col))) <= 20 &&
          all(col == round(col), na.rm = TRUE))
     }, logical(1))
 
-    if (all(is_raw) && nrow(counts) > max(vapply(counts, function(col) length(unique(col)), integer(1))) * 2) {
+    n_unique_max <- max(vapply(counts, function(col) {
+      length(unique(na.omit(col)))
+    }, integer(1)))
+
+    if (all(is_raw) && nrow(counts) > n_unique_max * 2) {
       # Raw responses — tabulate each column
       all_levels <- if (!is.null(levels)) {
         levels
@@ -129,9 +386,19 @@ coerce_survey_input <- function(counts, labels, levels) {
         if (!is.na(first_factor)) {
           as.character(base::levels(counts[[first_factor]]))
         } else {
-          lvs <- sort(unique(unlist(lapply(counts, unique))))
+          lvs <- sort(unique(unlist(lapply(counts, function(col) {
+            unique(na.omit(col))
+          }))))
           as.character(lvs)
         }
+      }
+
+      # Report NA drop count
+      total_na <- sum(vapply(counts, function(col) sum(is.na(col)),
+                             integer(1)))
+      if (total_na > 0L) {
+        message(sprintf("Note: %d NA responses excluded from tabulation",
+                        total_na))
       }
 
       count_mat <- t(vapply(counts, function(col) {
@@ -143,7 +410,6 @@ coerce_survey_input <- function(counts, labels, levels) {
         labels
       } else {
         nms <- names(counts)
-        n <- nrow(count_mat)
         paste0(nms, " (n=", rowSums(count_mat), ")")
       }
 
@@ -152,7 +418,14 @@ coerce_survey_input <- function(counts, labels, levels) {
     }
 
     # Otherwise treat as a counts data.frame — coerce to matrix
-    return(list(counts = as.matrix(counts), labels = labels, levels = levels))
+    mat <- as.matrix(counts)
+    if (is.null(labels) && !is.null(rownames(counts))) {
+      labels <- rownames(counts)
+    }
+    if (is.null(levels) && !is.null(colnames(counts))) {
+      levels <- colnames(counts)
+    }
+    return(list(counts = mat, labels = labels, levels = levels))
   }
 
   list(counts = counts, labels = labels, levels = levels) # nocov
@@ -168,15 +441,16 @@ coerce_survey_input <- function(counts, labels, levels) {
 #'   or NULL if no timestamps detected.
 #' @noRd
 prepare_timestamps <- function(data, day_format = NULL) {
-  # Find the timestamp column
-  ts_col <- if ("timestamp" %in% names(data) &&
-                inherits(data$timestamp, "POSIXt")) {
-    "timestamp"
-  } else if ("start" %in% names(data) && inherits(data$start, "POSIXt")) {
-    "start"
-  } else {
-    return(NULL)
+  # Find the timestamp column (case-insensitive)
+  ts_col <- NULL
+  for (cand in c("timestamp", "start")) {
+    found <- find_column(data, cand)
+    if (!is.null(found) && inherits(data[[found]], "POSIXt")) {
+      ts_col <- found
+      break
+    }
   }
+  if (is.null(ts_col)) return(NULL)
 
   ts <- data[[ts_col]]
   dates <- as.Date(ts)
@@ -225,7 +499,19 @@ validate_activity_data <- function(data) {
     stop("'data' must be a data.frame with columns: day, start, duration",
          call. = FALSE)
   }
+  # Case-insensitive column resolution
   required <- c("day", "start", "duration")
+  nms <- names(data)
+  nms_lower <- tolower(nms)
+  for (req in required) {
+    if (!(req %in% nms)) {
+      idx <- which(nms_lower == req)
+      if (length(idx) > 0L) {
+        names(data)[idx[1L]] <- req
+      }
+    }
+  }
+
   missing_cols <- setdiff(required, names(data))
   if (length(missing_cols) > 0) {
     stop(sprintf("'data' is missing columns: %s",

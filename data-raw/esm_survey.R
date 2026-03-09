@@ -6,12 +6,15 @@
 # Code:  https://osf.io/84kdr/files
 # License: CC-BY 4.0
 #
+# Original data uses a 1-7 Likert scale. We rescale to 1-5 for simplicity
+# using linear transformation: new = round(1 + (old - 1) * 4/6).
+#
 # Requires: openesm package (NOT a package dependency — used only here)
 
 d <- openesm::get_dataset("0062_neubauer")
 df <- as.data.frame(d$data)
 
-# --- Item groups (all 1-7 Likert) ---
+# --- Item groups (all 1-7 Likert in source) ---
 emo_cols <- c("happy", "afraid", "sad", "balanced", "exhausted",
               "cheerful", "worried", "lively", "angry", "relaxed")
 mot_cols <- c("study_motivation_others_disappointed",
@@ -43,6 +46,12 @@ person_means$id <- NULL
 complete <- person_means[complete.cases(person_means), ]
 rownames(complete) <- NULL
 
+# --- Rescale 1-7 to 1-5 ---
+rescale_7to5 <- function(x) {
+  as.integer(round(1 + (x - 1) * 4 / 6))
+}
+complete[] <- lapply(complete, rescale_7to5)
+
 # --- ema_emotions: 10 emotions, clean names ---
 ema_emotions <- complete[, seq_along(emo_cols)]
 names(ema_emotions) <- c("Happy", "Afraid", "Sad", "Balanced", "Exhausted",
@@ -70,6 +79,9 @@ ema_beeps <- esm_daily[order(esm_daily$day, esm_daily$start_time), ]
 # Sequential day labels (1-based)
 ema_beeps$day <- as.integer(factor(ema_beeps$day,
                                     levels = sort(unique(ema_beeps$day))))
+# Rescale beep-level emotions 1-7 → 1-5
+ema_beeps$happy <- rescale_7to5(ema_beeps$happy)
+ema_beeps$angry <- rescale_7to5(ema_beeps$angry)
 rownames(ema_beeps) <- NULL
 
 # --- Save ---

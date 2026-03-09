@@ -5,7 +5,7 @@
 \alias{student_survey}
 \title{Student Survey (Cross-Sectional, Multi-Construct)}
 \format{
-A data.frame with 280 rows and 34 integer columns (values 1--7).
+A data.frame with 280 rows and 34 integer columns (values 1--5).
 }
 \source{
 Neubauer, A. B., & Schmiedek, F. (2024). Approaching academic adjustment
@@ -23,8 +23,8 @@ student_survey
 \description{
 Person-level mean scores (rounded to integers) from a 14-day experience
 sampling study of 280 university students. Contains 34 items across four
-construct groups, each on a 1--7 Likert scale. Column name prefixes
-enable automatic faceting with
+construct groups, rescaled to a 1--5 Likert scale (original 1--7). Column
+name prefixes enable automatic faceting with
 \code{survey_snake(student_survey, facet = TRUE)}.
 }
 \details{

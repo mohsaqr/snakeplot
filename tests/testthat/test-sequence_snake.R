@@ -239,10 +239,12 @@ describe("sequence_snake()", {
     )
   })
 
-  it("errors on NA in sequence", {
-    expect_error(
-      sequence_snake(c("A", NA, "B")),
-      "NA values"
+  it("drops NA in sequence with warning", {
+    grDevices::pdf(nullfile())
+    on.exit(grDevices::dev.off(), add = TRUE)
+    expect_warning(
+      sequence_snake(c("A", NA, "B", "A", "B")),
+      "Dropped 1 NA"
     )
   })
 
@@ -572,5 +574,50 @@ describe("sequence_snake() — rug style", {
     on.exit(grDevices::dev.off(), add = TRUE)
     expect_silent(sequence_snake(seq30, rows = 4, style = "rug",
                                   jitter = 0.8))
+  })
+})
+
+describe("sequence_snake() — flexible input formats", {
+  it("accepts comma-separated string", {
+    grDevices::pdf(nullfile())
+    on.exit(grDevices::dev.off(), add = TRUE)
+    expect_silent(sequence_snake("A, B, C, A, B, C, A, B"))
+  })
+
+  it("accepts data.frame with character column", {
+    grDevices::pdf(nullfile())
+    on.exit(grDevices::dev.off(), add = TRUE)
+    df <- data.frame(id = 1:10,
+                     state = sample(c("X", "Y", "Z"), 10, replace = TRUE),
+                     stringsAsFactors = FALSE)
+    expect_message(sequence_snake(df), "Using column")
+  })
+
+  it("accepts data.frame with factor column", {
+    grDevices::pdf(nullfile())
+    on.exit(grDevices::dev.off(), add = TRUE)
+    df <- data.frame(num = 1:10,
+                     cat = factor(sample(c("A", "B"), 10, replace = TRUE)))
+    expect_message(sequence_snake(df), "Using column")
+  })
+
+  it("accepts list input", {
+    grDevices::pdf(nullfile())
+    on.exit(grDevices::dev.off(), add = TRUE)
+    lst <- list("A", "B", c("C", "A"), "B")
+    expect_silent(sequence_snake(lst))
+  })
+
+  it("drops NAs with warning", {
+    grDevices::pdf(nullfile())
+    on.exit(grDevices::dev.off(), add = TRUE)
+    x <- c("A", NA, "B", "A", NA, "B", "A", "B")
+    expect_warning(sequence_snake(x), "Dropped 2 NA")
+  })
+
+  it("accepts integer vector", {
+    grDevices::pdf(nullfile())
+    on.exit(grDevices::dev.off(), add = TRUE)
+    expect_silent(sequence_snake(c(1L, 2L, 3L, 1L, 2L, 3L)))
   })
 })

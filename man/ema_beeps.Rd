@@ -31,8 +31,10 @@ interface of \code{\link{survey_snake}} for daily snake plots.
 \item{\code{id}}{Character. Anonymised participant identifier.}
 \item{\code{day}}{Integer 1--14. Study day.}
 \item{\code{start_time}}{POSIXct. Timestamp of the beep.}
-\item{\code{happy}}{Integer 1--7. Self-reported happiness.}
-\item{\code{angry}}{Integer 1--7. Self-reported anger.}
+\item{\code{happy}}{Integer 1--5. Self-reported happiness (rescaled from
+original 1--7).}
+\item{\code{angry}}{Integer 1--5. Self-reported anger (rescaled from
+original 1--7).}
 }
 }
 \examples{

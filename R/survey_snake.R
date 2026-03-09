@@ -438,7 +438,9 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
       i1 <- a$from + 1L
       i2 <- a$to + 1L
       n_min <- min(length(raw_data[[i1]]), length(raw_data[[i2]]))
-      if (n_min > 2L) {
+      if (n_min > 2L &&
+          stats::sd(raw_data[[i1]][seq_len(n_min)]) > 0 &&
+          stats::sd(raw_data[[i2]][seq_len(n_min)]) > 0) {
         stats::cor(raw_data[[i1]][seq_len(n_min)],
                    raw_data[[i2]][seq_len(n_min)])
       } else {

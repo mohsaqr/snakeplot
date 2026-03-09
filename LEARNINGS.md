@@ -1,6 +1,12 @@
 # Learnings
 
 ### 2026-03-09
+- [parse_time year validation] `strptime` with `%Y/%m/%d` on "15/01/2024" happily treats "15" as year 0015. Must validate parsed years are in 1900-2100 range before accepting a format match.
+- [parse_time YYYY-MM] `strptime` cannot handle `%Y-%m` without a day. Must pre-process "2024-01" → "2024-01-01" before the format loop.
+- [numeric start column] `coerce_activity_input()` must NOT parse numeric `start` columns as Unix timestamps — they represent minutes-from-midnight in activity_snake context. Only parse character columns via `parse_time()`.
+- [coerce_sequence_input NA] Changed from hard error on NAs to warning + drop. This is more user-friendly for messy data. Updated existing test from `expect_error` to `expect_warning`.
+- [timeline label overlap] State labels inside bands must skip drawing when the run is too narrow (check `strwidth`). Transition labels go at bottom edge of band (28% from bottom), not centered — avoids overlap with state names. Band year labels go centered in the gap between bands. `timeline_snake` needs `band_gap = 30` (not 18) to fit year labels.
+- [vignette short examples] Users hate snake plots with only 1-2 rows — "they are not snakes". All vignette examples must have enough data for 3+ rows.
 - [rug style] Dark ribbon background (`draw_ribbon()`) creates thick visible border on rug ticks — user strongly dislikes. Use light `#F5F5F5` band background + `#EBEBEB` arcs/end caps instead.
 - [rug jitter] High jitter (0.8) makes rug look like a distribution/scatter plot. Subtle (0.3) is better but user still prefers no jitter. Best for ~100 events; at 1000 events block style is cleaner.
 - [proportional distribution] No new function needed — just sort input by frequency before calling `sequence_snake()`. User explicitly rejected `multi_snake()` as unnecessary.

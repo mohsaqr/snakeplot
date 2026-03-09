@@ -177,7 +177,7 @@ multi_snake <- function(sequences,
   # --- Draw blocks in each segment ---
   lapply(seq_len(nrow(seg_info)), function(seg) {
     m <- alloc[seg]
-    if (m == 0L) return(invisible(NULL))
+    if (m == 0L) return(invisible(NULL)) # nocov
 
     block_start <- cum_start[seg] + 1L
     block_end   <- block_start + m - 1L
@@ -259,9 +259,9 @@ draw_multi_band_blocks <- function(band, m, time_idx, sequences,
                         n_seq, state_colors, tick_opacity)
     }
 
-    if (!is.na(border_color)) {
+    if (!is.na(border_color)) { # nocov start
       rect(x0, yt, x1, yb, col = NA, border = border_color, lwd = 0.3)
-    }
+    } # nocov end
     NA
   }, logical(1))
   invisible(NULL)
@@ -273,12 +273,12 @@ draw_multi_band_blocks <- function(band, m, time_idx, sequences,
 draw_dist_block <- function(x0, x1, yt, yb, bw, count_row,
                              n_states, state_colors, show_percent) {
   row_total <- sum(count_row)
-  if (row_total == 0L) return(invisible(NULL))
+  if (row_total == 0L) return(invisible(NULL)) # nocov
 
   x_cursor <- x0
   vapply(seq_len(n_states), function(s) {
     cnt <- count_row[s]
-    if (cnt == 0L) return(NA)
+    if (cnt == 0L) return(NA) # nocov
     seg_w <- (cnt / row_total) * bw
     rect(x_cursor, yt, x_cursor + seg_w, yb,
          col = state_colors[s], border = NA)

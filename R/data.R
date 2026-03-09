@@ -10,10 +10,11 @@
 #'
 #' Person-level mean emotion ratings (rounded to integers) from a 14-day
 #' experience sampling study of 280 university students. Ten emotion items
-#' measured on a 1--7 Likert scale. Ready to pass directly to
+#' rescaled to a 1--5 Likert scale (original study used 1--7; rescaled via
+#' linear transformation for simplicity). Ready to pass directly to
 #' \code{\link{survey_snake}}.
 #'
-#' @format A data.frame with 280 rows and 10 columns (integers 1--7):
+#' @format A data.frame with 280 rows and 10 columns (integers 1--5):
 #'   Happy, Afraid, Sad, Balanced, Exhausted, Cheerful, Worried, Lively,
 #'   Angry, Relaxed.
 #'
@@ -35,8 +36,8 @@
 #'
 #' Person-level mean scores (rounded to integers) from a 14-day experience
 #' sampling study of 280 university students. Contains 34 items across four
-#' construct groups, each on a 1--7 Likert scale. Column name prefixes
-#' enable automatic faceting with
+#' construct groups, rescaled to a 1--5 Likert scale (original 1--7). Column
+#' name prefixes enable automatic faceting with
 #' \code{survey_snake(student_survey, facet = TRUE)}.
 #'
 #' \describe{
@@ -51,7 +52,7 @@
 #'     Energy, Identification, Expectations, ConsiderQuitting.}
 #' }
 #'
-#' @format A data.frame with 280 rows and 34 integer columns (values 1--7).
+#' @format A data.frame with 280 rows and 34 integer columns (values 1--5).
 #'
 #' @source
 #' Neubauer, A. B., & Schmiedek, F. (2024). Approaching academic adjustment
@@ -79,8 +80,10 @@
 #'   \item{\code{id}}{Character. Anonymised participant identifier.}
 #'   \item{\code{day}}{Integer 1--14. Study day.}
 #'   \item{\code{start_time}}{POSIXct. Timestamp of the beep.}
-#'   \item{\code{happy}}{Integer 1--7. Self-reported happiness.}
-#'   \item{\code{angry}}{Integer 1--7. Self-reported anger.}
+#'   \item{\code{happy}}{Integer 1--5. Self-reported happiness (rescaled from
+#'     original 1--7).}
+#'   \item{\code{angry}}{Integer 1--5. Self-reported anger (rescaled from
+#'     original 1--7).}
 #' }
 #'
 #' @format A data.frame with 11 474 rows and 5 columns.

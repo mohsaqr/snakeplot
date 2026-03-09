@@ -1,43 +1,43 @@
 # Session Handoff — 2026-03-09
 
 ## Completed
-- Added `style = "rug"` to `sequence_snake()` — thin colored ticks on light gray band background
-- Added `rug_jitter` parameter for vertical scatter (better for ~100 events, not great for 1000)
-- Added `rug_opacity` and `band_color` parameters for rug customization
-- Rug mode draws light neutral end caps and arcs instead of dark ribbon
-- Demonstrated 1000-event real data (Human-AI interaction) as:
-  - **Index view**: `sequence_snake(seq1000)` — temporal order, each block = 1 event
-  - **Proportional view**: same function with sorted input — distribution spread over 4 folds
-- User rejected `multi_snake()` — existing `sequence_snake()` + `survey_sequence()` suffice
-- Code review (/simplify) completed — fixed dead code, vectorized operations, removed unused functions
-- Jekyll snakeplot page published with rationale-driven captions
-- GitHub Actions CI + Codecov workflows set up
-- Version bumped to 0.2.2
-- All tests pass (402), R CMD check: 0 errors, 0 warnings, 1 NOTE (.github)
+- Smart input coercion for all functions — "super easy to get working"
+- `parse_time()` — robust timestamp parser (40+ formats, Unix timestamps, auto-unit detection), adapted from tna's `parse_time()`
+- `coerce_sequence_input()` — accepts vectors, data.frames, lists, comma-separated strings, drops NAs with warning
+- `coerce_activity_input()` — enhanced with character timestamp parsing, case-insensitive column matching, aliased column names
+- `coerce_survey_input()` — enhanced with auto-labels from dimnames, NA handling, improved heuristic
+- `find_column()` — case-insensitive column name matching helper
+- `validate_activity_data()` — case-insensitive column name resolution
+- `timeline_snake()` to_date() — uses `parse_time()` for flexible date parsing
+- Parameter rename across all 8 exported functions (prior session)
+- Rug style, real data demos, code review (prior session)
+- 470 tests pass, 0 fail. R CMD check: 0 errors, 0 warnings, 2 NOTEs.
 
 ## Current State
-- Package is clean and functional on branch `dev-clean`
-- `demo_real.Rmd` shows the two approved plots (index + sorted proportional block style)
-- Rug style implemented and tested (7 tests) but not featured in demos
-- `multi_snake.R` + `test-multi_snake.R` still in codebase — should be removed
+- All 8 exported functions have intuitive parameter names
+- All functions accept flexible input formats with smart coercion
+- `parse_time()` handles: POSIXct pass-through, POSIXlt→POSIXct, numeric Unix timestamps (auto-detect seconds/ms/μs), 40+ strptime format patterns, YYYY-MM shorthand, year validation (1900-2100)
+- `sequence_snake()` accepts: vector, data.frame (extracts first char/factor column), list (unlists), comma-separated string, NAs dropped with warning
+- `activity_snake()` accepts: POSIXct vector, character timestamp vector, data.frame with aliased column names (date/Day/begin/dur/activity etc.)
+- `survey_snake()`/`survey_sequence()` accept: matrix with dimnames → auto-labels, raw data.frames with NAs → message about excluded
 
 ## Key Decisions
-- Rug uses light `#F5F5F5` band + `#EBEBEB` arcs/end caps (user rejected dark ribbon)
-- Rug ticks are bottom 35% of band height; jitter scatters vertically
-- Proportional distribution = just sorting input by frequency before `sequence_snake()`, no new function
-- User prefers block style for 1000 events, rug for ~100
+- Adapted tna's `parse_time()` patterns but implemented in pure base R (no rlang/cli)
+- Year validation (1900-2100) prevents strptime from accepting nonsensical parses
+- Numeric `start` columns NOT parsed as timestamps — they mean minutes-from-midnight
+- NAs in sequences: warning + drop instead of error (more forgiving)
+- Column name matching: case-insensitive + aliases (date→day, begin→start, dur→duration)
 
 ## Open Issues
-- `multi_snake.R` should be removed (user said "no multi snake")
-- Codecov token not yet added to GitHub repo secrets
+- `multi_snake.R` still exists — user said "no multi snake" but also "keep it"
+- CODECOV_TOKEN not yet added to GitHub repo secrets
 - Changes not yet committed or pushed
 
 ## Next Steps
-- Remove `multi_snake.R` + tests if confirmed
 - Commit and push
-- Add CODECOV_TOKEN to GitHub secrets
+- Consider `parse_time()` support in `line_snake()` for timestamp columns
 
 ## Context
 - R package at `/Users/mohammedsaqr/Documents/Github/Snakeplot`
 - Branch: `dev-clean`, main branch: `main`
-- Real test data: `/Users/mohammedsaqr/Documents/Github/cograph/tutorials/data.csv` (category column)
+- Real test data: `/Users/mohammedsaqr/Documents/Github/cograph/tutorials/data.csv`

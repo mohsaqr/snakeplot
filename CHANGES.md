@@ -1,5 +1,29 @@
 # Changes
 
+### 2026-03-09 — vignette overhaul, 5-point scale, label overlap fixes
+
+- data/: All three datasets rescaled from 1-7 to 1-5 Likert (linear transform). data-raw/esm_survey.R updated with `rescale_7to5()`.
+- R/data.R: Documentation updated to reflect 1-5 scale.
+- R/sequence_snake.R: State labels skip drawing when run is too narrow (`strwidth` check). Transition labels moved to bottom edge of band (28% from bottom, italic, semi-transparent). Band year labels centered in gap between bands.
+- R/timeline_snake.R: Default `band_gap` increased from 18 to 30 to fit year labels between bands.
+- vignettes/survey-snake-plots.Rmd: Overhauled — removed short non-snake examples, 5-point labels, varied palettes (sunset/berry/viridis/earth), dpi=150, proportional sizing.
+- Tests: 470 pass, 0 fail.
+
+### 2026-03-09 — smart input coercion, parse_time(), flexible formats
+
+- R/utils.R: Added `parse_time()` — robust timestamp parser (40+ formats, Unix timestamps, auto-unit detection, year validation). Inspired by tna's `parse_time()`.
+- R/utils.R: Added `coerce_sequence_input()` — accepts vectors, data.frames (auto-extract first char/factor column), lists, comma-separated strings. NAs dropped with warning.
+- R/utils.R: Added `find_column()` — case-insensitive column name matching.
+- R/utils.R: Enhanced `coerce_activity_input()` — accepts character/numeric timestamp vectors via `parse_time()`, case-insensitive column matching, aliased column names (date→day, begin→start, dur→duration, activity→label), auto-detects POSIXct columns.
+- R/utils.R: Enhanced `coerce_survey_input()` — auto-labels from matrix rownames/colnames, NA handling with message, improved heuristic for raw vs counts detection.
+- R/utils.R: Enhanced `validate_activity_data()` — case-insensitive column name resolution.
+- R/sequence_snake.R: Uses `coerce_sequence_input()` for flexible input (string, data.frame, list, NA handling). Updated roxygen docs.
+- R/timeline_snake.R: `to_date()` uses `parse_time()` for flexible date parsing (handles month names, DD/MM/YYYY, Unix timestamps, POSIXt).
+- R/snakeplot-package.R: Added `na.omit` to stats imports.
+- tests/testthat/test-utils.R: Added 38 tests for parse_time (20), coerce_sequence_input (10), find_column (5), enhanced coerce_activity_input (5), enhanced coerce_survey_input (3), case-insensitive validate_activity_data (1).
+- tests/testthat/test-sequence_snake.R: Added 6 integration tests for flexible input formats + updated NA test.
+- Tests: 470 pass, 0 fail. R CMD check: 0 errors, 0 warnings, 2 NOTEs.
+
 ### 2026-03-09 — rug style for sequence_snake, real data demos
 
 - R/sequence_snake.R: Added `style = "rug"` parameter — thin colored ticks on light `#F5F5F5` band with `#EBEBEB` arcs/end caps. Added `rug_jitter` (vertical scatter), `rug_opacity`, `band_color`. New helpers: `draw_rug_band()`, `draw_rug_arc()`.

@@ -10,7 +10,7 @@ timeline_snake(
   colors = NULL,
   rows = NULL,
   band_height = 28,
-  band_gap = 18,
+  band_gap = 30,
   plot_width = 500,
   margin = c(top = 35, right = 10, bottom = 65, left = 20),
   orientation = "horizontal",
