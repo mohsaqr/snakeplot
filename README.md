@@ -12,7 +12,7 @@ data, and activity timelines using base R graphics. Zero external dependencies.
 ## Installation
 
 ```r
-# From GitHub
+# From GitHub.
 devtools::install_github("mohsaqr/snakeplot")
 
 # Once on CRAN
