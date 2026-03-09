@@ -1,5 +1,11 @@
 # Learnings
 
+### 2026-03-09
+- [rug style] Dark ribbon background (`draw_ribbon()`) creates thick visible border on rug ticks — user strongly dislikes. Use light `#F5F5F5` band background + `#EBEBEB` arcs/end caps instead.
+- [rug jitter] High jitter (0.8) makes rug look like a distribution/scatter plot. Subtle (0.3) is better but user still prefers no jitter. Best for ~100 events; at 1000 events block style is cleaner.
+- [proportional distribution] No new function needed — just sort input by frequency before calling `sequence_snake()`. User explicitly rejected `multi_snake()` as unnecessary.
+- [multi_snake rejection] User's reasoning: for single sequences use `sequence_snake()`, for proportional distribution of multiple sequences use `survey_sequence()` with tabulated counts. No need for a hybrid.
+
 ### 2026-03-08
 - [ESM auto-pivot] When building a wide data.frame from ESM data, `coerce_survey_input()` may not recognize it as raw responses due to the shape heuristic (`nrow > unique_values * 2`). Safer to tabulate directly into a counts matrix within the ESM pivot block.
 - [ESM time positioning] `esm_time_info[[k]]$time_frac` is NULL when no timestamp column is provided. Must guard the ESM tick positioning branch to only activate when `time_frac` is not NULL, otherwise fall through to standard proportional zone rendering.

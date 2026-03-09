@@ -44,6 +44,17 @@
 #' @param tick_col Color for tick marks (default \code{"#333333"}).
 #' @param tick_len Numeric, length of tick marks in pixels (default 5).
 #' @param tick_cex Numeric, text size for tick labels (default 0.4).
+#' @param style Character, \code{"block"} (default) or \code{"rug"}.
+#'   \code{"block"} fills the full band height with colored blocks.
+#'   \code{"rug"} draws thin colored tick marks on a dark ribbon,
+#'   similar to \code{\link{activity_snake}}.
+#' @param band_color Character, band ribbon color for rug mode
+#'   (default \code{"#3d3d4a"}).
+#' @param rug_opacity Numeric 0-1, opacity of rug tick marks
+#'   (default 0.9).
+#' @param rug_jitter Numeric 0-1, vertical jitter as fraction of band
+#'   height (default 0). When \code{> 0}, tick marks scatter vertically
+#'   across the band instead of sitting at a fixed position.
 #' @param block_border Color for thin borders between blocks, or \code{NA}
 #'   for no borders (default \code{NA}).
 #' @param title Optional character string for plot title.
@@ -96,6 +107,10 @@ sequence_snake <- function(sequence,
                            tick_col = "#333333",
                            tick_len = 5,
                            tick_cex = 0.4,
+                           style = c("block", "rug"),
+                           band_color = "#3d3d4a",
+                           rug_opacity = 0.9,
+                           rug_jitter = 0,
                            block_border = NA,
                            block_labels = NULL,
                            band_labels = NULL,
@@ -104,6 +119,8 @@ sequence_snake <- function(sequence,
                            shadow = TRUE,
                            cex = 0.5,
                            legend_cex = 0.8) {
+  style <- match.arg(style)
+
   # --- Input validation ---
   stopifnot(length(sequence) >= 1L)
   sequence <- as.character(sequence)
@@ -189,40 +206,68 @@ sequence_snake <- function(sequence,
   # Shadows
   if (shadow) draw_shadows(layout)
 
-  # --- Draw neutral arc backgrounds (connector color for empty arcs) ---
-  lapply(arcs, function(a) {
-    polygon(a$pts$x, a$pts$y, col = "#E0E0E0", border = NA)
-  })
+  if (style == "rug") {
+    # --- Rug mode: thin colored ticks, light band background ---
+    # Light band background
+    vapply(seq_len(n_rows), function(k) {
+      rect(bands$x_left[k], bands$y_top[k],
+           bands$x_right[k], bands$y_bottom[k],
+           col = "#F5F5F5", border = NA)
+      NA
+    }, logical(1))
+    # Neutral arcs
+    lapply(arcs, function(a) {
+      polygon(a$pts$x, a$pts$y, col = "#EBEBEB", border = NA)
+    })
+    n_segments <- nrow(seg_info)
+    lapply(seq_len(n_segments), function(seg) {
+      m <- alloc[seg]
+      if (m == 0L) return(invisible(NULL))
+      block_start <- cum_start[seg] + 1L
+      block_states <- sequence[block_start:(block_start + m - 1L)]
+      block_cols <- alpha_col(state_colors[block_states], rug_opacity)
+      if (seg_info$type[seg] == "band") {
+        draw_rug_band(bands[seg_info$index[seg], ], m, block_cols,
+                      rug_jitter)
+      } else {
+        draw_rug_arc(arcs[[seg_info$index[seg]]], m, block_cols,
+                     outer_r, inner_r, rug_jitter)
+      }
+    })
+  } else {
+    # --- Block mode: colored rectangles ---
+    lapply(arcs, function(a) {
+      polygon(a$pts$x, a$pts$y, col = "#E0E0E0", border = NA)
+    })
+    n_segments <- nrow(seg_info)
+    lapply(seq_len(n_segments), function(seg) {
+      m <- alloc[seg]
+      if (m == 0L) return(invisible(NULL))
 
-  # --- Draw blocks ---
-  n_segments <- nrow(seg_info)
-  lapply(seq_len(n_segments), function(seg) {
-    m <- alloc[seg]
-    if (m == 0L) return(invisible(NULL))
+      block_start <- cum_start[seg] + 1L
+      block_end   <- block_start + m - 1L
+      block_states <- sequence[block_start:block_end]
+      block_cols   <- state_colors[block_states]
+      seg_labels   <- if (!is.null(block_labels)) {
+        block_labels[block_start:block_end]
+      } else {
+        NULL
+      }
 
-    block_start <- cum_start[seg] + 1L
-    block_end   <- block_start + m - 1L
-    block_states <- sequence[block_start:block_end]
-    block_cols   <- state_colors[block_states]
-    seg_labels   <- if (!is.null(block_labels)) {
-      block_labels[block_start:block_end]
-    } else {
-      NULL
-    }
+      seg_st <- if (show_state) block_states else NULL
 
-    seg_st <- if (show_state) block_states else NULL
-
-    if (seg_info$type[seg] == "band") {
-      draw_band_blocks(bands[seg_info$index[seg], ], m, block_cols,
-                       block_border, show_index, block_start, cex,
-                       seg_labels, seg_st, state_cex)
-    } else {
-      draw_arc_blocks(arcs[[seg_info$index[seg]]], m, block_cols,
-                      outer_r, inner_r, r_mid, block_border,
-                      show_index, block_start, cex, seg_labels,
-                      seg_st, state_cex)
-    }
-  })
+      if (seg_info$type[seg] == "band") {
+        draw_band_blocks(bands[seg_info$index[seg], ], m, block_cols,
+                         block_border, show_index, block_start, cex,
+                         seg_labels, seg_st, state_cex)
+      } else {
+        draw_arc_blocks(arcs[[seg_info$index[seg]]], m, block_cols,
+                        outer_r, inner_r, r_mid, block_border,
+                        show_index, block_start, cex, seg_labels,
+                        seg_st, state_cex)
+      }
+    })
+  }
 
   # --- Ruler ticks ---
   if (!is.null(tick_labels)) show_ticks <- TRUE
@@ -312,8 +357,25 @@ sequence_snake <- function(sequence,
   }
 
   # --- End caps ---
-  draw_sequence_end_caps(layout, bands, n_rows, band_height,
-                         orientation, state_colors, sequence, n_blocks)
+  if (style == "rug") {
+    # Light neutral end caps for rug mode
+    if (n_rows >= 1L) {
+      bh2 <- band_height / 2
+      cap_side1 <- if (bands$direction[1L] == "ltr") "left" else "right"
+      cap_x1 <- if (cap_side1 == "left") bands$x_left[1L] else bands$x_right[1L]
+      cap1 <- end_cap_polygon(cap_x1, bands$y_center[1L], bh2, cap_side1)
+      polygon(cap1$x, cap1$y, col = "#EBEBEB", border = NA)
+      if (n_rows > 1L) {
+        cap_side2 <- if (bands$direction[n_rows] == "ltr") "right" else "left"
+        cap_x2 <- if (cap_side2 == "right") bands$x_right[n_rows] else bands$x_left[n_rows]
+        cap2 <- end_cap_polygon(cap_x2, bands$y_center[n_rows], bh2, cap_side2)
+        polygon(cap2$x, cap2$y, col = "#EBEBEB", border = NA)
+      }
+    }
+  } else {
+    draw_sequence_end_caps(layout, bands, n_rows, band_height,
+                           orientation, state_colors, sequence, n_blocks)
+  }
 
   # --- Row labels ---
   if (show_labels) {
@@ -324,7 +386,8 @@ sequence_snake <- function(sequence,
       s <- cum_start[seg] + 1L
       sprintf("%d-%d", s, s + m - 1L)
     }, character(1))
-    draw_band_labels(layout, range_labels, col = "#333333", cex = 0.75)
+    lbl_col <- if (style == "rug") "#999999" else "#333333"
+    draw_band_labels(layout, range_labels, col = lbl_col, cex = 0.75)
   }
 
   # --- Legend ---
@@ -669,4 +732,58 @@ draw_transition_mark_at <- function(frac_pos, label, seg_info, alloc,
     }
   }
   invisible(NULL) # nocov
+}
+
+#' Draw rug ticks within a band
+#' @noRd
+draw_rug_band <- function(b, m, tick_cols, jitter = 0) {
+  coords <- band_block_x(b, m)
+  bh <- b$y_bottom - b$y_top
+  tick_h <- bh * 0.2  # each tick is 20% of band height
+  if (jitter > 0) {
+    # Random y center for each tick within the band
+    pad <- tick_h / 2
+    y_min <- b$y_top + pad
+    y_max <- b$y_bottom - pad
+    y_center <- y_min + runif(m) * jitter * (y_max - y_min)
+    rect(coords$x0, y_center - tick_h / 2, coords$x1, y_center + tick_h / 2,
+         col = tick_cols, border = NA)
+  } else {
+    rug_top <- b$y_bottom - bh * 0.35
+    rect(coords$x0, rug_top, coords$x1, b$y_bottom,
+         col = tick_cols, border = NA)
+  }
+  invisible(NULL)
+}
+
+#' Draw rug ticks within an arc
+#' @noRd
+draw_rug_arc <- function(a, m, tick_cols, outer_r, inner_r, jitter = 0) {
+  r_range <- outer_r - inner_r
+  tick_r <- r_range * 0.2
+  theta_per <- pi / m
+  if (jitter > 0) {
+    pad <- tick_r / 2
+    r_min <- inner_r + pad
+    r_max <- outer_r - pad
+    r_centers <- r_min + runif(m) * jitter * (r_max - r_min)
+    lapply(seq_len(m), function(j) {
+      theta1 <- -pi / 2 + (j - 1L) * theta_per
+      theta2 <- -pi / 2 + j * theta_per
+      pts <- arc_sector_polygon(a$cx, a$cy, r_centers[j] + tick_r / 2,
+                                 r_centers[j] - tick_r / 2,
+                                 theta1, theta2, a$side)
+      polygon(pts$x, pts$y, col = tick_cols[j], border = NA)
+    })
+  } else {
+    rug_outer <- inner_r + r_range * 0.35
+    lapply(seq_len(m), function(j) {
+      theta1 <- -pi / 2 + (j - 1L) * theta_per
+      theta2 <- -pi / 2 + j * theta_per
+      pts <- arc_sector_polygon(a$cx, a$cy, rug_outer, inner_r,
+                                 theta1, theta2, a$side)
+      polygon(pts$x, pts$y, col = tick_cols[j], border = NA)
+    })
+  }
+  invisible(NULL)
 }

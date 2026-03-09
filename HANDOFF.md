@@ -1,37 +1,43 @@
-# Session Handoff — 2026-03-08
+# Session Handoff — 2026-03-09
 
 ## Completed
-- Implemented `arc_fill` parameter with 4 modes: "none", "correlation", "mean_prev", "blend"
-- Added `half_arc_polygon()` in `R/layout.R` and `blend_colors()` in `R/colors.R`
-- Implemented `tick_shape = "bar"` for stacked proportional distribution bars
-- Implemented `facet` parameter (auto-group by name prefix or explicit list) with shared legend
-- Added `level_labels`, `legend_cex`, `label_cex` parameters
-- Added ESM auto-pivot via `var`, `day`, `timestamp` — one band per day, time-of-day tick positioning
-- Correlation arcs use `arc_color` with blended absolute+relative intensity scaling
-- Added 30 new tests (232 total, all passing)
-- Demo renders at `tmp/demo_arc_fill.html` with ESM and survey examples
+- Added `style = "rug"` to `sequence_snake()` — thin colored ticks on light gray band background
+- Added `rug_jitter` parameter for vertical scatter (better for ~100 events, not great for 1000)
+- Added `rug_opacity` and `band_color` parameters for rug customization
+- Rug mode draws light neutral end caps and arcs instead of dark ribbon
+- Demonstrated 1000-event real data (Human-AI interaction) as:
+  - **Index view**: `sequence_snake(seq1000)` — temporal order, each block = 1 event
+  - **Proportional view**: same function with sorted input — distribution spread over 4 folds
+- User rejected `multi_snake()` — existing `sequence_snake()` + `survey_sequence()` suffice
+- Code review (/simplify) completed — fixed dead code, vectorized operations, removed unused functions
+- Jekyll snakeplot page published with rationale-driven captions
+- GitHub Actions CI + Codecov workflows set up
+- Version bumped to 0.2.2
+- All tests pass (402), R CMD check: 0 errors, 0 warnings, 1 NOTE (.github)
 
 ## Current State
-- All features working, 232 tests pass
-- Demo file at `tmp/demo_arc_fill.Rmd` covers: ESM emotions (bar + line), angry/happy 14 days (ticks by time-of-day + bars), faceted survey
-- User has not yet reviewed the latest render (which fixed 98-day → 14-day ESM bug)
+- Package is clean and functional on branch `dev-clean`
+- `demo_real.Rmd` shows the two approved plots (index + sorted proportional block style)
+- Rug style implemented and tested (7 tests) but not featured in demos
+- `multi_snake.R` + `test-multi_snake.R` still in codebase — should be removed
 
 ## Key Decisions
-- ESM pivot builds a counts matrix directly instead of relying on `coerce_survey_input()` heuristic
-- "none" arc mode uses full opacity (no alpha) so arcs match bands seamlessly
-- Correlation intensity uses `0.85 * abs(r) + 0.15 * relative_rank` formula
-- Facet uses `par(mfrow)` with `match.call()` manipulation for recursive dispatch
+- Rug uses light `#F5F5F5` band + `#EBEBEB` arcs/end caps (user rejected dark ribbon)
+- Rug ticks are bottom 35% of band height; jitter scatters vertically
+- Proportional distribution = just sorting input by frequency before `sequence_snake()`, no new function
+- User prefers block style for 1000 events, rug for ~100
 
 ## Open Issues
-- None blocking
+- `multi_snake.R` should be removed (user said "no multi snake")
+- Codecov token not yet added to GitHub repo secrets
+- Changes not yet committed or pushed
 
 ## Next Steps
-- Get user feedback on the rendered demo
-- Consider adding `start_from` support for faceted panels
-- Consider roxygen docs rebuild (`devtools::document()`)
+- Remove `multi_snake.R` + tests if confirmed
+- Commit and push
+- Add CODECOV_TOKEN to GitHub secrets
 
 ## Context
 - R package at `/Users/mohammedsaqr/Documents/Github/Snakeplot`
-- Branch: `dev-clean`
-- Uses `openesm` package for ESM demo data
-- Survey data at `/Users/mohammedsaqr/Library/CloudStorage/GoogleDrive-saqr@saqr.me/My Drive/Git/Survey.csv`
+- Branch: `dev-clean`, main branch: `main`
+- Real test data: `/Users/mohammedsaqr/Documents/Github/cograph/tutorials/data.csv` (category column)

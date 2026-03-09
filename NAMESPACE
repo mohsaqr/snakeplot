@@ -3,6 +3,7 @@
 export(activity_snake)
 export(facet_snake)
 export(line_snake)
+export(multi_snake)
 export(sequence_snake)
 export(sequential_dist)
 export(snake_palette)

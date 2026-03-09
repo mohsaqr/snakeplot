@@ -1,5 +1,12 @@
 # Changes
 
+### 2026-03-09 — rug style for sequence_snake, real data demos
+
+- R/sequence_snake.R: Added `style = "rug"` parameter — thin colored ticks on light `#F5F5F5` band with `#EBEBEB` arcs/end caps. Added `rug_jitter` (vertical scatter), `rug_opacity`, `band_color`. New helpers: `draw_rug_band()`, `draw_rug_arc()`.
+- tests/testthat/test-sequence_snake.R: Added 7 tests for rug style (basic, custom band_color, multi-row, large sequence, opacity, single row, jitter).
+- tmp/demo_real.Rmd: Two real-data plots — index view (1000 events temporal order) and proportional view (sorted by frequency, distribution spread over 4 folds). Both use block style.
+- Tests: 402 pass, 0 fail. R CMD check: 0 errors, 0 warnings, 1 NOTE (.github).
+
 ### 2026-03-08 — arc_fill, facet, ESM, bar ticks, level_labels
 
 - R/layout.R: Added `half_arc_polygon()` for splitting arcs into upper/lower halves (two-tone fill).

@@ -27,6 +27,10 @@ sequence_snake(
   tick_col = "#333333",
   tick_len = 5,
   tick_cex = 0.4,
+  style = c("block", "rug"),
+  band_color = "#3d3d4a",
+  rug_opacity = 0.9,
+  rug_jitter = 0,
   block_border = NA,
   block_labels = NULL,
   band_labels = NULL,
@@ -98,6 +102,21 @@ rather than at state-change boundaries.}
 \item{tick_len}{Numeric, length of tick marks in pixels (default 5).}
 
 \item{tick_cex}{Numeric, text size for tick labels (default 0.4).}
+
+\item{style}{Character, \code{"block"} (default) or \code{"rug"}.
+\code{"block"} fills the full band height with colored blocks.
+\code{"rug"} draws thin colored tick marks on a dark ribbon,
+similar to \code{\link{activity_snake}}.}
+
+\item{band_color}{Character, band ribbon color for rug mode
+(default \code{"#3d3d4a"}).}
+
+\item{rug_opacity}{Numeric 0-1, opacity of rug tick marks
+(default 0.9).}
+
+\item{rug_jitter}{Numeric 0-1, vertical jitter as fraction of band
+height (default 0). When \code{> 0}, tick marks scatter vertically
+across the band instead of sitting at a fixed position.}
 
 \item{block_border}{Color for thin borders between blocks, or \code{NA}
 for no borders (default \code{NA}).}

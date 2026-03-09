@@ -521,3 +521,56 @@ describe("sequence_snake() — coverage extras", {
     expect_silent(timeline_snake(s, alphabet = c("X", "Y")))
   })
 })
+
+describe("sequence_snake() — rug style", {
+  set.seed(42)
+  verbs <- c("Read", "Write", "Discuss", "Listen")
+  seq30 <- sample(verbs, 30, replace = TRUE)
+
+  it("renders rug style without error", {
+    grDevices::pdf(nullfile())
+    on.exit(grDevices::dev.off(), add = TRUE)
+    expect_silent(sequence_snake(seq30, style = "rug"))
+  })
+
+  it("renders rug style with custom band_color", {
+    grDevices::pdf(nullfile())
+    on.exit(grDevices::dev.off(), add = TRUE)
+    expect_silent(sequence_snake(seq30, style = "rug",
+                                  band_color = "#1a1a2e"))
+  })
+
+  it("renders rug style with multiple rows", {
+    grDevices::pdf(nullfile())
+    on.exit(grDevices::dev.off(), add = TRUE)
+    expect_silent(sequence_snake(seq30, n_rows = 4, style = "rug",
+                                  show_labels = TRUE, show_legend = TRUE,
+                                  shadow = TRUE, title = "Rug test"))
+  })
+
+  it("renders rug style with large sequence", {
+    grDevices::pdf(nullfile())
+    on.exit(grDevices::dev.off(), add = TRUE)
+    big <- sample(verbs, 500, replace = TRUE)
+    expect_silent(sequence_snake(big, n_rows = 4, style = "rug"))
+  })
+
+  it("renders rug style with rug_opacity", {
+    grDevices::pdf(nullfile())
+    on.exit(grDevices::dev.off(), add = TRUE)
+    expect_silent(sequence_snake(seq30, style = "rug", rug_opacity = 0.5))
+  })
+
+  it("renders rug style with single row", {
+    grDevices::pdf(nullfile())
+    on.exit(grDevices::dev.off(), add = TRUE)
+    expect_silent(sequence_snake(seq30, n_rows = 1, style = "rug"))
+  })
+
+  it("renders rug style with jitter", {
+    grDevices::pdf(nullfile())
+    on.exit(grDevices::dev.off(), add = TRUE)
+    expect_silent(sequence_snake(seq30, n_rows = 4, style = "rug",
+                                  rug_jitter = 0.8))
+  })
+})
