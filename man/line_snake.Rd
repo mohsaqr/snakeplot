@@ -22,12 +22,12 @@ line_snake(
   show_grid = TRUE,
   shadow = TRUE,
   label_color = "#cccccc",
-  label_cex = 0.85,
+  label_size = 0.85,
   orientation = c("horizontal", "vertical"),
   start_from = c("left", "right"),
   title = NULL,
   margin = c(top = 30, right = 10, bottom = 50, left = 80),
-  bg = "white"
+  background = "white"
 )
 }
 \arguments{
@@ -72,7 +72,7 @@ for a single band).}
 
 \item{label_color}{Character (default "#cccccc").}
 
-\item{label_cex}{Numeric (default 0.85).}
+\item{label_size}{Numeric (default 0.85).}
 
 \item{orientation}{Character, "horizontal" or "vertical" (default "horizontal").}
 
@@ -82,7 +82,7 @@ for a single band).}
 
 \item{margin}{Named numeric vector.}
 
-\item{bg}{Background color.}
+\item{background}{Background color.}
 }
 \value{
 Invisible \code{snake_layout} object.

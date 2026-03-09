@@ -7,12 +7,12 @@
 #'
 #' @param sequence Character, integer, or factor vector of states.
 #'   Each element represents one time point.
-#' @param alphabet Character vector of unique states in desired order.
+#' @param states Character vector of unique states in desired order.
 #'   If \code{NULL}, derived from \code{unique(sequence)}.
 #' @param colors Named character vector of colors keyed by state, or an
-#'   unnamed vector recycled to match \code{alphabet}. If \code{NULL},
+#'   unnamed vector recycled to match \code{states}. If \code{NULL},
 #'   a built-in qualitative palette is used.
-#' @param n_rows Integer, number of serpentine rows. If \code{NULL},
+#' @param rows Integer, number of serpentine rows. If \code{NULL},
 #'   auto-calculated targeting approximately 10 blocks per band.
 #' @param band_height Numeric, height of each band in pixels (default 28).
 #' @param band_gap Numeric, gap between bands (default 18).
@@ -24,11 +24,11 @@
 #' @param show_labels Logical, show position range labels per row
 #'   (default \code{TRUE}).
 #' @param show_legend Logical, draw color legend (default \code{TRUE}).
-#' @param show_index Logical, print small position numbers inside blocks
+#' @param show_numbers Logical, print small position numbers inside blocks
 #'   (default \code{FALSE}).
 #' @param show_state Logical, print the state name inside each block
 #'   (default \code{FALSE}).
-#' @param state_cex Numeric, text size for state labels (default 0.35).
+#' @param state_size Numeric, text size for state labels (default 0.35).
 #' @param show_ticks Logical, draw ruler-style tick marks at block
 #'   boundaries outside the bands (default \code{FALSE}).
 #' @param tick_labels Character vector of labels for evenly spaced ruler
@@ -41,9 +41,9 @@
 #'   transition labels (e.g., \code{c(6.5, 24.3)}). When provided, labels
 #'   are placed at exact interpolated positions along the serpentine path
 #'   rather than at state-change boundaries.
-#' @param tick_col Color for tick marks (default \code{"#333333"}).
-#' @param tick_len Numeric, length of tick marks in pixels (default 5).
-#' @param tick_cex Numeric, text size for tick labels (default 0.4).
+#' @param tick_color Color for tick marks (default \code{"#333333"}).
+#' @param tick_length Numeric, length of tick marks in pixels (default 5).
+#' @param tick_size Numeric, text size for tick labels (default 0.4).
 #' @param style Character, \code{"block"} (default) or \code{"rug"}.
 #'   \code{"block"} fills the full band height with colored blocks.
 #'   \code{"rug"} draws thin colored tick marks on a dark ribbon,
@@ -52,20 +52,20 @@
 #'   (default \code{"#3d3d4a"}).
 #' @param rug_opacity Numeric 0-1, opacity of rug tick marks
 #'   (default 0.9).
-#' @param rug_jitter Numeric 0-1, vertical jitter as fraction of band
+#' @param jitter Numeric 0-1, vertical jitter as fraction of band
 #'   height (default 0). When \code{> 0}, tick marks scatter vertically
 #'   across the band instead of sitting at a fixed position.
-#' @param block_border Color for thin borders between blocks, or \code{NA}
+#' @param border_color Color for thin borders between blocks, or \code{NA}
 #'   for no borders (default \code{NA}).
 #' @param title Optional character string for plot title.
-#' @param bg Background color (default \code{"white"}).
+#' @param background Background color (default \code{"white"}).
 #' @param shadow Logical, draw drop shadows (default \code{TRUE}).
 #' @param block_labels Optional character vector of labels to display inside
-#'   each block (same length as \code{sequence}). Overrides \code{show_index}.
+#'   each block (same length as \code{sequence}). Overrides \code{show_numbers}.
 #' @param band_labels Character vector of labels to display centered below
-#'   each band (e.g., year labels). Length must equal \code{n_rows}.
-#' @param cex Numeric, text size multiplier for block labels (default 0.5).
-#' @param legend_cex Numeric, legend text size (default 0.8).
+#'   each band (e.g., year labels). Length must equal \code{rows}.
+#' @param text_size Numeric, text size multiplier for block labels (default 0.5).
+#' @param legend_text_size Numeric, legend text size (default 0.8).
 #'
 #' @return Invisible \code{NULL}. Called for its side effect of producing
 #'   a plot.
@@ -81,13 +81,13 @@
 #' cols <- c(Read = "#E41A1C", Write = "#377EB8", Discuss = "#4DAF4A",
 #'           Listen = "#984EA3", Search = "#FF7F00", Plan = "#A6D854",
 #'           Code = "#A65628", Review = "#F781BF")
-#' sequence_snake(seq75, colors = cols, n_rows = 5)
+#' sequence_snake(seq75, colors = cols, rows = 5)
 #'
 #' @export
 sequence_snake <- function(sequence,
-                           alphabet = NULL,
+                           states = NULL,
                            colors = NULL,
-                           n_rows = NULL,
+                           rows = NULL,
                            band_height = 28,
                            band_gap = 18,
                            plot_width = 500,
@@ -97,28 +97,28 @@ sequence_snake <- function(sequence,
                            start_from = "left",
                            show_labels = TRUE,
                            show_legend = TRUE,
-                           show_index = FALSE,
+                           show_numbers = FALSE,
                            show_state = FALSE,
-                           state_cex = 0.35,
+                           state_size = 0.35,
                            show_ticks = FALSE,
                            tick_labels = NULL,
                            transition_labels = NULL,
                            transition_pos = NULL,
-                           tick_col = "#333333",
-                           tick_len = 5,
-                           tick_cex = 0.4,
+                           tick_color = "#333333",
+                           tick_length = 5,
+                           tick_size = 0.4,
                            style = c("block", "rug"),
                            band_color = "#3d3d4a",
                            rug_opacity = 0.9,
-                           rug_jitter = 0,
-                           block_border = NA,
+                           jitter = 0,
+                           border_color = NA,
                            block_labels = NULL,
                            band_labels = NULL,
                            title = NULL,
-                           bg = "white",
+                           background = "white",
                            shadow = TRUE,
-                           cex = 0.5,
-                           legend_cex = 0.8) {
+                           text_size = 0.5,
+                           legend_text_size = 0.8) {
   style <- match.arg(style)
 
   # --- Input validation ---
@@ -129,16 +129,16 @@ sequence_snake <- function(sequence,
   }
   n_blocks <- length(sequence)
 
-  if (is.null(alphabet)) {
-    alphabet <- unique(sequence)
+  if (is.null(states)) {
+    states <- unique(sequence)
   }
-  alphabet <- as.character(alphabet)
-  n_states <- length(alphabet)
+  states <- as.character(states)
+  n_states <- length(states)
 
-  # Validate all states are in alphabet
-  unknown <- setdiff(unique(sequence), alphabet)
+  # Validate all states are in states
+  unknown <- setdiff(unique(sequence), states)
   if (length(unknown) > 0L) {
-    stop(sprintf("Unknown states not in alphabet: %s",
+    stop(sprintf("Unknown states not in states: %s",
                  paste(unknown, collapse = ", ")), call. = FALSE)
   }
 
@@ -150,31 +150,31 @@ sequence_snake <- function(sequence,
                    length(block_labels), n_blocks), call. = FALSE)
     }
     # When ticks are on, labels go outside; otherwise inside blocks
-    if (!show_ticks && is.null(tick_labels)) show_index <- TRUE
+    if (!show_ticks && is.null(tick_labels)) show_numbers <- TRUE
   }
 
   # --- Colors ---
-  state_colors <- resolve_state_colors(colors, alphabet, n_states)
+  state_colors <- resolve_state_colors(colors, states, n_states)
 
-  # --- Auto-calculate n_rows ---
-  if (is.null(n_rows)) {
-    n_rows <- max(1L, ceiling(n_blocks / 11))
+  # --- Auto-calculate rows ---
+  if (is.null(rows)) {
+    rows <- max(1L, ceiling(n_blocks / 11))
   }
-  stopifnot(is.numeric(n_rows), length(n_rows) == 1L, n_rows >= 1L)
-  n_rows <- as.integer(n_rows)
+  stopifnot(is.numeric(rows), length(rows) == 1L, rows >= 1L)
+  rows <- as.integer(rows)
 
   # --- Band labels validation ---
   if (!is.null(band_labels)) {
     band_labels <- as.character(band_labels)
-    if (length(band_labels) != n_rows) {
-      stop(sprintf("length(band_labels) = %d but n_rows = %d; must match",
-                   length(band_labels), n_rows), call. = FALSE)
+    if (length(band_labels) != rows) {
+      stop(sprintf("length(band_labels) = %d but rows = %d; must match",
+                   length(band_labels), rows), call. = FALSE)
     }
   }
 
   # --- Layout ---
   layout <- compute_snake_layout(
-    n_bands = n_rows, band_height = band_height, band_gap = band_gap,
+    n_bands = rows, band_height = band_height, band_gap = band_gap,
     plot_width = plot_width, margin = margin,
     orientation = orientation, start_from = start_from
   )
@@ -187,14 +187,14 @@ sequence_snake <- function(sequence,
   r_mid   <- (outer_r + inner_r) / 2
 
   # --- Build segment table (band, arc, band, arc, ..., band) ---
-  seg_info <- build_segment_table(n_rows, plot_width, r_mid)
+  seg_info <- build_segment_table(rows, plot_width, r_mid)
 
   # --- Allocate blocks to segments ---
   alloc <- allocate_blocks(seg_info$path_length, n_blocks)
   cum_start <- c(0L, cumsum(alloc))
 
   # --- Set up canvas ---
-  op <- setup_canvas(layout, bg = bg)
+  op <- setup_canvas(layout, bg = background)
   on.exit(par(op), add = TRUE)
 
   # Title
@@ -209,7 +209,7 @@ sequence_snake <- function(sequence,
   if (style == "rug") {
     # --- Rug mode: thin colored ticks, light band background ---
     # Light band background
-    vapply(seq_len(n_rows), function(k) {
+    vapply(seq_len(rows), function(k) {
       rect(bands$x_left[k], bands$y_top[k],
            bands$x_right[k], bands$y_bottom[k],
            col = "#F5F5F5", border = NA)
@@ -228,10 +228,10 @@ sequence_snake <- function(sequence,
       block_cols <- alpha_col(state_colors[block_states], rug_opacity)
       if (seg_info$type[seg] == "band") {
         draw_rug_band(bands[seg_info$index[seg], ], m, block_cols,
-                      rug_jitter)
+                      jitter)
       } else {
         draw_rug_arc(arcs[[seg_info$index[seg]]], m, block_cols,
-                     outer_r, inner_r, rug_jitter)
+                     outer_r, inner_r, jitter)
       }
     })
   } else {
@@ -258,13 +258,13 @@ sequence_snake <- function(sequence,
 
       if (seg_info$type[seg] == "band") {
         draw_band_blocks(bands[seg_info$index[seg], ], m, block_cols,
-                         block_border, show_index, block_start, cex,
-                         seg_labels, seg_st, state_cex)
+                         border_color, show_numbers, block_start, text_size,
+                         seg_labels, seg_st, state_size)
       } else {
         draw_arc_blocks(arcs[[seg_info$index[seg]]], m, block_cols,
-                        outer_r, inner_r, r_mid, block_border,
-                        show_index, block_start, cex, seg_labels,
-                        seg_st, state_cex)
+                        outer_r, inner_r, r_mid, border_color,
+                        show_numbers, block_start, text_size, seg_labels,
+                        seg_st, state_size)
       }
     })
   }
@@ -272,7 +272,7 @@ sequence_snake <- function(sequence,
   # --- Ruler ticks ---
   if (!is.null(tick_labels)) show_ticks <- TRUE
   if (show_ticks) {
-    lapply(seq_len(n_rows), function(k) {
+    lapply(seq_len(rows), function(k) {
       b <- bands[k, ]
       bw <- b$x_right - b$x_left
       if (!is.null(tick_labels)) {
@@ -287,14 +287,14 @@ sequence_snake <- function(sequence,
         }
         # Internal boundary ticks (skip first and last)
         int_x <- tk_x[-c(1L, length(tk_x))]
-        segments(int_x, b$y_top - tick_len, int_x, b$y_top,
-                 col = tick_col, lwd = 0.6)
-        segments(int_x, b$y_bottom, int_x, b$y_bottom + tick_len,
-                 col = tick_col, lwd = 0.6)
+        segments(int_x, b$y_top - tick_length, int_x, b$y_top,
+                 col = tick_color, lwd = 0.6)
+        segments(int_x, b$y_bottom, int_x, b$y_bottom + tick_length,
+                 col = tick_color, lwd = 0.6)
         # Labels centered between boundary ticks
         mid_x <- (tk_x[-length(tk_x)] + tk_x[-1L]) / 2
-        text(mid_x, b$y_bottom + tick_len + 5, tick_labels,
-             cex = tick_cex, col = tick_col)
+        text(mid_x, b$y_bottom + tick_length + 5, tick_labels,
+             cex = tick_size, col = tick_color)
       } else {
         # Block-boundary ticks with optional labels outside
         seg_idx <- which(seg_info$type == "band" & seg_info$index == k)
@@ -304,18 +304,18 @@ sequence_snake <- function(sequence,
         # Internal boundary ticks
         if (m > 1L) {
           tick_x <- coords$x1[-m]
-          segments(tick_x, b$y_top - tick_len, tick_x, b$y_top,
-                   col = tick_col, lwd = 0.8)
-          segments(tick_x, b$y_bottom, tick_x, b$y_bottom + tick_len,
-                   col = tick_col, lwd = 0.8)
+          segments(tick_x, b$y_top - tick_length, tick_x, b$y_top,
+                   col = tick_color, lwd = 0.8)
+          segments(tick_x, b$y_bottom, tick_x, b$y_bottom + tick_length,
+                   col = tick_color, lwd = 0.8)
         }
         # Block labels outside (centered under each block)
         if (!is.null(block_labels)) {
           blk_start <- cum_start[seg_idx] + 1L
           blk_lbls <- block_labels[blk_start:(blk_start + m - 1L)]
           mid_x <- (coords$x0 + coords$x1) / 2
-          text(mid_x, b$y_bottom + tick_len + 6, blk_lbls,
-               cex = tick_cex, col = tick_col)
+          text(mid_x, b$y_bottom + tick_length + 6, blk_lbls,
+               cex = tick_size, col = tick_color)
         }
       }
     })
@@ -329,7 +329,7 @@ sequence_snake <- function(sequence,
       lapply(seq_len(n_trans), function(ti) {
         draw_transition_mark_at(transition_pos[ti], transition_labels[ti],
                                  seg_info, alloc, cum_start, bands, arcs,
-                                 outer_r, inner_r, tick_cex)
+                                 outer_r, inner_r, tick_size)
       })
     } else {
       # Default: place at state-change block boundaries
@@ -340,7 +340,7 @@ sequence_snake <- function(sequence,
         lapply(seq_len(n_trans), function(ti) {
           draw_transition_mark(trans_pos[ti], transition_labels[ti],
                                 seg_info, alloc, cum_start, bands, arcs,
-                                outer_r, tick_cex)
+                                outer_r, tick_size)
         })
       }
     }
@@ -348,32 +348,32 @@ sequence_snake <- function(sequence,
 
   # --- Band labels (centered below each band) ---
   if (!is.null(band_labels)) {
-    lapply(seq_len(n_rows), function(k) {
+    lapply(seq_len(rows), function(k) {
       b <- bands[k, ]
       mid_x <- (b$x_left + b$x_right) / 2
-      text(mid_x, b$y_bottom + tick_len * 1.5 + 8, band_labels[k],
-           cex = tick_cex * 1.3, col = tick_col, font = 1)
+      text(mid_x, b$y_bottom + tick_length * 1.5 + 8, band_labels[k],
+           cex = tick_size * 1.3, col = tick_color, font = 1)
     })
   }
 
   # --- End caps ---
   if (style == "rug") {
     # Light neutral end caps for rug mode
-    if (n_rows >= 1L) {
+    if (rows >= 1L) {
       bh2 <- band_height / 2
       cap_side1 <- if (bands$direction[1L] == "ltr") "left" else "right"
       cap_x1 <- if (cap_side1 == "left") bands$x_left[1L] else bands$x_right[1L]
       cap1 <- end_cap_polygon(cap_x1, bands$y_center[1L], bh2, cap_side1)
       polygon(cap1$x, cap1$y, col = "#EBEBEB", border = NA)
-      if (n_rows > 1L) {
-        cap_side2 <- if (bands$direction[n_rows] == "ltr") "right" else "left"
-        cap_x2 <- if (cap_side2 == "right") bands$x_right[n_rows] else bands$x_left[n_rows]
-        cap2 <- end_cap_polygon(cap_x2, bands$y_center[n_rows], bh2, cap_side2)
+      if (rows > 1L) {
+        cap_side2 <- if (bands$direction[rows] == "ltr") "right" else "left"
+        cap_x2 <- if (cap_side2 == "right") bands$x_right[rows] else bands$x_left[rows]
+        cap2 <- end_cap_polygon(cap_x2, bands$y_center[rows], bh2, cap_side2)
         polygon(cap2$x, cap2$y, col = "#EBEBEB", border = NA)
       }
     }
   } else {
-    draw_sequence_end_caps(layout, bands, n_rows, band_height,
+    draw_sequence_end_caps(layout, bands, rows, band_height,
                            orientation, state_colors, sequence, n_blocks)
   }
 
@@ -392,10 +392,10 @@ sequence_snake <- function(sequence,
 
   # --- Legend ---
   if (show_legend) {
-    legend_items <- lapply(seq_along(alphabet), function(i) {
-      list(label = alphabet[i], color = state_colors[alphabet[i]])
+    legend_items <- lapply(seq_along(states), function(i) {
+      list(label = states[i], color = state_colors[states[i]])
     })
-    draw_snake_legend(layout, legend_items, cex = legend_cex)
+    draw_snake_legend(layout, legend_items, cex = legend_text_size)
   }
 
   invisible(NULL)
@@ -405,7 +405,7 @@ sequence_snake <- function(sequence,
 
 #' Resolve state colors from user input
 #' @noRd
-resolve_state_colors <- function(colors, alphabet, n_states) {
+resolve_state_colors <- function(colors, states, n_states) {
   # Default qualitative palette (Set2-inspired)
   default_pal <- c("#66C2A5", "#FC8D62", "#8DA0CB", "#E78AC3",
                    "#A6D854", "#FFD92F", "#E5C494", "#FB8072",
@@ -413,32 +413,32 @@ resolve_state_colors <- function(colors, alphabet, n_states) {
 
   if (is.null(colors)) {
     state_colors <- rep_len(default_pal, n_states)
-    names(state_colors) <- alphabet
+    names(state_colors) <- states
   } else if (!is.null(names(colors))) {
-    state_colors <- colors[alphabet]
+    state_colors <- colors[states]
     missing <- is.na(state_colors)
     if (any(missing)) state_colors[missing] <- "#CCCCCC"
-    names(state_colors) <- alphabet
+    names(state_colors) <- states
   } else {
     state_colors <- rep_len(colors, n_states)
-    names(state_colors) <- alphabet
+    names(state_colors) <- states
   }
   state_colors
 }
 
 #' Build segment table (band/arc interleaved)
 #' @noRd
-build_segment_table <- function(n_rows, plot_width, r_mid) {
+build_segment_table <- function(rows, plot_width, r_mid) {
   band_df <- data.frame(
-    type = rep("band", n_rows),
-    index = seq_len(n_rows),
-    path_length = rep(plot_width, n_rows),
+    type = rep("band", rows),
+    index = seq_len(rows),
+    path_length = rep(plot_width, rows),
     stringsAsFactors = FALSE
   )
 
-  if (n_rows <= 1L) return(band_df)
+  if (rows <= 1L) return(band_df)
 
-  n_arcs <- n_rows - 1L
+  n_arcs <- rows - 1L
   arc_df <- data.frame(
     type = rep("arc", n_arcs),
     index = seq_len(n_arcs),
@@ -448,11 +448,11 @@ build_segment_table <- function(n_rows, plot_width, r_mid) {
 
   # Interleave: band1, arc1, band2, arc2, ..., band_n
   combined <- rbind(band_df, arc_df)
-  band_pos <- seq(1L, by = 2L, length.out = n_rows)
+  band_pos <- seq(1L, by = 2L, length.out = rows)
   arc_pos  <- seq(2L, by = 2L, length.out = n_arcs)
-  order_idx <- integer(n_rows + n_arcs)
-  order_idx[band_pos] <- seq_len(n_rows)
-  order_idx[arc_pos]  <- n_rows + seq_len(n_arcs)
+  order_idx <- integer(rows + n_arcs)
+  order_idx[band_pos] <- seq_len(rows)
+  order_idx[arc_pos]  <- rows + seq_len(n_arcs)
   result <- combined[order_idx, ]
   rownames(result) <- NULL
   result
@@ -505,16 +505,16 @@ band_block_x <- function(b, m) {
 
 #' Draw colored blocks within a band
 #' @noRd
-draw_band_blocks <- function(b, m, block_cols, block_border,
-                              show_index, block_start, cex,
+draw_band_blocks <- function(b, m, block_cols, border_color,
+                              show_numbers, block_start, text_size,
                               seg_labels = NULL,
-                              seg_states = NULL, state_cex = NULL) {
+                              seg_states = NULL, state_size = NULL) {
   coords <- band_block_x(b, m)
   # Draw rectangles
   rect(coords$x0, b$y_top, coords$x1, b$y_bottom,
-       col = block_cols, border = block_border)
+       col = block_cols, border = border_color)
   # Block labels (year, index, etc.)
-  if (show_index) {
+  if (show_numbers) {
     lbls <- if (!is.null(seg_labels)) seg_labels else block_start + seq_len(m) - 1L
     y_lbl <- if (!is.null(seg_states)) {
       b$y_center - (b$y_bottom - b$y_top) * 0.18
@@ -522,14 +522,14 @@ draw_band_blocks <- function(b, m, block_cols, block_border,
       b$y_center
     }
     text((coords$x0 + coords$x1) / 2, y_lbl, lbls,
-         cex = cex, col = "#FFFFFF")
+         cex = text_size, col = "#FFFFFF")
   }
   # State labels — centered across runs of same state
   if (!is.null(seg_states)) {
     runs <- rle(seg_states)
     end_pos <- cumsum(runs$lengths)
     start_pos <- c(1L, end_pos[-length(end_pos)] + 1L)
-    y_st <- if (show_index) {
+    y_st <- if (show_numbers) {
       b$y_center + (b$y_bottom - b$y_top) * 0.22
     } else {
       b$y_center
@@ -538,7 +538,7 @@ draw_band_blocks <- function(b, m, block_cols, block_border,
       run_x0 <- coords$x0[start_pos[r]]
       run_x1 <- coords$x1[end_pos[r]]
       text((run_x0 + run_x1) / 2, y_st, runs$values[r],
-           cex = state_cex, col = "#FFFFFF", font = 2)
+           cex = state_size, col = "#FFFFFF", font = 2)
     })
   }
   invisible(NULL)
@@ -547,17 +547,17 @@ draw_band_blocks <- function(b, m, block_cols, block_border,
 #' Draw colored blocks (annular sectors) within an arc
 #' @noRd
 draw_arc_blocks <- function(a, m, block_cols, outer_r, inner_r, r_mid,
-                             block_border, show_index, block_start, cex,
+                             border_color, show_numbers, block_start, text_size,
                              seg_labels = NULL,
-                             seg_states = NULL, state_cex = NULL) {
+                             seg_states = NULL, state_size = NULL) {
   theta_per <- pi / m
   lapply(seq_len(m), function(j) {
     theta1 <- -pi / 2 + (j - 1L) * theta_per
     theta2 <- -pi / 2 + j * theta_per
     pts <- arc_sector_polygon(a$cx, a$cy, outer_r, inner_r,
                                theta1, theta2, a$side)
-    polygon(pts$x, pts$y, col = block_cols[j], border = block_border)
-    if (show_index || !is.null(seg_states)) {
+    polygon(pts$x, pts$y, col = block_cols[j], border = border_color)
+    if (show_numbers || !is.null(seg_states)) {
       theta_mid <- (theta1 + theta2) / 2
       if (a$side %in% c("right", "left")) {
         sign_x <- if (a$side == "right") 1 else -1
@@ -568,9 +568,9 @@ draw_arc_blocks <- function(a, m, block_cols, outer_r, inner_r, r_mid,
         lx <- a$cx + r_mid * sin(theta_mid)
         ly <- a$cy + sign_y * r_mid * cos(theta_mid)
       }
-      if (show_index) {
+      if (show_numbers) {
         lbl <- if (!is.null(seg_labels)) seg_labels[j] else block_start + j - 1L
-        text(lx, ly, lbl, cex = cex * 0.8, col = "#FFFFFF")
+        text(lx, ly, lbl, cex = text_size * 0.8, col = "#FFFFFF")
       }
     }
   })
@@ -579,7 +579,7 @@ draw_arc_blocks <- function(a, m, block_cols, outer_r, inner_r, r_mid,
 
 #' Draw semicircular end caps colored by first/last state
 #' @noRd
-draw_sequence_end_caps <- function(layout, bands, n_rows, band_height,
+draw_sequence_end_caps <- function(layout, bands, rows, band_height,
                                     orientation, state_colors, sequence,
                                     n_blocks) {
   bh2  <- band_height / 2
@@ -594,14 +594,14 @@ draw_sequence_end_caps <- function(layout, bands, n_rows, band_height,
     polygon(cap1$x, cap1$y, col = state_colors[sequence[1]], border = NA)
 
     # End cap
-    if (n_rows > 1L) {
-      last_dir <- bands$direction[n_rows]
+    if (rows > 1L) {
+      last_dir <- bands$direction[rows]
       if (last_dir == "ltr") {
-        cap2 <- end_cap_polygon(bands$x_right[n_rows],
-                                bands$y_center[n_rows], bh2, "right")
+        cap2 <- end_cap_polygon(bands$x_right[rows],
+                                bands$y_center[rows], bh2, "right")
       } else {
-        cap2 <- end_cap_polygon(bands$x_left[n_rows],
-                                bands$y_center[n_rows], bh2, "left")
+        cap2 <- end_cap_polygon(bands$x_left[rows],
+                                bands$y_center[rows], bh2, "left")
       }
       polygon(cap2$x, cap2$y, col = state_colors[sequence[n_blocks]],
               border = NA)
@@ -613,14 +613,14 @@ draw_sequence_end_caps <- function(layout, bands, n_rows, band_height,
     cap1 <- end_cap_polygon(bands$x_center[1], cap_y, bh2, cap_side)
     polygon(cap1$x, cap1$y, col = state_colors[sequence[1]], border = NA)
 
-    if (n_rows > 1L) {
-      last_dir <- bands$direction[n_rows]
+    if (rows > 1L) {
+      last_dir <- bands$direction[rows]
       if (last_dir == "ttb") {
-        cap2 <- end_cap_polygon(bands$x_center[n_rows],
-                                bands$y_bottom[n_rows], bh2, "bottom")
+        cap2 <- end_cap_polygon(bands$x_center[rows],
+                                bands$y_bottom[rows], bh2, "bottom")
       } else {
-        cap2 <- end_cap_polygon(bands$x_center[n_rows],
-                                bands$y_top[n_rows], bh2, "top")
+        cap2 <- end_cap_polygon(bands$x_center[rows],
+                                bands$y_top[rows], bh2, "top")
       }
       polygon(cap2$x, cap2$y, col = state_colors[sequence[n_blocks]],
               border = NA)
@@ -634,7 +634,7 @@ draw_sequence_end_caps <- function(layout, bands, n_rows, band_height,
 #' Overlays label inside the band or arc at the transition boundary.
 #' @noRd
 draw_transition_mark <- function(pos, label, seg_info, alloc, cum_start,
-                                  bands, arcs, outer_r, tick_cex) {
+                                  bands, arcs, outer_r, tick_size) {
   n_seg <- nrow(seg_info)
   # Find which segment block 'pos' belongs to (vectorized)
   cs <- cum_start[seq_len(n_seg)]
@@ -657,7 +657,7 @@ draw_transition_mark <- function(pos, label, seg_info, alloc, cum_start,
 
     # Overlaid label inside band at the transition edge
     text(tx, b$y_center, label,
-         cex = tick_cex, col = "#FFFFFF", font = 2)
+         cex = tick_size, col = "#FFFFFF", font = 2)
 
   } else if (seg_info$type[seg] == "arc") {
     a <- arcs[[seg_info$index[seg]]]
@@ -680,7 +680,7 @@ draw_transition_mark <- function(pos, label, seg_info, alloc, cum_start,
     }
 
     text(lx, ly, label,
-         cex = tick_cex, col = "#FFFFFF", font = 2)
+         cex = tick_size, col = "#FFFFFF", font = 2)
   }
   invisible(NULL)
 }
@@ -692,7 +692,7 @@ draw_transition_mark <- function(pos, label, seg_info, alloc, cum_start,
 #' @noRd
 draw_transition_mark_at <- function(frac_pos, label, seg_info, alloc,
                                      cum_start, bands, arcs,
-                                     outer_r, inner_r, tick_cex) {
+                                     outer_r, inner_r, tick_size) {
   n_seg <- nrow(seg_info)
   r_mid <- (outer_r + inner_r) / 2
 
@@ -712,7 +712,7 @@ draw_transition_mark_at <- function(frac_pos, label, seg_info, alloc,
           lx <- b$x_right - frac * (b$x_right - b$x_left)
         }
         text(lx, b$y_center, label,
-             cex = tick_cex, col = "#FFFFFF", font = 2)
+             cex = tick_size, col = "#FFFFFF", font = 2)
       } else {
         a <- arcs[[seg_info$index[s]]]
         theta <- -pi / 2 + frac * pi
@@ -726,7 +726,7 @@ draw_transition_mark_at <- function(frac_pos, label, seg_info, alloc,
           ly <- a$cy + sign_y * r_mid * cos(theta)
         } # nocov end
         text(lx, ly, label,
-             cex = tick_cex, col = "#FFFFFF", font = 2)
+             cex = tick_size, col = "#FFFFFF", font = 2)
       }
       return(invisible(NULL))
     }
@@ -736,7 +736,7 @@ draw_transition_mark_at <- function(frac_pos, label, seg_info, alloc,
 
 #' Draw rug ticks within a band
 #' @noRd
-draw_rug_band <- function(b, m, tick_cols, jitter = 0) {
+draw_rug_band <- function(b, m, tick_colors, jitter = 0) {
   coords <- band_block_x(b, m)
   bh <- b$y_bottom - b$y_top
   tick_h <- bh * 0.2  # each tick is 20% of band height
@@ -747,18 +747,18 @@ draw_rug_band <- function(b, m, tick_cols, jitter = 0) {
     y_max <- b$y_bottom - pad
     y_center <- y_min + runif(m) * jitter * (y_max - y_min)
     rect(coords$x0, y_center - tick_h / 2, coords$x1, y_center + tick_h / 2,
-         col = tick_cols, border = NA)
+         col = tick_colors, border = NA)
   } else {
     rug_top <- b$y_bottom - bh * 0.35
     rect(coords$x0, rug_top, coords$x1, b$y_bottom,
-         col = tick_cols, border = NA)
+         col = tick_colors, border = NA)
   }
   invisible(NULL)
 }
 
 #' Draw rug ticks within an arc
 #' @noRd
-draw_rug_arc <- function(a, m, tick_cols, outer_r, inner_r, jitter = 0) {
+draw_rug_arc <- function(a, m, tick_colors, outer_r, inner_r, jitter = 0) {
   r_range <- outer_r - inner_r
   tick_r <- r_range * 0.2
   theta_per <- pi / m
@@ -773,7 +773,7 @@ draw_rug_arc <- function(a, m, tick_cols, outer_r, inner_r, jitter = 0) {
       pts <- arc_sector_polygon(a$cx, a$cy, r_centers[j] + tick_r / 2,
                                  r_centers[j] - tick_r / 2,
                                  theta1, theta2, a$side)
-      polygon(pts$x, pts$y, col = tick_cols[j], border = NA)
+      polygon(pts$x, pts$y, col = tick_colors[j], border = NA)
     })
   } else {
     rug_outer <- inner_r + r_range * 0.35
@@ -782,7 +782,7 @@ draw_rug_arc <- function(a, m, tick_cols, outer_r, inner_r, jitter = 0) {
       theta2 <- -pi / 2 + j * theta_per
       pts <- arc_sector_polygon(a$cx, a$cy, rug_outer, inner_r,
                                  theta1, theta2, a$side)
-      polygon(pts$x, pts$y, col = tick_cols[j], border = NA)
+      polygon(pts$x, pts$y, col = tick_colors[j], border = NA)
     })
   }
   invisible(NULL)

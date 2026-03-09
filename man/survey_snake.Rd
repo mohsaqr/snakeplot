@@ -12,8 +12,8 @@ survey_snake(
   day = NULL,
   timestamp = NULL,
   level_labels = NULL,
-  band_height = 32,
-  band_gap = 34,
+  band_height = 28,
+  band_gap = 18,
   plot_width = 500,
   tick_shape = c("line", "dot", "bar"),
   bar_reverse = FALSE,
@@ -29,10 +29,10 @@ survey_snake(
   sort_by = c("none", "mean", "net"),
   shadow = TRUE,
   label_color = "#333333",
-  label_cex = 0.85,
+  label_size = 0.85,
   label_align = "left",
   show_legend = TRUE,
-  legend_cex = 0.65,
+  legend_text_size = 0.65,
   arc_color = "#2c3e6b",
   arc_opacity = 0.8,
   arc_fill = c("none", "correlation", "mean_prev", "blend"),
@@ -42,7 +42,7 @@ survey_snake(
   facet_ncol = 2L,
   title = NULL,
   margin = c(top = 30, right = 10, bottom = 55, left = 100),
-  bg = "white",
+  background = "white",
   seed = 42L
 )
 }
@@ -83,9 +83,9 @@ values to display labels (e.g.
 and any level-based text. If unnamed and same length as levels, used
 positionally.}
 
-\item{band_height}{Numeric (default 32).}
+\item{band_height}{Numeric (default 28).}
 
-\item{band_gap}{Numeric (default 34).}
+\item{band_gap}{Numeric (default 18).}
 
 \item{plot_width}{Numeric (default 500).}
 
@@ -123,14 +123,14 @@ Default uses a diverging palette.}
 
 \item{label_color}{Character (default "#333333").}
 
-\item{label_cex}{Numeric (default 0.85).}
+\item{label_size}{Numeric (default 0.85).}
 
 \item{label_align}{Character. Label alignment: "left" (default), "right",
 or "direction" (follows band reading direction).}
 
 \item{show_legend}{Logical (default TRUE).}
 
-\item{legend_cex}{Numeric, legend text size (default 0.65).}
+\item{legend_text_size}{Numeric, legend text size (default 0.65).}
 
 \item{arc_color}{Character (default "#2c3e6b").}
 
@@ -167,7 +167,7 @@ gives explicit grouping. Default \code{FALSE}.}
 
 \item{margin}{Named numeric vector.}
 
-\item{bg}{Background color.}
+\item{background}{Background color.}
 
 \item{seed}{Integer for reproducible jitter (default 42).}
 }

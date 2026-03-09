@@ -27,7 +27,7 @@ describe("multi_snake()", {
     on.exit(grDevices::dev.off(), add = TRUE)
     cols <- c(Active = "#E41A1C", Passive = "#377EB8", Absent = "#999999")
     expect_silent(multi_snake(seqs, colors = cols,
-                              alphabet = c("Active", "Passive", "Absent")))
+                              states = c("Active", "Passive", "Absent")))
   })
 
   it("handles sort_by = 'first'", {
@@ -71,17 +71,17 @@ describe("multi_snake()", {
                               shadow = FALSE))
   })
 
-  it("respects show_pct = FALSE in distribution", {
+  it("respects show_percent = FALSE in distribution", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
     expect_silent(multi_snake(seqs, type = "distribution",
-                              show_pct = FALSE))
+                              show_percent = FALSE))
   })
 
-  it("handles n_rows override", {
+  it("handles rows override", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
-    expect_silent(multi_snake(seqs, n_rows = 3))
+    expect_silent(multi_snake(seqs, rows = 3))
   })
 
   it("works with large number of sequences (1000)", {

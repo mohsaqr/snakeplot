@@ -29,12 +29,12 @@
 #' @param show_grid Logical (default TRUE).
 #' @param shadow Logical (default TRUE).
 #' @param label_color Character (default "#cccccc").
-#' @param label_cex Numeric (default 0.85).
+#' @param label_size Numeric (default 0.85).
 #' @param orientation Character, "horizontal" or "vertical" (default "horizontal").
 #' @param start_from Character, "left" or "right" (default "left").
 #' @param title Optional title.
 #' @param margin Named numeric vector.
-#' @param bg Background color.
+#' @param background Background color.
 #'
 #' @return Invisible \code{snake_layout} object.
 #'
@@ -67,13 +67,13 @@ line_snake <- function(data,
                        show_grid    = TRUE,
                        shadow       = TRUE,
                        label_color  = "#cccccc",
-                       label_cex    = 0.85,
+                       label_size    = 0.85,
                        orientation  = c("horizontal", "vertical"),
                        start_from   = c("left", "right"),
                        title        = NULL,
                        margin       = c(top = 30, right = 10,
                                         bottom = 50, left = 80),
-                       bg           = "white") {
+                       background   = "white") {
   orientation <- match.arg(orientation)
   start_from  <- match.arg(start_from)
 
@@ -119,7 +119,7 @@ line_snake <- function(data,
                                  plot_width, margin,
                                  orientation = orientation,
                                  start_from = start_from)
-  op <- setup_canvas(layout, bg = bg)
+  op <- setup_canvas(layout, bg = background)
   on.exit(par(op), add = TRUE)
 
   if (!is.null(title)) {
@@ -236,7 +236,7 @@ line_snake <- function(data,
   })
 
   # Labels
-  draw_band_labels(layout, day_levels, col = label_color, cex = label_cex)
+  draw_band_labels(layout, day_levels, col = label_color, cex = label_size)
 
   # Hour axis
   hour_start <- ceiling(day_start / 60) * 60

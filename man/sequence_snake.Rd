@@ -6,9 +6,9 @@
 \usage{
 sequence_snake(
   sequence,
-  alphabet = NULL,
+  states = NULL,
   colors = NULL,
-  n_rows = NULL,
+  rows = NULL,
   band_height = 28,
   band_gap = 18,
   plot_width = 500,
@@ -17,42 +17,42 @@ sequence_snake(
   start_from = "left",
   show_labels = TRUE,
   show_legend = TRUE,
-  show_index = FALSE,
+  show_numbers = FALSE,
   show_state = FALSE,
-  state_cex = 0.35,
+  state_size = 0.35,
   show_ticks = FALSE,
   tick_labels = NULL,
   transition_labels = NULL,
   transition_pos = NULL,
-  tick_col = "#333333",
-  tick_len = 5,
-  tick_cex = 0.4,
+  tick_color = "#333333",
+  tick_length = 5,
+  tick_size = 0.4,
   style = c("block", "rug"),
   band_color = "#3d3d4a",
   rug_opacity = 0.9,
-  rug_jitter = 0,
-  block_border = NA,
+  jitter = 0,
+  border_color = NA,
   block_labels = NULL,
   band_labels = NULL,
   title = NULL,
-  bg = "white",
+  background = "white",
   shadow = TRUE,
-  cex = 0.5,
-  legend_cex = 0.8
+  text_size = 0.5,
+  legend_text_size = 0.8
 )
 }
 \arguments{
 \item{sequence}{Character, integer, or factor vector of states.
 Each element represents one time point.}
 
-\item{alphabet}{Character vector of unique states in desired order.
+\item{states}{Character vector of unique states in desired order.
 If \code{NULL}, derived from \code{unique(sequence)}.}
 
 \item{colors}{Named character vector of colors keyed by state, or an
-unnamed vector recycled to match \code{alphabet}. If \code{NULL},
+unnamed vector recycled to match \code{states}. If \code{NULL},
 a built-in qualitative palette is used.}
 
-\item{n_rows}{Integer, number of serpentine rows. If \code{NULL},
+\item{rows}{Integer, number of serpentine rows. If \code{NULL},
 auto-calculated targeting approximately 10 blocks per band.}
 
 \item{band_height}{Numeric, height of each band in pixels (default 28).}
@@ -73,13 +73,13 @@ auto-calculated targeting approximately 10 blocks per band.}
 
 \item{show_legend}{Logical, draw color legend (default \code{TRUE}).}
 
-\item{show_index}{Logical, print small position numbers inside blocks
+\item{show_numbers}{Logical, print small position numbers inside blocks
 (default \code{FALSE}).}
 
 \item{show_state}{Logical, print the state name inside each block
 (default \code{FALSE}).}
 
-\item{state_cex}{Numeric, text size for state labels (default 0.35).}
+\item{state_size}{Numeric, text size for state labels (default 0.35).}
 
 \item{show_ticks}{Logical, draw ruler-style tick marks at block
 boundaries outside the bands (default \code{FALSE}).}
@@ -97,11 +97,11 @@ transition labels (e.g., \code{c(6.5, 24.3)}). When provided, labels
 are placed at exact interpolated positions along the serpentine path
 rather than at state-change boundaries.}
 
-\item{tick_col}{Color for tick marks (default \code{"#333333"}).}
+\item{tick_color}{Color for tick marks (default \code{"#333333"}).}
 
-\item{tick_len}{Numeric, length of tick marks in pixels (default 5).}
+\item{tick_length}{Numeric, length of tick marks in pixels (default 5).}
 
-\item{tick_cex}{Numeric, text size for tick labels (default 0.4).}
+\item{tick_size}{Numeric, text size for tick labels (default 0.4).}
 
 \item{style}{Character, \code{"block"} (default) or \code{"rug"}.
 \code{"block"} fills the full band height with colored blocks.
@@ -114,28 +114,28 @@ similar to \code{\link{activity_snake}}.}
 \item{rug_opacity}{Numeric 0-1, opacity of rug tick marks
 (default 0.9).}
 
-\item{rug_jitter}{Numeric 0-1, vertical jitter as fraction of band
+\item{jitter}{Numeric 0-1, vertical jitter as fraction of band
 height (default 0). When \code{> 0}, tick marks scatter vertically
 across the band instead of sitting at a fixed position.}
 
-\item{block_border}{Color for thin borders between blocks, or \code{NA}
+\item{border_color}{Color for thin borders between blocks, or \code{NA}
 for no borders (default \code{NA}).}
 
 \item{block_labels}{Optional character vector of labels to display inside
-each block (same length as \code{sequence}). Overrides \code{show_index}.}
+each block (same length as \code{sequence}). Overrides \code{show_numbers}.}
 
 \item{band_labels}{Character vector of labels to display centered below
-each band (e.g., year labels). Length must equal \code{n_rows}.}
+each band (e.g., year labels). Length must equal \code{rows}.}
 
 \item{title}{Optional character string for plot title.}
 
-\item{bg}{Background color (default \code{"white"}).}
+\item{background}{Background color (default \code{"white"}).}
 
 \item{shadow}{Logical, draw drop shadows (default \code{TRUE}).}
 
-\item{cex}{Numeric, text size multiplier for block labels (default 0.5).}
+\item{text_size}{Numeric, text size multiplier for block labels (default 0.5).}
 
-\item{legend_cex}{Numeric, legend text size (default 0.8).}
+\item{legend_text_size}{Numeric, legend text size (default 0.8).}
 }
 \value{
 Invisible \code{NULL}. Called for its side effect of producing
@@ -158,6 +158,6 @@ sequence_snake(seq75)
 cols <- c(Read = "#E41A1C", Write = "#377EB8", Discuss = "#4DAF4A",
           Listen = "#984EA3", Search = "#FF7F00", Plan = "#A6D854",
           Code = "#A65628", Review = "#F781BF")
-sequence_snake(seq75, colors = cols, n_rows = 5)
+sequence_snake(seq75, colors = cols, rows = 5)
 
 }

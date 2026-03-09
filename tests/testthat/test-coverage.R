@@ -220,7 +220,7 @@ describe("survey_sequence() edge cases", {
     pdf(nullfile())
     on.exit(dev.off())
     result <- survey_sequence(counts, paste0("Q", 1:4), as.character(1:5),
-                              arc_mode = "gradient")
+                              arc_style = "gradient")
     expect_s3_class(result, "snake_layout")
   })
 

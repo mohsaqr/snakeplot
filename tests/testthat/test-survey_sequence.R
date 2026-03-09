@@ -28,7 +28,7 @@ describe("survey_sequence()", {
       pdf(nullfile())
       on.exit(dev.off())
       survey_sequence(counts, paste0("Q", 1:4), as.character(1:5),
-                      arc_mode = "neutral")
+                      arc_style = "neutral")
     })
   })
 

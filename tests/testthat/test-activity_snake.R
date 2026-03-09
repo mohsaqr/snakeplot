@@ -27,7 +27,7 @@ describe("activity_snake()", {
     expect_no_error({
       pdf(nullfile())
       on.exit(dev.off())
-      activity_snake(d, min_tick_width = 1.0)
+      activity_snake(d, tick_width = 1.0)
     })
   })
 

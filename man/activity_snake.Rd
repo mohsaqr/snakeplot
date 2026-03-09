@@ -17,7 +17,7 @@ activity_snake(
   band_opacity = 0.9,
   arc_opacity = 0.85,
   event_opacity = 0.85,
-  min_tick_width = 1.5,
+  tick_width = 1.5,
   show_grid = TRUE,
   show_total = TRUE,
   show_count = FALSE,
@@ -26,7 +26,7 @@ activity_snake(
   shadow = TRUE,
   grid_color = "rgba(255,255,255,0.25)",
   label_color = "#cccccc",
-  label_cex = 0.85,
+  label_size = 0.85,
   label_align = "left",
   orientation = c("horizontal", "vertical"),
   start_from = c("left", "right"),
@@ -34,7 +34,7 @@ activity_snake(
   legend = NULL,
   title = NULL,
   margin = c(top = 30, right = 10, bottom = 50, left = 80),
-  bg = "white"
+  background = "white"
 )
 }
 \arguments{
@@ -78,7 +78,7 @@ If a vector, colors cycle per day (default "#d4a843").}
 
 \item{event_opacity}{Numeric 0-1 (default 0.85).}
 
-\item{min_tick_width}{Numeric. Minimum event width in plot units
+\item{tick_width}{Numeric. Minimum event width in plot units
 (default 1.5). Use 1.0 for thin rug style.}
 
 \item{show_grid}{Logical. Show hour gridlines (default TRUE).}
@@ -100,7 +100,7 @@ If a vector, colors cycle per day (default "#d4a843").}
 
 \item{label_color}{Character. Day label color (default "#cccccc").}
 
-\item{label_cex}{Numeric. Label font size multiplier (default 0.85).}
+\item{label_size}{Numeric. Label font size multiplier (default 0.85).}
 
 \item{label_align}{Character. Label alignment: "left" (default), "right",
 or "direction" (follows band reading direction).}
@@ -123,7 +123,7 @@ dates). NULL = auto-detect (\code{"\%a"} for 7 or fewer days,
 
 \item{margin}{Named numeric vector with top, right, bottom, left margins.}
 
-\item{bg}{Background color (default "white").}
+\item{background}{Background color (default "white").}
 }
 \value{
 Invisible \code{snake_layout} object (for downstream use).

@@ -12,21 +12,21 @@ survey_sequence(
   band_gap = 14,
   plot_width = 500,
   colors = NULL,
-  show_pct = TRUE,
-  min_segment_px = 34,
-  arc_mode = c("gradient", "neutral"),
+  show_percent = TRUE,
+  min_segment = 34,
+  arc_style = c("gradient", "neutral"),
   arc_opacity = 0.5,
   sort_by = c("none", "mean", "net"),
   shadow = TRUE,
   show_legend = TRUE,
   label_color = "#333333",
-  label_cex = 0.85,
+  label_size = 0.85,
   label_align = "left",
   reverse_rtl = FALSE,
   start_from = c("left", "right"),
   title = NULL,
   margin = c(top = 30, right = 10, bottom = 55, left = 100),
-  bg = "white"
+  background = "white"
 )
 }
 \arguments{
@@ -44,12 +44,12 @@ survey_sequence(
 
 \item{colors}{Character vector of segment colors. Default: diverging palette.}
 
-\item{show_pct}{Logical. Show percentages inside segments (default TRUE).}
+\item{show_percent}{Logical. Show percentages inside segments (default TRUE).}
 
-\item{min_segment_px}{Numeric. Hide label if segment narrower than this
+\item{min_segment}{Numeric. Hide label if segment narrower than this
 (default 34).}
 
-\item{arc_mode}{Character: "gradient" or "neutral" (default "gradient").}
+\item{arc_style}{Character: "gradient" or "neutral" (default "gradient").}
 
 \item{arc_opacity}{Numeric 0-1 (default 0.5).}
 
@@ -61,7 +61,7 @@ survey_sequence(
 
 \item{label_color}{Character (default "#333333").}
 
-\item{label_cex}{Numeric (default 0.85).}
+\item{label_size}{Numeric (default 0.85).}
 
 \item{label_align}{Character. Label alignment: "left" (default), "right",
 or "direction" (follows band reading direction).}
@@ -76,7 +76,7 @@ first band starts from.}
 
 \item{margin}{Named numeric vector.}
 
-\item{bg}{Background color.}
+\item{background}{Background color.}
 }
 \value{
 Invisible \code{snake_layout} object.

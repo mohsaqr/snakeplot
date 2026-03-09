@@ -11,19 +11,19 @@
 #'   function auto-generates monthly blocks, transition labels, and band
 #'   labels.
 #' @inheritParams sequence_snake
-#' @param band_height Numeric, height of each band (default 26).
-#' @param band_gap Numeric, gap between bands (default 26).
-#' @param plot_width Numeric, width of each band (default 450).
+#' @param band_height Numeric, height of each band (default 28).
+#' @param band_gap Numeric, gap between bands (default 18).
+#' @param plot_width Numeric, width of each band (default 500).
 #' @param margin Named numeric vector with top, right, bottom, left margins
 #'   (default \code{c(top = 35, right = 10, bottom = 65, left = 20)}).
 #' @param show_labels Logical, show position range labels (default
 #'   \code{FALSE}).
 #' @param show_state Logical, show state names inside blocks (default
 #'   \code{TRUE}).
-#' @param state_cex Numeric, state label size (default 1).
-#' @param tick_cex Numeric, text size for band and transition labels
+#' @param state_size Numeric, state label size (default 1).
+#' @param tick_size Numeric, text size for band and transition labels
 #'   (default 0.8).
-#' @param legend_cex Numeric, legend text size (default 1.2).
+#' @param legend_text_size Numeric, legend text size (default 1.2).
 #'
 #' @return Invisible \code{NULL}. Called for its side effect of producing
 #'   a plot.
@@ -39,43 +39,43 @@
 #'
 #' @export
 timeline_snake <- function(sequence,
-                           alphabet = NULL,
+                           states = NULL,
                            colors = NULL,
-                           n_rows = NULL,
-                           band_height = 26,
-                           band_gap = 26,
-                           plot_width = 450,
+                           rows = NULL,
+                           band_height = 28,
+                           band_gap = 18,
+                           plot_width = 500,
                            margin = c(top = 35, right = 10,
                                       bottom = 65, left = 20),
                            orientation = "horizontal",
                            start_from = "left",
                            show_labels = FALSE,
                            show_legend = TRUE,
-                           show_index = FALSE,
+                           show_numbers = FALSE,
                            show_state = TRUE,
-                           state_cex = 1,
+                           state_size = 1,
                            show_ticks = FALSE,
                            tick_labels = NULL,
                            transition_labels = NULL,
                            transition_pos = NULL,
-                           tick_col = "#444444",
-                           tick_len = 6,
-                           tick_cex = 0.8,
-                           block_border = NA,
+                           tick_color = "#444444",
+                           tick_length = 6,
+                           tick_size = 0.8,
+                           border_color = NA,
                            block_labels = NULL,
                            band_labels = NULL,
                            title = NULL,
-                           bg = "white",
+                           background = "white",
                            shadow = TRUE,
-                           cex = 0.5,
-                           legend_cex = 1.2) {
+                           text_size = 0.5,
+                           legend_text_size = 1.2) {
 
   # --- Auto sequential palette for timelines ---
   if (is.null(colors)) {
     alpha_vec <- if (is.data.frame(sequence)) {
       unique(as.character(sequence[[1]]))
-    } else if (!is.null(alphabet)) {
-      alphabet
+    } else if (!is.null(states)) {
+      states
     } else {
       unique(as.character(sequence))
     }
@@ -111,22 +111,22 @@ timeline_snake <- function(sequence,
     all_months <- do.call(c, month_seqs)
 
     # Alphabet from data.frame order
-    if (is.null(alphabet)) alphabet <- unique(roles)
+    if (is.null(states)) states <- unique(roles)
 
     # Auto transition labels from start dates (skip first role)
     if (is.null(transition_labels)) {
       transition_labels <- format(starts[-1L], "%b %Y")
     }
 
-    # Auto n_rows: ~20 blocks per band
-    if (is.null(n_rows)) {
-      n_rows <- max(2L, round(total_months / 20))
+    # Auto rows: ~20 blocks per band
+    if (is.null(rows)) {
+      rows <- max(2L, round(total_months / 20))
     }
 
     # Auto band labels: approximate year at center of each band
     if (is.null(band_labels)) {
       center_idx <- pmax(1L, round(
-        (seq_len(n_rows) - 0.5) * total_months / n_rows
+        (seq_len(rows) - 0.5) * total_months / rows
       ))
       center_idx <- pmin(center_idx, total_months)
       band_labels <- format(all_months[center_idx], "%Y")
@@ -135,9 +135,9 @@ timeline_snake <- function(sequence,
 
   sequence_snake(
     sequence = sequence,
-    alphabet = alphabet,
+    states = states,
     colors = colors,
-    n_rows = n_rows,
+    rows = rows,
     band_height = band_height,
     band_gap = band_gap,
     plot_width = plot_width,
@@ -146,24 +146,24 @@ timeline_snake <- function(sequence,
     start_from = start_from,
     show_labels = show_labels,
     show_legend = show_legend,
-    show_index = show_index,
+    show_numbers = show_numbers,
     show_state = show_state,
-    state_cex = state_cex,
+    state_size = state_size,
     show_ticks = show_ticks,
     tick_labels = tick_labels,
     transition_labels = transition_labels,
     transition_pos = transition_pos,
-    tick_col = tick_col,
-    tick_len = tick_len,
-    tick_cex = tick_cex,
-    block_border = block_border,
+    tick_color = tick_color,
+    tick_length = tick_length,
+    tick_size = tick_size,
+    border_color = border_color,
     block_labels = block_labels,
     band_labels = band_labels,
     title = title,
-    bg = bg,
+    background = background,
     shadow = shadow,
-    cex = cex,
-    legend_cex = legend_cex
+    text_size = text_size,
+    legend_text_size = legend_text_size
   )
 }
 

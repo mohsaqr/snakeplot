@@ -7,22 +7,22 @@
 multi_snake(
   sequences,
   type = c("index", "distribution"),
-  alphabet = NULL,
+  states = NULL,
   colors = NULL,
   sort_by = c("none", "first", "last", "freq", "entropy"),
-  n_rows = NULL,
-  band_height = 30,
-  band_gap = 20,
+  rows = NULL,
+  band_height = 28,
+  band_gap = 18,
   plot_width = 500,
   margin = c(top = 30, right = 10, bottom = 50, left = 80),
   show_labels = TRUE,
   show_legend = TRUE,
-  show_pct = TRUE,
-  block_border = NA,
+  show_percent = TRUE,
+  border_color = NA,
   title = NULL,
-  bg = "white",
+  background = "white",
   shadow = TRUE,
-  legend_cex = 0.8,
+  legend_text_size = 0.8,
   tick_opacity = 0.85
 )
 }
@@ -32,7 +32,7 @@ columns are time points. Each cell contains a state label.}
 
 \item{type}{Character, \code{"index"} (default) or \code{"distribution"}.}
 
-\item{alphabet}{Character vector of unique states in desired legend order.
+\item{states}{Character vector of unique states in desired legend order.
 If \code{NULL}, derived from the data.}
 
 \item{colors}{Named or unnamed character vector of colors. If \code{NULL},
@@ -43,12 +43,12 @@ a built-in qualitative palette is used.}
 \code{"last"} (sort by last state), \code{"freq"} (sort by most
 frequent state), or \code{"entropy"} (sort by Shannon entropy).}
 
-\item{n_rows}{Integer, number of serpentine rows. If \code{NULL},
+\item{rows}{Integer, number of serpentine rows. If \code{NULL},
 auto-calculated (~10 blocks per band).}
 
-\item{band_height}{Numeric, height of each band in pixels (default 30).}
+\item{band_height}{Numeric, height of each band in pixels (default 28).}
 
-\item{band_gap}{Numeric, gap between bands (default 20).}
+\item{band_gap}{Numeric, gap between bands (default 18).}
 
 \item{plot_width}{Numeric, width of each band (default 500).}
 
@@ -58,19 +58,19 @@ auto-calculated (~10 blocks per band).}
 
 \item{show_legend}{Logical, draw color legend (default TRUE).}
 
-\item{show_pct}{Logical, show percentage labels inside distribution bars
+\item{show_percent}{Logical, show percentage labels inside distribution bars
 (default TRUE). Only used when \code{type = "distribution"}.}
 
-\item{block_border}{Color for thin borders between blocks, or \code{NA}
+\item{border_color}{Color for thin borders between blocks, or \code{NA}
 for no borders (default \code{NA}).}
 
 \item{title}{Optional character string for plot title.}
 
-\item{bg}{Background color (default \code{"white"}).}
+\item{background}{Background color (default \code{"white"}).}
 
 \item{shadow}{Logical, draw drop shadows (default TRUE).}
 
-\item{legend_cex}{Numeric, legend text size (default 0.8).}
+\item{legend_text_size}{Numeric, legend text size (default 0.8).}
 
 \item{tick_opacity}{Numeric 0-1, opacity of ticks in index mode
 (default 0.85).}

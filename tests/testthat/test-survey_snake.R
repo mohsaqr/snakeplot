@@ -235,23 +235,23 @@ describe("survey_snake()", {
     })
   })
 
-  it("legend_cex scales legend text", {
+  it("legend_text_size scales legend text", {
     counts <- make_counts(3, 5)
     expect_no_error({
       pdf(nullfile())
       on.exit(dev.off())
       survey_snake(counts, paste0("Q", 1:3), as.character(1:5),
-                   legend_cex = 1.2)
+                   legend_text_size = 1.2)
     })
   })
 
-  it("label_cex scales label text", {
+  it("label_size scales label text", {
     counts <- make_counts(3, 5)
     expect_no_error({
       pdf(nullfile())
       on.exit(dev.off())
       survey_snake(counts, paste0("Q", 1:3), as.character(1:5),
-                   label_cex = 1.5)
+                   label_size = 1.5)
     })
   })
 
@@ -357,7 +357,7 @@ describe("survey_snake()", {
     expect_equal(length(result), 3)
   })
 
-  it("facet with level_labels and legend_cex", {
+  it("facet with level_labels and legend_text_size", {
     set.seed(98)
     survey_df <- data.frame(
       P1 = sample(1:5, 60, replace = TRUE),
@@ -372,7 +372,7 @@ describe("survey_snake()", {
                            level_labels = c("1" = "SD", "2" = "D",
                                             "3" = "N", "4" = "A",
                                             "5" = "SA"),
-                           legend_cex = 0.9)
+                           legend_text_size = 0.9)
     expect_type(result, "list")
   })
 

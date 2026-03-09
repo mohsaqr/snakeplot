@@ -11,16 +11,16 @@
 #' @param band_gap Numeric (default 14).
 #' @param plot_width Numeric (default 500).
 #' @param colors Character vector of segment colors. Default: diverging palette.
-#' @param show_pct Logical. Show percentages inside segments (default TRUE).
-#' @param min_segment_px Numeric. Hide label if segment narrower than this
+#' @param show_percent Logical. Show percentages inside segments (default TRUE).
+#' @param min_segment Numeric. Hide label if segment narrower than this
 #'   (default 34).
-#' @param arc_mode Character: "gradient" or "neutral" (default "gradient").
+#' @param arc_style Character: "gradient" or "neutral" (default "gradient").
 #' @param arc_opacity Numeric 0-1 (default 0.5).
 #' @param sort_by Character: "none", "mean", "net" (default "none").
 #' @param shadow Logical (default TRUE).
 #' @param show_legend Logical (default TRUE).
 #' @param label_color Character (default "#333333").
-#' @param label_cex Numeric (default 0.85).
+#' @param label_size Numeric (default 0.85).
 #' @param label_align Character. Label alignment: "left" (default), "right",
 #'   or "direction" (follows band reading direction).
 #' @param reverse_rtl Logical. Reverse segment order on right-to-left bands
@@ -29,7 +29,7 @@
 #'   first band starts from.
 #' @param title Optional title.
 #' @param margin Named numeric vector.
-#' @param bg Background color.
+#' @param background Background color.
 #'
 #' @return Invisible \code{snake_layout} object.
 #'
@@ -54,22 +54,22 @@ survey_sequence <- function(counts, labels = NULL, levels = NULL,
                             band_gap      = 14,
                             plot_width    = 500,
                             colors        = NULL,
-                            show_pct      = TRUE,
-                            min_segment_px = 34,
-                            arc_mode      = c("gradient", "neutral"),
+                            show_percent      = TRUE,
+                            min_segment = 34,
+                            arc_style      = c("gradient", "neutral"),
                             arc_opacity   = 0.5,
                             sort_by       = c("none", "mean", "net"),
                             shadow        = TRUE,
                             show_legend   = TRUE,
                             label_color   = "#333333",
-                            label_cex     = 0.85,
+                            label_size     = 0.85,
                             label_align   = "left",
                             reverse_rtl   = FALSE,
                             start_from    = c("left", "right"),
                             title         = NULL,
                             margin        = c(top = 30, right = 10,
                                               bottom = 55, left = 100),
-                            bg            = "white") {
+                            background            = "white") {
   coerced <- coerce_survey_input(counts, labels, levels)
   counts  <- coerced$counts
   labels  <- coerced$labels
@@ -77,7 +77,7 @@ survey_sequence <- function(counts, labels = NULL, levels = NULL,
 
   if (is.data.frame(counts)) counts <- as.matrix(counts) # nocov
   validate_survey_data(counts, labels, levels)
-  arc_mode   <- match.arg(arc_mode)
+  arc_style   <- match.arg(arc_style)
   sort_by    <- match.arg(sort_by)
   start_from <- match.arg(start_from)
 
@@ -116,7 +116,7 @@ survey_sequence <- function(counts, labels = NULL, levels = NULL,
   layout <- compute_snake_layout(n_items, band_height, band_gap,
                                  plot_width, margin,
                                  start_from = start_from)
-  op <- setup_canvas(layout, bg = bg)
+  op <- setup_canvas(layout, bg = background)
   on.exit(par(op), add = TRUE)
 
   if (!is.null(title)) {
@@ -131,7 +131,7 @@ survey_sequence <- function(counts, labels = NULL, levels = NULL,
   # Draw arcs (with gradient or neutral coloring)
   lapply(seq_along(layout$arcs), function(a_idx) {
     a <- layout$arcs[[a_idx]]
-    if (arc_mode == "neutral") {
+    if (arc_style == "neutral") {
       acol <- alpha_col("#999999", arc_opacity)
     } else {
       # Gradient: blend end color of from-band with start color of to-band
@@ -201,7 +201,7 @@ survey_sequence <- function(counts, labels = NULL, levels = NULL,
            col = seg_colors[s], border = NA)
 
       # Percentage label
-      if (show_pct && seg_w >= min_segment_px && seg_pcts[s] > 0) {
+      if (show_percent && seg_w >= min_segment && seg_pcts[s] > 0) {
         lbl_x <- x_cursor + seg_w / 2
         lbl_y <- (yt + yb) / 2
         # Auto text color: white on dark, dark on light
@@ -219,7 +219,7 @@ survey_sequence <- function(counts, labels = NULL, levels = NULL,
   }, logical(1))
 
   # Labels
-  draw_band_labels(layout, labels, col = label_color, cex = label_cex,
+  draw_band_labels(layout, labels, col = label_color, cex = label_size,
                    align = label_align)
 
   # Legend
@@ -263,22 +263,22 @@ sequential_dist <- function(counts, labels = NULL, levels = NULL,
                             band_gap       = 14,
                             plot_width     = 500,
                             colors         = NULL,
-                            show_pct       = TRUE,
-                            min_segment_px = 34,
-                            arc_mode       = c("gradient", "neutral"),
+                            show_percent       = TRUE,
+                            min_segment = 34,
+                            arc_style       = c("gradient", "neutral"),
                             arc_opacity    = 0.85,
                             sort_by        = c("none", "mean", "net"),
                             shadow         = TRUE,
                             show_legend    = TRUE,
                             label_color    = "#333333",
-                            label_cex      = 0.85,
+                            label_size      = 0.85,
                             label_align    = "left",
                             reverse_rtl    = FALSE,
                             start_from     = c("left", "right"),
                             title          = NULL,
                             margin         = c(top = 30, right = 10,
                                               bottom = 55, left = 100),
-                            bg             = "white") {
+                            background             = "white") {
   start_from <- match.arg(start_from)
   coerced <- coerce_survey_input(counts, labels, levels)
   counts  <- coerced$counts
@@ -292,11 +292,11 @@ sequential_dist <- function(counts, labels = NULL, levels = NULL,
   survey_sequence(counts = counts, labels = labels, levels = levels,
                   band_height = band_height, band_gap = band_gap,
                   plot_width = plot_width, colors = colors,
-                  show_pct = show_pct, min_segment_px = min_segment_px,
-                  arc_mode = arc_mode, arc_opacity = arc_opacity,
+                  show_percent = show_percent, min_segment = min_segment,
+                  arc_style = arc_style, arc_opacity = arc_opacity,
                   sort_by = sort_by, shadow = shadow,
                   show_legend = show_legend, label_color = label_color,
-                  label_cex = label_cex, label_align = label_align,
+                  label_size = label_size, label_align = label_align,
                   reverse_rtl = reverse_rtl, start_from = start_from,
-                  title = title, margin = margin, bg = bg)
+                  title = title, margin = margin, background = background)
 }

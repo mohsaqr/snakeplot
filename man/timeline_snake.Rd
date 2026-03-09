@@ -6,35 +6,35 @@
 \usage{
 timeline_snake(
   sequence,
-  alphabet = NULL,
+  states = NULL,
   colors = NULL,
-  n_rows = NULL,
-  band_height = 26,
-  band_gap = 26,
-  plot_width = 450,
+  rows = NULL,
+  band_height = 28,
+  band_gap = 18,
+  plot_width = 500,
   margin = c(top = 35, right = 10, bottom = 65, left = 20),
   orientation = "horizontal",
   start_from = "left",
   show_labels = FALSE,
   show_legend = TRUE,
-  show_index = FALSE,
+  show_numbers = FALSE,
   show_state = TRUE,
-  state_cex = 1,
+  state_size = 1,
   show_ticks = FALSE,
   tick_labels = NULL,
   transition_labels = NULL,
   transition_pos = NULL,
-  tick_col = "#444444",
-  tick_len = 6,
-  tick_cex = 0.8,
-  block_border = NA,
+  tick_color = "#444444",
+  tick_length = 6,
+  tick_size = 0.8,
+  border_color = NA,
   block_labels = NULL,
   band_labels = NULL,
   title = NULL,
-  bg = "white",
+  background = "white",
   shadow = TRUE,
-  cex = 0.5,
-  legend_cex = 1.2
+  text_size = 0.5,
+  legend_text_size = 1.2
 )
 }
 \arguments{
@@ -44,21 +44,21 @@ unit), or a \strong{data.frame with 3 columns}: state/role, start date
 function auto-generates monthly blocks, transition labels, and band
 labels.}
 
-\item{alphabet}{Character vector of unique states in desired order.
+\item{states}{Character vector of unique states in desired order.
 If \code{NULL}, derived from \code{unique(sequence)}.}
 
 \item{colors}{Named character vector of colors keyed by state, or an
-unnamed vector recycled to match \code{alphabet}. If \code{NULL},
+unnamed vector recycled to match \code{states}. If \code{NULL},
 a built-in qualitative palette is used.}
 
-\item{n_rows}{Integer, number of serpentine rows. If \code{NULL},
+\item{rows}{Integer, number of serpentine rows. If \code{NULL},
 auto-calculated targeting approximately 10 blocks per band.}
 
-\item{band_height}{Numeric, height of each band (default 26).}
+\item{band_height}{Numeric, height of each band (default 28).}
 
-\item{band_gap}{Numeric, gap between bands (default 26).}
+\item{band_gap}{Numeric, gap between bands (default 18).}
 
-\item{plot_width}{Numeric, width of each band (default 450).}
+\item{plot_width}{Numeric, width of each band (default 500).}
 
 \item{margin}{Named numeric vector with top, right, bottom, left margins
 (default \code{c(top = 35, right = 10, bottom = 65, left = 20)}).}
@@ -73,13 +73,13 @@ auto-calculated targeting approximately 10 blocks per band.}
 
 \item{show_legend}{Logical, draw color legend (default \code{TRUE}).}
 
-\item{show_index}{Logical, print small position numbers inside blocks
+\item{show_numbers}{Logical, print small position numbers inside blocks
 (default \code{FALSE}).}
 
 \item{show_state}{Logical, show state names inside blocks (default
 \code{TRUE}).}
 
-\item{state_cex}{Numeric, state label size (default 1).}
+\item{state_size}{Numeric, state label size (default 1).}
 
 \item{show_ticks}{Logical, draw ruler-style tick marks at block
 boundaries outside the bands (default \code{FALSE}).}
@@ -97,31 +97,31 @@ transition labels (e.g., \code{c(6.5, 24.3)}). When provided, labels
 are placed at exact interpolated positions along the serpentine path
 rather than at state-change boundaries.}
 
-\item{tick_col}{Color for tick marks (default \code{"#333333"}).}
+\item{tick_color}{Color for tick marks (default \code{"#333333"}).}
 
-\item{tick_len}{Numeric, length of tick marks in pixels (default 5).}
+\item{tick_length}{Numeric, length of tick marks in pixels (default 5).}
 
-\item{tick_cex}{Numeric, text size for band and transition labels
+\item{tick_size}{Numeric, text size for band and transition labels
 (default 0.8).}
 
-\item{block_border}{Color for thin borders between blocks, or \code{NA}
+\item{border_color}{Color for thin borders between blocks, or \code{NA}
 for no borders (default \code{NA}).}
 
 \item{block_labels}{Optional character vector of labels to display inside
-each block (same length as \code{sequence}). Overrides \code{show_index}.}
+each block (same length as \code{sequence}). Overrides \code{show_numbers}.}
 
 \item{band_labels}{Character vector of labels to display centered below
-each band (e.g., year labels). Length must equal \code{n_rows}.}
+each band (e.g., year labels). Length must equal \code{rows}.}
 
 \item{title}{Optional character string for plot title.}
 
-\item{bg}{Background color (default \code{"white"}).}
+\item{background}{Background color (default \code{"white"}).}
 
 \item{shadow}{Logical, draw drop shadows (default \code{TRUE}).}
 
-\item{cex}{Numeric, text size multiplier for block labels (default 0.5).}
+\item{text_size}{Numeric, text size multiplier for block labels (default 0.5).}
 
-\item{legend_cex}{Numeric, legend text size (default 1.2).}
+\item{legend_text_size}{Numeric, legend text size (default 1.2).}
 }
 \value{
 Invisible \code{NULL}. Called for its side effect of producing

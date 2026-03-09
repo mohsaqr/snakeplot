@@ -141,10 +141,10 @@ describe("sequence_snake()", {
     expect_silent(sequence_snake(seq20))
   })
 
-  it("accepts custom n_rows", {
+  it("accepts custom rows", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
-    expect_silent(sequence_snake(seq20, n_rows = 3))
+    expect_silent(sequence_snake(seq20, rows = 3))
   })
 
   it("accepts named colors", {
@@ -164,7 +164,7 @@ describe("sequence_snake()", {
   it("shows position indices", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
-    expect_silent(sequence_snake(seq20, show_index = TRUE))
+    expect_silent(sequence_snake(seq20, show_numbers = TRUE))
   })
 
   it("hides labels and legend", {
@@ -189,7 +189,7 @@ describe("sequence_snake()", {
   it("draws with no block border", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
-    expect_silent(sequence_snake(seq20, block_border = NA))
+    expect_silent(sequence_snake(seq20, border_color = NA))
   })
 
   it("accepts factor input", {
@@ -210,20 +210,20 @@ describe("sequence_snake()", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
     expect_silent(sequence_snake(seq20,
-                                  alphabet = c("Listen", "Read",
+                                  states = c("Listen", "Read",
                                                "Write", "Discuss")))
   })
 
   it("works with single block", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
-    expect_silent(sequence_snake("A", n_rows = 1))
+    expect_silent(sequence_snake("A", rows = 1))
   })
 
   it("works with single row", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
-    expect_silent(sequence_snake(rep("X", 5), n_rows = 1))
+    expect_silent(sequence_snake(rep("X", 5), rows = 1))
   })
 
   it("works with start_from = 'right'", {
@@ -234,7 +234,7 @@ describe("sequence_snake()", {
 
   it("errors on unknown states not in alphabet", {
     expect_error(
-      sequence_snake(c("A", "B", "C"), alphabet = c("A", "B")),
+      sequence_snake(c("A", "B", "C"), states = c("A", "B")),
       "Unknown states"
     )
   })
@@ -250,7 +250,7 @@ describe("sequence_snake()", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
     seq75 <- sample(c("A", "B", "C", "D", "E"), 75, replace = TRUE)
-    expect_silent(sequence_snake(seq75, n_rows = 7))
+    expect_silent(sequence_snake(seq75, rows = 7))
   })
 
   it("handles 200 blocks with auto rows", {
@@ -272,7 +272,7 @@ describe("sequence_snake()", {
     # Run of same state should get one centered label
     run_seq <- c(rep("A", 5), rep("B", 3), rep("A", 2))
     expect_silent(sequence_snake(run_seq, show_state = TRUE,
-                                  state_cex = 0.8, n_rows = 2))
+                                  state_size = 0.8, rows = 2))
   })
 
   it("shows state labels together with block_labels", {
@@ -280,22 +280,22 @@ describe("sequence_snake()", {
     on.exit(grDevices::dev.off(), add = TRUE)
     s <- c("X", "X", "Y", "Y", "Y")
     expect_silent(sequence_snake(s, block_labels = as.character(1:5),
-                                  show_state = TRUE, state_cex = 0.6,
-                                  n_rows = 2))
+                                  show_state = TRUE, state_size = 0.6,
+                                  rows = 2))
   })
 
   it("draws ruler ticks at block boundaries", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
-    expect_silent(sequence_snake(seq20, show_ticks = TRUE, n_rows = 3))
+    expect_silent(sequence_snake(seq20, show_ticks = TRUE, rows = 3))
   })
 
   it("draws ticks with custom color and length", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
     expect_silent(sequence_snake(seq20, show_ticks = TRUE,
-                                  tick_col = "red", tick_len = 8,
-                                  n_rows = 3))
+                                  tick_color = "red", tick_length = 8,
+                                  rows = 3))
   })
 
   it("errors on block_labels length mismatch", {
@@ -308,20 +308,20 @@ describe("sequence_snake()", {
   it("works with vertical orientation and >1 rows", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
-    expect_silent(sequence_snake(seq20, n_rows = 3,
+    expect_silent(sequence_snake(seq20, rows = 3,
                                   orientation = "vertical"))
   })
 
   it("draws band_labels below each band", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
-    expect_silent(sequence_snake(seq20, n_rows = 4,
+    expect_silent(sequence_snake(seq20, rows = 4,
                                   band_labels = c("A", "B", "C", "D")))
   })
 
-  it("errors on band_labels length mismatch with n_rows", {
+  it("errors on band_labels length mismatch with rows", {
     expect_error(
-      sequence_snake(seq20, n_rows = 3,
+      sequence_snake(seq20, rows = 3,
                       band_labels = c("X", "Y")),
       "must match"
     )
@@ -331,7 +331,7 @@ describe("sequence_snake()", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
     s <- c(rep("A", 5), rep("B", 5), rep("C", 5), rep("D", 5))
-    expect_silent(sequence_snake(s, n_rows = 4,
+    expect_silent(sequence_snake(s, rows = 4,
                                   transition_labels = c("T1", "T2", "T3")))
   })
 
@@ -344,7 +344,7 @@ describe("sequence_snake()", {
            rep("E", 1), rep("F", 1), rep("G", 1), rep("H", 1),
            rep("I", 1), rep("J", 1), rep("K", 1), rep("L", 1),
            rep("M", 1))
-    expect_silent(sequence_snake(s, n_rows = 7,
+    expect_silent(sequence_snake(s, rows = 7,
                                   transition_labels = paste0("T", 1:12)))
   })
 })
@@ -360,7 +360,7 @@ describe("timeline_snake()", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
     roles <- c(rep("Junior", 3), rep("Senior", 2))
-    expect_silent(timeline_snake(roles, n_rows = 3,
+    expect_silent(timeline_snake(roles, rows = 3,
                                   transition_labels = "2020",
                                   band_labels = c("2018", "2020", "2022")))
   })
@@ -368,9 +368,9 @@ describe("timeline_snake()", {
   it("accepts all sequence_snake parameters", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
-    expect_silent(timeline_snake(rep("X", 10), n_rows = 2,
+    expect_silent(timeline_snake(rep("X", 10), rows = 2,
                                   colors = c(X = "red"),
-                                  shadow = FALSE, bg = "#F0F0F0",
+                                  shadow = FALSE, background = "#F0F0F0",
                                   title = "Test"))
   })
 
@@ -404,7 +404,7 @@ describe("timeline_snake()", {
       start = c("2020-01", "2021-01"),
       end   = c("2020-12", "2022-06")
     )
-    expect_silent(timeline_snake(df, n_rows = 3,
+    expect_silent(timeline_snake(df, rows = 3,
                                   transition_labels = "Custom",
                                   band_labels = c("A", "B", "C")))
   })
@@ -418,14 +418,14 @@ describe("sequence_snake() — coverage extras", {
   it("draws tick_labels ruler", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
-    expect_silent(sequence_snake(seq20, n_rows = 3,
+    expect_silent(sequence_snake(seq20, rows = 3,
                                   tick_labels = month.abb[1:4]))
   })
 
   it("draws block_labels with show_ticks", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
-    expect_silent(sequence_snake(seq20, n_rows = 3,
+    expect_silent(sequence_snake(seq20, rows = 3,
                                   show_ticks = TRUE,
                                   block_labels = as.character(seq_len(20))))
   })
@@ -434,7 +434,7 @@ describe("sequence_snake() — coverage extras", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
     s <- c(rep("A", 10), rep("B", 10))
-    expect_silent(sequence_snake(s, n_rows = 3,
+    expect_silent(sequence_snake(s, rows = 3,
                                   transition_labels = "Mid",
                                   transition_pos = 7.5))
   })
@@ -446,7 +446,7 @@ describe("sequence_snake() — coverage extras", {
     s <- c(rep("A", 20), rep("B", 20))
     # With 4 rows: ~10 blocks per band, ~3 per arc.
     # Band1 ends ~10, arc1 ~13, so pos 11.5 is in the arc
-    expect_silent(sequence_snake(s, n_rows = 4,
+    expect_silent(sequence_snake(s, rows = 4,
                                   transition_labels = "T1",
                                   transition_pos = 11.5))
   })
@@ -455,32 +455,32 @@ describe("sequence_snake() — coverage extras", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
     s <- c(rep("X", 8), rep("Y", 8), rep("Z", 4))
-    expect_silent(sequence_snake(s, n_rows = 3,
+    expect_silent(sequence_snake(s, rows = 3,
                                   orientation = "vertical",
                                   show_state = TRUE,
                                   transition_labels = c("T1", "T2")))
   })
 
-  it("handles vertical show_index in arcs", {
+  it("handles vertical show_numbers in arcs", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
-    expect_silent(sequence_snake(seq20, n_rows = 3,
+    expect_silent(sequence_snake(seq20, rows = 3,
                                   orientation = "vertical",
-                                  show_index = TRUE))
+                                  show_numbers = TRUE))
   })
 
   it("handles alloc with m == 0 segment", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
     # 3 blocks across 5 segments (3 bands + 2 arcs) — some get 0
-    expect_silent(sequence_snake(c("A", "B", "C"), n_rows = 3))
+    expect_silent(sequence_snake(c("A", "B", "C"), rows = 3))
   })
 
   it("draws show_ticks with few blocks and show_labels with 0-alloc bands", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
     # 2 blocks across 3 bands + 2 arcs = 5 segments — one band gets 0
-    expect_silent(sequence_snake(c("A", "B"), n_rows = 3,
+    expect_silent(sequence_snake(c("A", "B"), rows = 3,
                                   show_ticks = TRUE, show_labels = TRUE))
   })
 
@@ -489,7 +489,7 @@ describe("sequence_snake() — coverage extras", {
     on.exit(grDevices::dev.off(), add = TRUE)
     # First band is always LTR with start_from="left"
     s <- c(rep("A", 15), rep("B", 15))
-    expect_silent(sequence_snake(s, n_rows = 3,
+    expect_silent(sequence_snake(s, rows = 3,
                                   transition_labels = "T1",
                                   transition_pos = 3.5))
   })
@@ -498,7 +498,7 @@ describe("sequence_snake() — coverage extras", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
     s <- c(rep("A", 20), rep("B", 20))
-    expect_silent(sequence_snake(s, n_rows = 4,
+    expect_silent(sequence_snake(s, rows = 4,
                                   orientation = "vertical",
                                   transition_labels = "T1",
                                   transition_pos = 11.5))
@@ -509,7 +509,7 @@ describe("sequence_snake() — coverage extras", {
     on.exit(grDevices::dev.off(), add = TRUE)
     s <- c(rep("A", 10), rep("B", 10))
     # pos 999 is beyond the sequence
-    expect_silent(sequence_snake(s, n_rows = 2,
+    expect_silent(sequence_snake(s, rows = 2,
                                   transition_labels = "T1",
                                   transition_pos = 999))
   })
@@ -518,7 +518,7 @@ describe("sequence_snake() — coverage extras", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
     s <- c(rep("X", 5), rep("Y", 5))
-    expect_silent(timeline_snake(s, alphabet = c("X", "Y")))
+    expect_silent(timeline_snake(s, states = c("X", "Y")))
   })
 })
 
@@ -543,7 +543,7 @@ describe("sequence_snake() — rug style", {
   it("renders rug style with multiple rows", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
-    expect_silent(sequence_snake(seq30, n_rows = 4, style = "rug",
+    expect_silent(sequence_snake(seq30, rows = 4, style = "rug",
                                   show_labels = TRUE, show_legend = TRUE,
                                   shadow = TRUE, title = "Rug test"))
   })
@@ -552,7 +552,7 @@ describe("sequence_snake() — rug style", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
     big <- sample(verbs, 500, replace = TRUE)
-    expect_silent(sequence_snake(big, n_rows = 4, style = "rug"))
+    expect_silent(sequence_snake(big, rows = 4, style = "rug"))
   })
 
   it("renders rug style with rug_opacity", {
@@ -564,13 +564,13 @@ describe("sequence_snake() — rug style", {
   it("renders rug style with single row", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
-    expect_silent(sequence_snake(seq30, n_rows = 1, style = "rug"))
+    expect_silent(sequence_snake(seq30, rows = 1, style = "rug"))
   })
 
   it("renders rug style with jitter", {
     grDevices::pdf(nullfile())
     on.exit(grDevices::dev.off(), add = TRUE)
-    expect_silent(sequence_snake(seq30, n_rows = 4, style = "rug",
-                                  rug_jitter = 0.8))
+    expect_silent(sequence_snake(seq30, rows = 4, style = "rug",
+                                  jitter = 0.8))
   })
 })

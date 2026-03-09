@@ -17,7 +17,7 @@
 #' @param sequences Matrix or data.frame where rows are sequences and
 #'   columns are time points. Each cell contains a state label.
 #' @param type Character, \code{"index"} (default) or \code{"distribution"}.
-#' @param alphabet Character vector of unique states in desired legend order.
+#' @param states Character vector of unique states in desired legend order.
 #'   If \code{NULL}, derived from the data.
 #' @param colors Named or unnamed character vector of colors. If \code{NULL},
 #'   a built-in qualitative palette is used.
@@ -25,22 +25,22 @@
 #'   \code{"none"} (default), \code{"first"} (sort by first state),
 #'   \code{"last"} (sort by last state), \code{"freq"} (sort by most
 #'   frequent state), or \code{"entropy"} (sort by Shannon entropy).
-#' @param n_rows Integer, number of serpentine rows. If \code{NULL},
+#' @param rows Integer, number of serpentine rows. If \code{NULL},
 #'   auto-calculated (~10 blocks per band).
-#' @param band_height Numeric, height of each band in pixels (default 30).
-#' @param band_gap Numeric, gap between bands (default 20).
+#' @param band_height Numeric, height of each band in pixels (default 28).
+#' @param band_gap Numeric, gap between bands (default 18).
 #' @param plot_width Numeric, width of each band (default 500).
 #' @param margin Named numeric vector with top, right, bottom, left margins.
 #' @param show_labels Logical, show time-point range per row (default TRUE).
 #' @param show_legend Logical, draw color legend (default TRUE).
-#' @param show_pct Logical, show percentage labels inside distribution bars
+#' @param show_percent Logical, show percentage labels inside distribution bars
 #'   (default TRUE). Only used when \code{type = "distribution"}.
-#' @param block_border Color for thin borders between blocks, or \code{NA}
+#' @param border_color Color for thin borders between blocks, or \code{NA}
 #'   for no borders (default \code{NA}).
 #' @param title Optional character string for plot title.
-#' @param bg Background color (default \code{"white"}).
+#' @param background Background color (default \code{"white"}).
 #' @param shadow Logical, draw drop shadows (default TRUE).
-#' @param legend_cex Numeric, legend text size (default 0.8).
+#' @param legend_text_size Numeric, legend text size (default 0.8).
 #' @param tick_opacity Numeric 0-1, opacity of ticks in index mode
 #'   (default 0.85).
 #'
@@ -57,24 +57,24 @@
 #' @export
 multi_snake <- function(sequences,
                         type = c("index", "distribution"),
-                        alphabet = NULL,
+                        states = NULL,
                         colors = NULL,
                         sort_by = c("none", "first", "last",
                                     "freq", "entropy"),
-                        n_rows = NULL,
-                        band_height = 30,
-                        band_gap = 20,
+                        rows = NULL,
+                        band_height = 28,
+                        band_gap = 18,
                         plot_width = 500,
                         margin = c(top = 30, right = 10,
                                    bottom = 50, left = 80),
                         show_labels = TRUE,
                         show_legend = TRUE,
-                        show_pct = TRUE,
-                        block_border = NA,
+                        show_percent = TRUE,
+                        border_color = NA,
                         title = NULL,
-                        bg = "white",
+                        background = "white",
                         shadow = TRUE,
-                        legend_cex = 0.8,
+                        legend_text_size = 0.8,
                         tick_opacity = 0.85) {
 
   type    <- match.arg(type)
@@ -89,30 +89,30 @@ multi_snake <- function(sequences,
   n_time  <- ncol(sequences)
 
   # --- Alphabet ---
-  if (is.null(alphabet)) {
-    alphabet <- unique(as.vector(sequences))
-    alphabet <- alphabet[!is.na(alphabet)]
+  if (is.null(states)) {
+    states <- unique(as.vector(sequences))
+    states <- states[!is.na(states)]
   }
-  n_states <- length(alphabet)
+  n_states <- length(states)
 
   # --- Colors ---
-  state_colors <- resolve_state_colors(colors, alphabet, n_states)
+  state_colors <- resolve_state_colors(colors, states, n_states)
 
   # --- Sort sequences (index mode) ---
   if (type == "index" && sort_by != "none") {
     row_order <- switch(sort_by,
-      first = order(factor(sequences[, 1L], levels = alphabet)),
-      last  = order(factor(sequences[, n_time], levels = alphabet)),
+      first = order(factor(sequences[, 1L], levels = states)),
+      last  = order(factor(sequences[, n_time], levels = states)),
       freq  = {
         dominant <- vapply(seq_len(n_seq), function(i) {
-          tbl <- table(factor(sequences[i, ], levels = alphabet))
+          tbl <- table(factor(sequences[i, ], levels = states))
           names(which.max(tbl))[1L]
         }, character(1))
-        order(factor(dominant, levels = alphabet))
+        order(factor(dominant, levels = states))
       },
       entropy = {
         ent <- vapply(seq_len(n_seq), function(i) {
-          tbl <- table(factor(sequences[i, ], levels = alphabet))
+          tbl <- table(factor(sequences[i, ], levels = states))
           p <- tbl / sum(tbl)
           p <- p[p > 0]
           -sum(p * log(p))
@@ -125,7 +125,7 @@ multi_snake <- function(sequences,
 
   # --- Tabulate state counts per time point ---
   counts <- vapply(seq_len(n_time), function(t) {
-    tbl <- table(factor(sequences[, t], levels = alphabet))
+    tbl <- table(factor(sequences[, t], levels = states))
     as.integer(tbl)
   }, integer(n_states))
   counts <- t(counts)  # n_time x n_states
@@ -137,19 +137,19 @@ multi_snake <- function(sequences,
     seq_len(n_time)
   }
 
-  # --- Auto n_rows (targeting ~10-12 blocks per band) ---
-  if (is.null(n_rows)) {
-    n_rows <- max(1L, ceiling(n_time / 11))
+  # --- Auto rows (targeting ~10-12 blocks per band) ---
+  if (is.null(rows)) {
+    rows <- max(1L, ceiling(n_time / 11))
   }
-  n_rows <- as.integer(n_rows)
+  rows <- as.integer(rows)
 
   # --- Adjust margins ---
   if (show_legend) margin["bottom"] <- margin["bottom"] + 15
   if (!is.null(title)) margin["top"] <- margin["top"] + 18
 
-  # --- Layout: n_rows serpentine bands ---
+  # --- Layout: rows serpentine bands ---
   layout <- compute_snake_layout(
-    n_bands = n_rows, band_height = band_height, band_gap = band_gap,
+    n_bands = rows, band_height = band_height, band_gap = band_gap,
     plot_width = plot_width, margin = margin
   )
   bands  <- layout$bands
@@ -160,12 +160,12 @@ multi_snake <- function(sequences,
   r_mid   <- (outer_r + inner_r) / 2
 
   # --- Allocate time-point blocks to segments ---
-  seg_info <- build_segment_table(n_rows, plot_width, r_mid)
+  seg_info <- build_segment_table(rows, plot_width, r_mid)
   alloc    <- allocate_blocks(seg_info$path_length, n_time)
   cum_start <- c(0L, cumsum(alloc))
 
   # --- Canvas ---
-  op <- setup_canvas(layout, bg = bg)
+  op <- setup_canvas(layout, bg = background)
   on.exit(par(op), add = TRUE)
 
   if (!is.null(title)) {
@@ -186,9 +186,9 @@ multi_snake <- function(sequences,
     if (seg_info$type[seg] == "band") {
       k <- seg_info$index[seg]
       draw_multi_band_blocks(bands[k, ], m, time_idx, sequences,
-                              counts, n_seq, n_states, alphabet,
+                              counts, n_seq, n_states, states,
                               state_colors, type, tick_opacity,
-                              show_pct, block_border)
+                              show_percent, border_color)
     } else {
       # Simple neutral arc fill — no data in arcs
       a <- arcs[[seg_info$index[seg]]]
@@ -197,15 +197,15 @@ multi_snake <- function(sequences,
   })
 
   # --- End caps (subtle, matching adjacent band edge) ---
-  if (n_rows >= 1L) {
+  if (rows >= 1L) {
     cap_side1 <- if (bands$direction[1L] == "ltr") "left" else "right"
     cap1 <- end_cap_polygon(bands$x_left[1L], bands$y_top[1L],
                             bands$y_bottom[1L], cap_side1, outer_r)
     polygon(cap1$x, cap1$y, col = "#E8E8E8", border = NA)
 
-    cap_side2 <- if (bands$direction[n_rows] == "ltr") "right" else "left"
-    cap2 <- end_cap_polygon(bands$x_right[n_rows], bands$y_top[n_rows],
-                            bands$y_bottom[n_rows], cap_side2, outer_r)
+    cap_side2 <- if (bands$direction[rows] == "ltr") "right" else "left"
+    cap2 <- end_cap_polygon(bands$x_right[rows], bands$y_top[rows],
+                            bands$y_bottom[rows], cap_side2, outer_r)
     polygon(cap2$x, cap2$y, col = "#E8E8E8", border = NA)
   }
 
@@ -226,7 +226,7 @@ multi_snake <- function(sequences,
 
   # --- Legend ---
   if (show_legend) {
-    draw_multi_legend(layout, alphabet, state_colors, legend_cex, n_seq,
+    draw_multi_legend(layout, states, state_colors, legend_text_size, n_seq,
                       type)
   }
 
@@ -239,9 +239,9 @@ multi_snake <- function(sequences,
 #' Draw blocks within a band for multi_snake
 #' @noRd
 draw_multi_band_blocks <- function(band, m, time_idx, sequences,
-                                    counts, n_seq, n_states, alphabet,
+                                    counts, n_seq, n_states, states,
                                     state_colors, type, tick_opacity,
-                                    show_pct, block_border) {
+                                    show_percent, border_color) {
   coords <- band_block_x(band, m)
   vapply(seq_len(m), function(j) {
     t_idx <- time_idx[j]
@@ -253,14 +253,14 @@ draw_multi_band_blocks <- function(band, m, time_idx, sequences,
 
     if (type == "distribution") {
       draw_dist_block(x0, x1, yt, yb, bw, counts[t_idx, ],
-                      n_states, state_colors, show_pct)
+                      n_states, state_colors, show_percent)
     } else {
       draw_index_block(x0, x1, yt, yb, sequences[, t_idx],
                         n_seq, state_colors, tick_opacity)
     }
 
-    if (!is.na(block_border)) {
-      rect(x0, yt, x1, yb, col = NA, border = block_border, lwd = 0.3)
+    if (!is.na(border_color)) {
+      rect(x0, yt, x1, yb, col = NA, border = border_color, lwd = 0.3)
     }
     NA
   }, logical(1))
@@ -271,7 +271,7 @@ draw_multi_band_blocks <- function(band, m, time_idx, sequences,
 #' Draw a single distribution block (stacked bar)
 #' @noRd
 draw_dist_block <- function(x0, x1, yt, yb, bw, count_row,
-                             n_states, state_colors, show_pct) {
+                             n_states, state_colors, show_percent) {
   row_total <- sum(count_row)
   if (row_total == 0L) return(invisible(NULL))
 
@@ -282,7 +282,7 @@ draw_dist_block <- function(x0, x1, yt, yb, bw, count_row,
     seg_w <- (cnt / row_total) * bw
     rect(x_cursor, yt, x_cursor + seg_w, yb,
          col = state_colors[s], border = NA)
-    if (show_pct) {
+    if (show_percent) {
       pct <- round(cnt / row_total * 100)
       if (seg_w > bw * 0.12) {
         text(x_cursor + seg_w / 2, (yt + yb) / 2,
@@ -316,9 +316,9 @@ draw_index_block <- function(x0, x1, yt, yb, states_at_t,
 
 #' Draw legend for multi_snake
 #' @noRd
-draw_multi_legend <- function(layout, alphabet, state_colors, legend_cex,
+draw_multi_legend <- function(layout, states, state_colors, legend_text_size,
                                n_seq, type) {
-  n_states <- length(alphabet)
+  n_states <- length(states)
   cw <- layout$canvas$width
   ch <- layout$canvas$height
   legend_y <- ch - 8
@@ -326,22 +326,22 @@ draw_multi_legend <- function(layout, alphabet, state_colors, legend_cex,
   swatch_w <- 10
   gap <- 6
   total_w <- n_states * (swatch_w + gap) +
-    sum(nchar(alphabet)) * 5 * legend_cex
+    sum(nchar(states)) * 5 * legend_text_size
   x_start <- max(5, (cw - total_w) / 2)
 
   x_cursor <- x_start
   lapply(seq_len(n_states), function(s) {
     rect(x_cursor, legend_y - 5, x_cursor + swatch_w, legend_y + 5,
          col = state_colors[s], border = NA)
-    text(x_cursor + swatch_w + 3, legend_y, alphabet[s],
-         adj = c(0, 0.5), cex = legend_cex * 0.9, col = "#444444")
+    text(x_cursor + swatch_w + 3, legend_y, states[s],
+         adj = c(0, 0.5), cex = legend_text_size * 0.9, col = "#444444")
     x_cursor <<- x_cursor + swatch_w + gap +
-      nchar(alphabet[s]) * 5 * legend_cex + 4
+      nchar(states[s]) * 5 * legend_text_size + 4
   })
 
   info <- sprintf("n = %d sequences", n_seq)
   text(cw - 10, legend_y, info, adj = c(1, 0.5),
-       cex = legend_cex * 0.75, col = "#888888")
+       cex = legend_text_size * 0.75, col = "#888888")
 
   invisible(NULL)
 }

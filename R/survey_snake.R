@@ -33,8 +33,8 @@
 #'   \code{c("1"="Str. Disagree", "5"="Str. Agree")}). Applied to legend
 #'   and any level-based text. If unnamed and same length as levels, used
 #'   positionally.
-#' @param band_height Numeric (default 32).
-#' @param band_gap Numeric (default 34).
+#' @param band_height Numeric (default 28).
+#' @param band_gap Numeric (default 18).
 #' @param plot_width Numeric (default 500).
 #' @param tick_shape Character: "line" (default), "dot", or "bar"
 #'   (stacked proportional bars with percentage labels).
@@ -56,11 +56,11 @@
 #' @param sort_by Character: "none", "mean", or "net" (default "none").
 #' @param shadow Logical (default TRUE).
 #' @param label_color Character (default "#333333").
-#' @param label_cex Numeric (default 0.85).
+#' @param label_size Numeric (default 0.85).
 #' @param label_align Character. Label alignment: "left" (default), "right",
 #'   or "direction" (follows band reading direction).
 #' @param show_legend Logical (default TRUE).
-#' @param legend_cex Numeric, legend text size (default 0.65).
+#' @param legend_text_size Numeric, legend text size (default 0.65).
 #' @param arc_color Character (default "#2c3e6b").
 #' @param arc_opacity Numeric (default 0.80).
 #' @param arc_fill Character controlling arc fill style:
@@ -87,7 +87,7 @@
 #'   (default 2).
 #' @param title Optional plot title.
 #' @param margin Named numeric vector.
-#' @param bg Background color.
+#' @param background Background color.
 #' @param seed Integer for reproducible jitter (default 42).
 #'
 #' @return Invisible \code{snake_layout} object (or list of layouts when
@@ -111,8 +111,8 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
                          day              = NULL,
                          timestamp        = NULL,
                          level_labels     = NULL,
-                         band_height      = 32,
-                         band_gap         = 34,
+                         band_height      = 28,
+                         band_gap         = 18,
                          plot_width       = 500,
                          tick_shape       = c("line", "dot", "bar"),
                          bar_reverse      = FALSE,
@@ -128,10 +128,10 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
                          sort_by          = c("none", "mean", "net"),
                          shadow           = TRUE,
                          label_color      = "#333333",
-                         label_cex        = 0.85,
+                         label_size        = 0.85,
                          label_align      = "left",
                          show_legend      = TRUE,
-                         legend_cex       = 0.65,
+                         legend_text_size       = 0.65,
                          arc_color        = "#2c3e6b",
                          arc_opacity      = 0.80,
                          arc_fill         = c("none", "correlation",
@@ -143,7 +143,7 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
                          title            = NULL,
                          margin           = c(top = 30, right = 10,
                                               bottom = 55, left = 100),
-                         bg               = "white",
+                         background       = "white",
                          seed             = 42L) {
   # --- ESM auto-pivot ---
   esm_time_info <- NULL
@@ -276,7 +276,7 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
       plot.window(xlim = c(0, 400), ylim = c(0, 100))
       y_pos <- 50
       total_w <- sum(vapply(items, function(it) {
-        strwidth(it$label, cex = legend_cex) + 20
+        strwidth(it$label, cex = legend_text_size) + 20
       }, numeric(1)))
       x_cur <- (400 - total_w) / 2
       lapply(items, function(it) {
@@ -284,14 +284,14 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
           segments(x_cur + 2, y_pos - 6, x_cur + 2, y_pos + 6,
                    col = it$color, lwd = 2.5)
           text(x_cur + 8, y_pos, it$label, adj = c(0, 0.5),
-               col = "#333333", cex = legend_cex)
-          x_cur <<- x_cur + strwidth(it$label, cex = legend_cex) + 20
+               col = "#333333", cex = legend_text_size)
+          x_cur <<- x_cur + strwidth(it$label, cex = legend_text_size) + 20
         } else {
           rect(x_cur, y_pos - 5, x_cur + 14, y_pos + 5,
                col = it$color, border = NA)
           text(x_cur + 18, y_pos, it$label, adj = c(0, 0.5),
-               col = "#333333", cex = legend_cex)
-          x_cur <<- x_cur + strwidth(it$label, cex = legend_cex) + 28
+               col = "#333333", cex = legend_text_size)
+          x_cur <<- x_cur + strwidth(it$label, cex = legend_text_size) + 28
         }
       })
     }
@@ -387,7 +387,7 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
   layout <- compute_snake_layout(n_items, band_height, band_gap,
                                  plot_width, margin,
                                  start_from = start_from)
-  op <- setup_canvas(layout, bg = bg)
+  op <- setup_canvas(layout, bg = background)
   on.exit(par(op), add = TRUE)
 
   if (!is.null(title)) {
@@ -426,7 +426,7 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
       # Hour labels on the first band only
       if (k == 1L) {
         text(x_hrs, yt - 5, paste0(hour_marks, "h"),
-             cex = label_cex * 0.8, col = "#444444", font = 2)
+             cex = label_size * 0.8, col = "#444444", font = 2)
       }
       NA
     }, logical(1))
@@ -667,7 +667,7 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
   }
 
   # Labels
-  draw_band_labels(layout, labels, col = label_color, cex = label_cex,
+  draw_band_labels(layout, labels, col = label_color, cex = label_size,
                    align = label_align)
 
   # Legend — tick lines for levels, gradient swatches for profile/mean
@@ -682,7 +682,7 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
     items <- c(items, list(list(label = "Low -> High mean",
                                 color = shade_by_value(3, 1, 5, palette = band_palette),
                                 type = "gradient")))
-    draw_snake_legend(layout, items, cex = legend_cex)
+    draw_snake_legend(layout, items, cex = legend_text_size)
   }
 
   invisible(layout)
