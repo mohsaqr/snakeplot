@@ -31,6 +31,9 @@
 #' @param band_gap Numeric, gap between bands (default 18).
 #' @param plot_width Numeric, width of each band (default 500).
 #' @param margin Named numeric vector with top, right, bottom, left margins.
+#' @param flow Character, \code{"snake"} (default) or \code{"natural"}.
+#'   \code{"snake"} uses alternating boustrophedon direction;
+#'   \code{"natural"} reads all bands in the same direction.
 #' @param show_labels Logical, show time-point range per row (default TRUE).
 #' @param show_legend Logical, draw color legend (default TRUE).
 #' @param show_percent Logical, show percentage labels inside distribution bars
@@ -67,6 +70,7 @@ multi_snake <- function(sequences,
                         plot_width = 500,
                         margin = c(top = 30, right = 10,
                                    bottom = 50, left = 80),
+                        flow = c("snake", "natural"),
                         show_labels = TRUE,
                         show_legend = TRUE,
                         show_percent = TRUE,
@@ -79,6 +83,7 @@ multi_snake <- function(sequences,
 
   type    <- match.arg(type)
   sort_by <- match.arg(sort_by)
+  flow    <- match.arg(flow)
 
   # --- Coerce input ---
   if (is.data.frame(sequences)) sequences <- as.matrix(sequences)
@@ -150,7 +155,8 @@ multi_snake <- function(sequences,
   # --- Layout: rows serpentine bands ---
   layout <- compute_snake_layout(
     n_bands = rows, band_height = band_height, band_gap = band_gap,
-    plot_width = plot_width, margin = margin
+    plot_width = plot_width, margin = margin,
+    flow = flow
   )
   bands  <- layout$bands
   arcs   <- layout$arcs
@@ -198,14 +204,15 @@ multi_snake <- function(sequences,
 
   # --- End caps (subtle, matching adjacent band edge) ---
   if (rows >= 1L) {
+    bh2 <- layout$params$band_height / 2
     cap_side1 <- if (bands$direction[1L] == "ltr") "left" else "right"
-    cap1 <- end_cap_polygon(bands$x_left[1L], bands$y_top[1L],
-                            bands$y_bottom[1L], cap_side1, outer_r)
+    cap_x1 <- if (cap_side1 == "left") bands$x_left[1L] else bands$x_right[1L]
+    cap1 <- end_cap_polygon(cap_x1, bands$y_center[1L], bh2, cap_side1)
     polygon(cap1$x, cap1$y, col = "#E8E8E8", border = NA)
 
     cap_side2 <- if (bands$direction[rows] == "ltr") "right" else "left"
-    cap2 <- end_cap_polygon(bands$x_right[rows], bands$y_top[rows],
-                            bands$y_bottom[rows], cap_side2, outer_r)
+    cap_x2 <- if (cap_side2 == "right") bands$x_right[rows] else bands$x_left[rows]
+    cap2 <- end_cap_polygon(cap_x2, bands$y_center[rows], bh2, cap_side2)
     polygon(cap2$x, cap2$y, col = "#E8E8E8", border = NA)
   }
 

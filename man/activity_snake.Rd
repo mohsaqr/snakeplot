@@ -30,6 +30,7 @@ activity_snake(
   label_align = "left",
   orientation = c("horizontal", "vertical"),
   start_from = c("left", "right"),
+  flow = c("snake", "natural"),
   day_format = NULL,
   legend = NULL,
   title = NULL,
@@ -110,6 +111,10 @@ Controls whether the snake runs left-right or top-bottom.}
 
 \item{start_from}{Character: "left" (default) or "right". Which side the
 first band starts from.}
+
+\item{flow}{Character, \code{"snake"} (default) or \code{"natural"}.
+\code{"snake"} uses alternating boustrophedon direction;
+\code{"natural"} reads all bands in the same direction.}
 
 \item{day_format}{Optional strftime format for day labels when \code{start}
 is POSIXct (e.g., \code{"\%a"} for "Mon", \code{"\%Y-\%m-\%d"} for

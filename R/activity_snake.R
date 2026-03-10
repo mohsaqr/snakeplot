@@ -52,6 +52,9 @@
 #'   Controls whether the snake runs left-right or top-bottom.
 #' @param start_from Character: "left" (default) or "right". Which side the
 #'   first band starts from.
+#' @param flow Character, \code{"snake"} (default) or \code{"natural"}.
+#'   \code{"snake"} uses alternating boustrophedon direction;
+#'   \code{"natural"} reads all bands in the same direction.
 #' @param day_format Optional strftime format for day labels when \code{start}
 #'   is POSIXct (e.g., \code{"\%a"} for "Mon", \code{"\%Y-\%m-\%d"} for
 #'   dates). NULL = auto-detect (\code{"\%a"} for 7 or fewer days,
@@ -109,6 +112,7 @@ activity_snake <- function(data,
                            label_align    = "left",
                            orientation    = c("horizontal", "vertical"),
                            start_from     = c("left", "right"),
+                           flow           = c("snake", "natural"),
                            day_format     = NULL,
                            legend         = NULL,
                            title          = NULL,
@@ -117,6 +121,7 @@ activity_snake <- function(data,
                            background     = "white") {
   orientation <- match.arg(orientation)
   start_from  <- match.arg(start_from)
+  flow        <- match.arg(flow)
   # Coerce bare POSIXct vector to data.frame
   was_timestamps <- inherits(data, "POSIXt") || (is.data.frame(data) &&
     (("timestamp" %in% names(data) && inherits(data$timestamp, "POSIXt")) ||
@@ -163,7 +168,8 @@ activity_snake <- function(data,
   layout <- compute_snake_layout(n_days, band_height, band_gap,
                                  plot_width, margin,
                                  orientation = orientation,
-                                 start_from = start_from)
+                                 start_from = start_from,
+                                 flow = flow)
 
   # Set up canvas
   op <- setup_canvas(layout, bg = background)
@@ -198,13 +204,13 @@ activity_snake <- function(data,
       if (!vert) {
         x_pos <- time_to_x(hour_mins, day_start, day_end,
                             bands$x_left[k], bands$x_right[k],
-                            bands$direction[k])
+                            bands$read_direction[k])
         segments(x_pos, bands$y_top[k], x_pos, bands$y_bottom[k],
                  col = gcol, lwd = 0.4)
       } else {
         y_pos <- time_to_y(hour_mins, day_start, day_end,
                             bands$y_top[k], bands$y_bottom[k],
-                            bands$direction[k])
+                            bands$read_direction[k])
         segments(bands$x_left[k], y_pos, bands$x_right[k], y_pos,
                  col = gcol, lwd = 0.4)
       }
@@ -221,7 +227,7 @@ activity_snake <- function(data,
     events <- day_events[[dname]]
     if (is.null(events) || nrow(events) == 0L) return(NA)
 
-    dir  <- bands$direction[k]
+    dir  <- bands$read_direction[k]
     ecol <- alpha_col(ecols[k], event_opacity)
 
     if (!vert) {
@@ -273,15 +279,48 @@ activity_snake <- function(data,
 
   # Arc labels
   if (show_arc_labels && length(layout$arcs) > 0L) {
-    if (!vert) {
-      draw_arc_labels(layout, label = "12AM", col = "#666666", cex = 0.55)
+    start_label <- minutes_to_label(day_start)
+    end_label   <- minutes_to_label(day_end)
+
+    if (flow == "natural") {
+      # Natural: all bands same direction.
+      # start_from="left": all LTR, right edge = day_end, left edge = day_start
+      # start_from="right": all RTL, right edge = day_start, left edge = day_end
+      right_is_end <- (start_from == "left")
+      if (!vert) {
+        lapply(layout$arcs, function(a) {
+          lbl <- if (a$side == "right") {
+            if (right_is_end) end_label else start_label
+          } else {
+            if (right_is_end) start_label else end_label
+          }
+          text(a$tip_x, a$tip_y, lbl, col = "#666666", cex = 0.55,
+               adj = c(if (a$side == "right") 0 else 1, 0.5))
+        })
+      } else {
+        bottom_is_end <- (start_from == "left")
+        lapply(layout$arcs, function(a) {
+          lbl <- if (a$side == "bottom") {
+            if (bottom_is_end) end_label else start_label
+          } else {
+            if (bottom_is_end) start_label else end_label
+          }
+          adj_y <- if (a$side == "bottom") 0 else 1
+          text(a$tip_x, a$tip_y, lbl, col = "#666666", cex = 0.55,
+               adj = c(0.5, adj_y))
+        })
+      }
     } else {
-      # Vertical: arc labels at top/bottom tips
-      lapply(layout$arcs, function(a) {
-        adj_y <- if (a$side == "bottom") 0 else 1
-        text(a$tip_x, a$tip_y, "12AM", col = "#666666", cex = 0.55,
-             adj = c(0.5, adj_y))
-      })
+      # Snake: arcs always represent midnight (day_end)
+      if (!vert) {
+        draw_arc_labels(layout, label = end_label, col = "#666666", cex = 0.55)
+      } else {
+        lapply(layout$arcs, function(a) {
+          adj_y <- if (a$side == "bottom") 0 else 1
+          text(a$tip_x, a$tip_y, end_label, col = "#666666", cex = 0.55,
+               adj = c(0.5, adj_y))
+        })
+      }
     }
   }
 

@@ -104,6 +104,22 @@ activity_snake(d2, event_color = "#e09480", band_color = "#3d2518",
                title = "Weekly activity — duration blocks")
 ```
 
+With `flow = "natural"`, all bands read 6AM→12AM left-to-right — no
+alternating. Compare: the default boustrophedon flips morning events
+between left and right on alternate rows, while natural keeps them
+consistently on the left:
+
+```{r activity_natural, fig.height = 6}
+set.seed(1)
+d_morning <- data.frame(
+  day      = rep(days, each = 15),
+  start    = round(runif(105, 360, 720)),
+  duration = 0
+)
+activity_snake(d_morning, flow = "natural",
+               title = "Morning events — flow='natural' (6AM always left)")
+```
+
 ## Line snake
 
 `line_snake()` draws a continuous intensity line winding through bands:

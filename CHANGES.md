@@ -1,5 +1,32 @@
 # Changes
 
+### 2026-03-10 — Add `flow` parameter to all snake functions
+
+- R/layout.R: Added `flow` param ("snake"/"natural") to `compute_snake_layout()`. Added `bands$read_direction` field — separates content ordering from arc geometry (`bands$direction`).
+- R/sequence_snake.R: Added `flow` param, default "natural". Content placement uses `read_direction` instead of `direction`.
+- R/timeline_snake.R: Added `flow` param, default "natural". Passes through to `sequence_snake()`.
+- R/activity_snake.R: Added `flow` param, default "snake". Grid lines and event blocks use `read_direction`.
+- R/survey_snake.R: Added `flow` param, default "snake". Content refs use `read_direction`.
+- R/line_snake.R: Added `flow` param, default "snake". Content placement uses `read_direction`.
+- R/survey_sequence.R: Added `flow` param, default "snake". Content refs use `read_direction`.
+- R/multi_snake.R: Added `flow` param, default "snake".
+- R/render.R: `draw_band_labels()` uses `read_direction` for `align="direction"`.
+- R/render.R: `draw_band_labels()` uses `read_direction` for `align="direction"`.
+- All functions: Added `@param flow` roxygen documentation.
+- R/activity_snake.R: Arc labels now flow-aware — in natural mode, right arcs show day-end label, left arcs show day-start label. Accounts for `start_from` direction.
+- R/survey_sequence.R: Fixed arc gradient to use `bands$direction` (geometry) instead of `bands$read_direction` for end-level color.
+- R/survey_snake.R: Fixed first end cap to respect `bands$direction[1]` instead of hardcoding "left".
+- R/multi_snake.R: Fixed `end_cap_polygon` argument order (was passing y_top/y_bottom instead of y_center/radius).
+- Tests: 28 new tests in test-flow.R. Full suite: 498 pass, 0 fail. R CMD check --as-cran: 0 errors, 0 warnings, 2 NOTEs.
+
+### 2026-03-09 — CRAN polish, 100% coverage, zero warnings
+
+- R/survey_snake.R: Added `sd()` guard before `cor()` to prevent zero-SD warnings.
+- R/snakeplot-package.R: Added `sd` to stats imports.
+- R/multi_snake.R, R/sequence_snake.R, R/timeline_snake.R, R/utils.R: Marked defensive guards with `# nocov`.
+- vignettes/survey-snake-plots.Rmd: Added duration blocks activity example, moved timeline before correlation arcs.
+- Tests: 470 pass, 0 fail, 0 warnings. 100% coverage. R CMD check --as-cran: 0 errors, 0 warnings, 1 NOTE.
+
 ### 2026-03-09 — vignette overhaul, 5-point scale, label overlap fixes
 
 - data/: All three datasets rescaled from 1-7 to 1-5 Likert (linear transform). data-raw/esm_survey.R updated with `rescale_7to5()`.

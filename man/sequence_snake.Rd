@@ -15,6 +15,7 @@ sequence_snake(
   margin = c(top = 30, right = 10, bottom = 50, left = 80),
   orientation = "horizontal",
   start_from = "left",
+  flow = c("natural", "snake"),
   show_labels = TRUE,
   show_legend = TRUE,
   show_numbers = FALSE,
@@ -73,6 +74,10 @@ auto-calculated targeting approximately 10 blocks per band.}
 \code{"vertical"}.}
 
 \item{start_from}{Character, \code{"left"} (default) or \code{"right"}.}
+
+\item{flow}{Character, \code{"natural"} (default) or \code{"snake"}.
+\code{"natural"} reads all bands left-to-right; \code{"snake"} uses
+alternating boustrophedon direction. Default \code{"natural"}.}
 
 \item{show_labels}{Logical, show position range labels per row
 (default \code{TRUE}).}

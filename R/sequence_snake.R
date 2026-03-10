@@ -27,6 +27,9 @@
 #' @param orientation Character, \code{"horizontal"} (default) or
 #'   \code{"vertical"}.
 #' @param start_from Character, \code{"left"} (default) or \code{"right"}.
+#' @param flow Character, \code{"natural"} (default) or \code{"snake"}.
+#'   \code{"natural"} reads all bands left-to-right; \code{"snake"} uses
+#'   alternating boustrophedon direction. Default \code{"natural"}.
 #' @param show_labels Logical, show position range labels per row
 #'   (default \code{TRUE}).
 #' @param show_legend Logical, draw color legend (default \code{TRUE}).
@@ -101,6 +104,7 @@ sequence_snake <- function(sequence,
                                       bottom = 50, left = 80),
                            orientation = "horizontal",
                            start_from = "left",
+                           flow = c("natural", "snake"),
                            show_labels = TRUE,
                            show_legend = TRUE,
                            show_numbers = FALSE,
@@ -126,6 +130,7 @@ sequence_snake <- function(sequence,
                            text_size = 0.5,
                            legend_text_size = 0.8) {
   style <- match.arg(style)
+  flow  <- match.arg(flow)
 
   # --- Smart input coercion ---
   sequence <- coerce_sequence_input(sequence)
@@ -178,7 +183,8 @@ sequence_snake <- function(sequence,
   layout <- compute_snake_layout(
     n_bands = rows, band_height = band_height, band_gap = band_gap,
     plot_width = plot_width, margin = margin,
-    orientation = orientation, start_from = start_from
+    orientation = orientation, start_from = start_from,
+    flow = flow
   )
 
   bands  <- layout$bands
@@ -282,7 +288,7 @@ sequence_snake <- function(sequence,
         n_tk <- length(tick_labels)
         frac <- seq(0, 1, length.out = n_tk + 1L)
         # Tick positions at boundaries
-        if (b$direction %in% c("ltr", "ttb")) {
+        if (b$read_direction %in% c("ltr", "ttb")) {
           tk_x <- b$x_left + frac * bw
         } else {
           tk_x <- b$x_right - frac * bw
@@ -503,7 +509,7 @@ allocate_blocks <- function(seg_lengths, n_blocks) {
 #' @noRd
 band_block_x <- function(b, m) {
   bw <- (b$x_right - b$x_left) / m
-  if (b$direction %in% c("ltr", "ttb")) {
+  if (b$read_direction %in% c("ltr", "ttb")) {
     x0 <- b$x_left + (seq_len(m) - 1L) * bw
     x1 <- b$x_left + seq_len(m) * bw
   } else {
@@ -664,7 +670,7 @@ draw_transition_mark <- function(pos, label, seg_info, alloc, cum_start,
     coords <- band_block_x(b, m)
 
     # Transition at EXIT edge: LTR → x1, RTL → x0
-    if (b$direction %in% c("ltr", "ttb")) {
+    if (b$read_direction %in% c("ltr", "ttb")) {
       tx <- coords$x1[local_pos]
     } else {
       tx <- coords$x0[local_pos]
@@ -704,7 +710,7 @@ draw_transition_mark_at <- function(frac_pos, label, seg_info, alloc,
 
       if (seg_info$type[s] == "band") {
         b <- bands[seg_info$index[s], ]
-        if (b$direction %in% c("ltr", "ttb")) {
+        if (b$read_direction %in% c("ltr", "ttb")) {
           lx <- b$x_left + frac * (b$x_right - b$x_left)
         } else {
           lx <- b$x_right - frac * (b$x_right - b$x_left)

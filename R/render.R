@@ -191,12 +191,12 @@ draw_band_labels <- function(layout, labels, totals = NULL,
         (bands$y_bottom[k - 1L] + bands$y_top[k]) / 2
       }
       if (align == "direction") {
-        lbl_x <- if (bands$direction[k] == "ltr") {
+        lbl_x <- if (bands$read_direction[k] == "ltr") {
           bands$x_left[k]
         } else {
           bands$x_right[k]
         }
-        adj_x <- if (bands$direction[k] == "ltr") 0 else 1
+        adj_x <- if (bands$read_direction[k] == "ltr") 0 else 1
       } else if (align == "right") {
         lbl_x <- bands$x_right[k]
         adj_x <- 1

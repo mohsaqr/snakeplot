@@ -27,6 +27,9 @@
 #'   so the visual reading direction mirrors the data order (default FALSE).
 #' @param start_from Character: "left" (default) or "right". Which side the
 #'   first band starts from.
+#' @param flow Character, \code{"snake"} (default) or \code{"natural"}.
+#'   \code{"snake"} uses alternating boustrophedon direction;
+#'   \code{"natural"} reads all bands in the same direction.
 #' @param title Optional title.
 #' @param margin Named numeric vector.
 #' @param background Background color.
@@ -66,6 +69,7 @@ survey_sequence <- function(counts, labels = NULL, levels = NULL,
                             label_align   = "left",
                             reverse_rtl   = FALSE,
                             start_from    = c("left", "right"),
+                            flow          = c("snake", "natural"),
                             title         = NULL,
                             margin        = c(top = 30, right = 10,
                                               bottom = 55, left = 100),
@@ -80,6 +84,7 @@ survey_sequence <- function(counts, labels = NULL, levels = NULL,
   arc_style   <- match.arg(arc_style)
   sort_by    <- match.arg(sort_by)
   start_from <- match.arg(start_from)
+  flow       <- match.arg(flow)
 
   n_items  <- nrow(counts)
   n_levels <- ncol(counts)
@@ -115,7 +120,8 @@ survey_sequence <- function(counts, labels = NULL, levels = NULL,
   if (!is.null(title)) margin["top"] <- margin["top"] + 18
   layout <- compute_snake_layout(n_items, band_height, band_gap,
                                  plot_width, margin,
-                                 start_from = start_from)
+                                 start_from = start_from,
+                                 flow = flow)
   op <- setup_canvas(layout, bg = background)
   on.exit(par(op), add = TRUE)
 
@@ -175,7 +181,7 @@ survey_sequence <- function(counts, labels = NULL, levels = NULL,
 
   # Draw stacked segments on each band
   vapply(seq_len(n_items), function(k) {
-    dir <- bands$direction[k]
+    dir <- bands$read_direction[k]
     xl  <- bands$x_left[k]
     xr  <- bands$x_right[k]
     yt  <- bands$y_top[k]
@@ -275,11 +281,13 @@ sequential_dist <- function(counts, labels = NULL, levels = NULL,
                             label_align    = "left",
                             reverse_rtl    = FALSE,
                             start_from     = c("left", "right"),
+                            flow           = c("snake", "natural"),
                             title          = NULL,
                             margin         = c(top = 30, right = 10,
                                               bottom = 55, left = 100),
                             background             = "white") {
   start_from <- match.arg(start_from)
+  flow       <- match.arg(flow)
   coerced <- coerce_survey_input(counts, labels, levels)
   counts  <- coerced$counts
   labels  <- coerced$labels
@@ -298,5 +306,6 @@ sequential_dist <- function(counts, labels = NULL, levels = NULL,
                   show_legend = show_legend, label_color = label_color,
                   label_size = label_size, label_align = label_align,
                   reverse_rtl = reverse_rtl, start_from = start_from,
-                  title = title, margin = margin, background = background)
+                  flow = flow, title = title, margin = margin,
+                  background = background)
 }

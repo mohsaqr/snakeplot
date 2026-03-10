@@ -1,6 +1,13 @@
 # Learnings
 
+### 2026-03-10
+- [flow parameter naming] `flow="snake"` = boustrophedon (alternating direction). `flow="natural"` = all bands same direction (like a folded ribbon laid flat, consistent reading order). Same meaning in EVERY function — no special cases per function. Do NOT reverse these meanings.
+- [flow defaults] Only `timeline_snake()` and `sequence_snake()` default to `flow="natural"`. All other functions (`activity_snake`, `survey_snake`, `line_snake`, `survey_sequence`, `multi_snake`) default to `flow="snake"`. All functions accept both values.
+- [direction vs read_direction] `bands$direction` controls arc geometry (always alternates). `bands$read_direction` controls content/block ordering within bands. In snake mode they're the same; in natural mode `read_direction` is uniform while `direction` still alternates. End caps follow `direction`, content follows `read_direction`.
+
 ### 2026-03-09
+- [cor zero-SD] `stats::cor()` warns when standard deviation is zero (constant data). Guard with `sd() > 0` check before calling `cor()`. Add `sd` to `@importFrom stats`.
+- [vignette fig.height] User strongly dislikes tall/thick plots. Default fig.height=5 (from setup chunk) is fine for most. Don't increase unless explicitly asked. Activity plots use fig.height=6.
 - [parse_time year validation] `strptime` with `%Y/%m/%d` on "15/01/2024" happily treats "15" as year 0015. Must validate parsed years are in 1900-2100 range before accepting a format match.
 - [parse_time YYYY-MM] `strptime` cannot handle `%Y-%m` without a day. Must pre-process "2024-01" → "2024-01-01" before the format loop.
 - [numeric start column] `coerce_activity_input()` must NOT parse numeric `start` columns as Unix timestamps — they represent minutes-from-midnight in activity_snake context. Only parse character columns via `parse_time()`.

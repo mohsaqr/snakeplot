@@ -15,6 +15,7 @@ multi_snake(
   band_gap = 18,
   plot_width = 500,
   margin = c(top = 30, right = 10, bottom = 50, left = 80),
+  flow = c("snake", "natural"),
   show_labels = TRUE,
   show_legend = TRUE,
   show_percent = TRUE,
@@ -53,6 +54,10 @@ auto-calculated (~10 blocks per band).}
 \item{plot_width}{Numeric, width of each band (default 500).}
 
 \item{margin}{Named numeric vector with top, right, bottom, left margins.}
+
+\item{flow}{Character, \code{"snake"} (default) or \code{"natural"}.
+\code{"snake"} uses alternating boustrophedon direction;
+\code{"natural"} reads all bands in the same direction.}
 
 \item{show_labels}{Logical, show time-point range per row (default TRUE).}
 

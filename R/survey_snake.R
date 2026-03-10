@@ -77,6 +77,9 @@
 #'   shading gradient. Low item means map to the first color, high means to
 #'   the last. Default \code{NULL} uses the built-in brown-to-slate ramp.
 #'   For darker plots try \code{c("#1a1228", "#1a2a42")}.
+#' @param flow Character, \code{"snake"} (default) or \code{"natural"}.
+#'   \code{"snake"} uses alternating boustrophedon direction;
+#'   \code{"natural"} reads all bands in the same direction.
 #' @param start_from Character: "left" (default) or "right". Which side the
 #'   first band starts from.
 #' @param facet Logical or named list. When \code{TRUE}, columns are
@@ -138,6 +141,7 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
                                               "mean_prev", "blend"),
                          band_palette     = NULL,
                          start_from       = c("left", "right"),
+                         flow             = c("snake", "natural"),
                          facet            = FALSE,
                          facet_ncol       = 2L,
                          title            = NULL,
@@ -324,6 +328,7 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
   sort_by     <- match.arg(sort_by)
   start_from  <- match.arg(start_from)
   arc_fill    <- match.arg(arc_fill)
+  flow        <- match.arg(flow)
 
   n_items  <- nrow(counts)
   n_levels <- ncol(counts)
@@ -386,7 +391,8 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
 
   layout <- compute_snake_layout(n_items, band_height, band_gap,
                                  plot_width, margin,
-                                 start_from = start_from)
+                                 start_from = start_from,
+                                 flow = flow)
   op <- setup_canvas(layout, bg = background)
   on.exit(par(op), add = TRUE)
 
@@ -529,7 +535,10 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
   } else {
     alpha_col(shade(item_means[1]), arc_opacity)
   }
-  cap1 <- end_cap_polygon(bands$x_left[1], bands$y_center[1], bh2, "left")
+  first_dir <- bands$direction[1]
+  cap_side1 <- if (first_dir == "ltr") "left" else "right"
+  cap_x1 <- if (cap_side1 == "left") bands$x_left[1] else bands$x_right[1]
+  cap1 <- end_cap_polygon(cap_x1, bands$y_center[1], bh2, cap_side1)
   polygon(cap1$x, cap1$y, col = cap1_col, border = NA)
   if (n_items > 1L) {
     last <- n_items

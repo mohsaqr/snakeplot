@@ -24,6 +24,7 @@ survey_sequence(
   label_align = "left",
   reverse_rtl = FALSE,
   start_from = c("left", "right"),
+  flow = c("snake", "natural"),
   title = NULL,
   margin = c(top = 30, right = 10, bottom = 55, left = 100),
   background = "white"
@@ -71,6 +72,10 @@ so the visual reading direction mirrors the data order (default FALSE).}
 
 \item{start_from}{Character: "left" (default) or "right". Which side the
 first band starts from.}
+
+\item{flow}{Character, \code{"snake"} (default) or \code{"natural"}.
+\code{"snake"} uses alternating boustrophedon direction;
+\code{"natural"} reads all bands in the same direction.}
 
 \item{title}{Optional title.}
 

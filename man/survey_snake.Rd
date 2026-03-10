@@ -38,6 +38,7 @@ survey_snake(
   arc_fill = c("none", "correlation", "mean_prev", "blend"),
   band_palette = NULL,
   start_from = c("left", "right"),
+  flow = c("snake", "natural"),
   facet = FALSE,
   facet_ncol = 2L,
   title = NULL,
@@ -154,6 +155,10 @@ For darker plots try \code{c("#1a1228", "#1a2a42")}.}
 
 \item{start_from}{Character: "left" (default) or "right". Which side the
 first band starts from.}
+
+\item{flow}{Character, \code{"snake"} (default) or \code{"natural"}.
+\code{"snake"} uses alternating boustrophedon direction;
+\code{"natural"} reads all bands in the same direction.}
 
 \item{facet}{Logical or named list. When \code{TRUE}, columns are
 auto-grouped by their name prefix (e.g. LOC1-LOC5 → "LOC") and each

@@ -11,6 +11,9 @@
 #'   function auto-generates monthly blocks, transition labels, and band
 #'   labels.
 #' @inheritParams sequence_snake
+#' @param flow Character, \code{"natural"} (default) or \code{"snake"}.
+#'   \code{"natural"} reads all bands left-to-right; \code{"snake"} uses
+#'   alternating boustrophedon direction.
 #' @param band_height Numeric, height of each band (default 28).
 #' @param band_gap Numeric, gap between bands (default 18).
 #' @param plot_width Numeric, width of each band (default 500).
@@ -49,6 +52,7 @@ timeline_snake <- function(sequence,
                                       bottom = 65, left = 20),
                            orientation = "horizontal",
                            start_from = "left",
+                           flow = c("natural", "snake"),
                            show_labels = FALSE,
                            show_legend = TRUE,
                            show_numbers = FALSE,
@@ -152,6 +156,7 @@ timeline_snake <- function(sequence,
     margin = margin,
     orientation = orientation,
     start_from = start_from,
+    flow = match.arg(flow),
     show_labels = show_labels,
     show_legend = show_legend,
     show_numbers = show_numbers,

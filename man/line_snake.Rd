@@ -25,6 +25,7 @@ line_snake(
   label_size = 0.85,
   orientation = c("horizontal", "vertical"),
   start_from = c("left", "right"),
+  flow = c("snake", "natural"),
   title = NULL,
   margin = c(top = 30, right = 10, bottom = 50, left = 80),
   background = "white"
@@ -77,6 +78,10 @@ for a single band).}
 \item{orientation}{Character, "horizontal" or "vertical" (default "horizontal").}
 
 \item{start_from}{Character, "left" or "right" (default "left").}
+
+\item{flow}{Character, \code{"snake"} (default) or \code{"natural"}.
+\code{"snake"} uses alternating boustrophedon direction;
+\code{"natural"} reads all bands in the same direction.}
 
 \item{title}{Optional title.}
 

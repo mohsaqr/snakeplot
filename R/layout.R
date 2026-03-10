@@ -11,6 +11,9 @@
 #' @param orientation Character, "horizontal" or "vertical".
 #' @param start_from Character, "left" or "right". Controls which side
 #'   the first band reads from.
+#' @param flow Character, "snake" or "natural". Controls block/content
+#'   ordering within bands. "snake" = boustrophedon (alternating
+#'   direction); "natural" = all bands read in the same direction.
 #' @return A list with components: bands, arcs, canvas, plot_area, orientation.
 #' @noRd
 compute_snake_layout <- function(n_bands, band_height = 28, band_gap = 18,
@@ -18,7 +21,9 @@ compute_snake_layout <- function(n_bands, band_height = 28, band_gap = 18,
                                  margin = c(top = 30, right = 10,
                                             bottom = 50, left = 80),
                                  orientation = "horizontal",
-                                 start_from = "left") {
+                                 start_from = "left",
+                                 flow = c("snake", "natural")) {
+  flow <- match.arg(flow)
   stopifnot(n_bands >= 1L)
 
   row_step  <- band_height + band_gap
@@ -53,6 +58,14 @@ compute_snake_layout <- function(n_bands, band_height = 28, band_gap = 18,
       bands$direction <- ifelse(bands$i %% 2 == 0, "ltr", "rtl")
     } else {
       bands$direction <- ifelse(bands$i %% 2 == 0, "rtl", "ltr")
+    }
+
+    # Read direction: "snake" = boustrophedon (follows fold),
+    # "natural" = all same direction (natural reading order)
+    if (flow == "snake") {
+      bands$read_direction <- bands$direction
+    } else {
+      bands$read_direction <- if (start_from == "left") "ltr" else "rtl"
     }
 
     # Arc geometry
@@ -107,6 +120,12 @@ compute_snake_layout <- function(n_bands, band_height = 28, band_gap = 18,
       bands$direction <- ifelse(bands$i %% 2 == 0, "btt", "ttb")
     }
 
+    if (flow == "snake") {
+      bands$read_direction <- bands$direction
+    } else {
+      bands$read_direction <- if (start_from == "left") "ttb" else "btt"
+    }
+
     # Arcs: horizontal semicircles at top/bottom
     arcs <- if (n_bands > 1L) {
       lapply(seq_len(n_bands - 1L), function(k) {
@@ -137,6 +156,7 @@ compute_snake_layout <- function(n_bands, band_height = 28, band_gap = 18,
       canvas      = list(width = unname(canvas_w), height = unname(canvas_h)),
       plot_area   = plot_area,
       orientation = orientation,
+      flow        = flow,
       params      = list(band_height = band_height, band_gap = band_gap,
                          plot_width = plot_width, margin = margin,
                          outer_r = outer_r, inner_r = inner_r,

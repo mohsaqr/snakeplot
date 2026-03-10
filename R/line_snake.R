@@ -32,6 +32,9 @@
 #' @param label_size Numeric (default 0.85).
 #' @param orientation Character, "horizontal" or "vertical" (default "horizontal").
 #' @param start_from Character, "left" or "right" (default "left").
+#' @param flow Character, \code{"snake"} (default) or \code{"natural"}.
+#'   \code{"snake"} uses alternating boustrophedon direction;
+#'   \code{"natural"} reads all bands in the same direction.
 #' @param title Optional title.
 #' @param margin Named numeric vector.
 #' @param background Background color.
@@ -70,12 +73,14 @@ line_snake <- function(data,
                        label_size    = 0.85,
                        orientation  = c("horizontal", "vertical"),
                        start_from   = c("left", "right"),
+                       flow         = c("snake", "natural"),
                        title        = NULL,
                        margin       = c(top = 30, right = 10,
                                         bottom = 50, left = 80),
                        background   = "white") {
   orientation <- match.arg(orientation)
   start_from  <- match.arg(start_from)
+  flow        <- match.arg(flow)
 
   # Coerce numeric vector to single-band data.frame
   if (is.numeric(data) && is.null(dim(data))) {
@@ -118,7 +123,8 @@ line_snake <- function(data,
   layout <- compute_snake_layout(n_days, band_height, band_gap,
                                  plot_width, margin,
                                  orientation = orientation,
-                                 start_from = start_from)
+                                 start_from = start_from,
+                                 flow = flow)
   op <- setup_canvas(layout, bg = background)
   on.exit(par(op), add = TRUE)
 
@@ -145,7 +151,7 @@ line_snake <- function(data,
     vapply(seq_len(n_days), function(k) {
       x_pos <- time_to_x(hour_mins, day_start, day_end,
                           bands$x_left[k], bands$x_right[k],
-                          bands$direction[k])
+                          bands$read_direction[k])
       segments(x_pos, bands$y_top[k], x_pos, bands$y_bottom[k],
                col = gcol, lwd = 0.3)
       NA
@@ -165,7 +171,7 @@ line_snake <- function(data,
     if (is.null(dd) || nrow(dd) < 2L) return(NA)
 
     dd <- dd[order(dd$time), ]
-    dir <- bands$direction[k]
+    dir <- bands$read_direction[k]
     xl  <- bands$x_left[k]; xr <- bands$x_right[k]
     yt  <- bands$y_top[k];  yb <- bands$y_bottom[k]
 
@@ -209,7 +215,7 @@ line_snake <- function(data,
       sign_x <- if (a$side == "right") 1 else -1
 
       # 1. Vertical drop from line end to inner arc edge
-      dir_from <- bands$direction[k_from]
+      dir_from <- bands$read_direction[k_from]
       xl_f <- bands$x_left[k_from]; xr_f <- bands$x_right[k_from]
       x_end <- if (dir_from == "ltr") xr_f else xl_f
       inner_y_entry <- a$cy - a$inner_r  # top of inner arc
@@ -225,7 +231,7 @@ line_snake <- function(data,
       lines(arc_x, arc_y, col = line_color, lwd = line_width)
 
       # 3. Vertical rise from inner arc edge to line start in next band
-      dir_to <- bands$direction[k_to]
+      dir_to <- bands$read_direction[k_to]
       xl_t <- bands$x_left[k_to]; xr_t <- bands$x_right[k_to]
       x_start <- if (dir_to == "ltr") xl_t else xr_t
       inner_y_exit <- a$cy + a$inner_r  # bottom of inner arc
