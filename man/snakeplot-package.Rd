@@ -4,7 +4,7 @@
 \name{snakeplot-package}
 \alias{snakeplot}
 \alias{snakeplot-package}
-\title{snakeplot: Serpentine (Snake) Plots for Survey and Activity Data}
+\title{snakeplot: Serpentine Plots for Long Timeline, Sequential and Survey Data}
 \description{
 Visualize long timelines, extended sequences and temporally chained survey responses and experience sampling data using intuitive serpentine (snake) plots. Supports distribution bars, tick-mark plots, inter-item correlation arcs, faceted multi-construct panels, and daily time-of-day positioning for ecological momentary assessment data.
 }
