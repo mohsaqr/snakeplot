@@ -6,14 +6,12 @@ Authors@R: c(
            role = c("aut", "cre", "cph")),
     person("Sonsoles", "Lopez-Pernas",
            role = "aut"))
-Description: Visualize survey responses and experience sampling data using
-    serpentine (snake) layouts where horizontal bands alternate direction
-    row-by-row, connected by U-turn arcs. Supports distribution bars,
+Description: Visualize long timelines, extended sequences and temporally
+    chained survey responses and experience sampling data using intuitive
+    serpentine (snake) plots. Supports distribution bars,
     tick-mark plots, inter-item correlation arcs, faceted multi-construct
     panels, and daily time-of-day positioning for ecological momentary
-    assessment data. Includes three bundled datasets from Neubauer and
-    Schmiedek (2024) <doi:10.1007/s11618-023-01182-8>. Uses only base
-    'R' graphics with zero external dependencies.
+    assessment data.
 License: MIT + file LICENSE
 Depends: R (>= 3.5.0)
 Imports: graphics, grDevices, stats
