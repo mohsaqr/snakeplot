@@ -3,14 +3,11 @@ Title: Serpentine (Snake) Plots for Survey and Activity Data
 Version: 0.2.2
 Authors@R: person("Mohammed", "Saqr", email = "saqr@saqr.me",
                   role = c("aut", "cre", "cph"))
-Description: Visualize survey responses and experience sampling data using
-    serpentine (snake) layouts where horizontal bands alternate direction
-    row-by-row, connected by U-turn arcs. Supports distribution bars,
+Description: Visualize timelines, longer sequences and temporally chained survey responses and experience sampling data using
+    serpentine (snake). Supports distribution bars,
     tick-mark plots, inter-item correlation arcs, faceted multi-construct
     panels, and daily time-of-day positioning for ecological momentary
-    assessment data. Includes three bundled datasets from Neubauer and
-    Schmiedek (2024) <doi:10.1007/s11618-023-01182-8>. Uses only base
-    'R' graphics with zero external dependencies.
+    assessment data. Uses only base 'R' graphics with zero external dependencies.
 License: MIT + file LICENSE
 Depends: R (>= 3.5.0)
 Imports: graphics, grDevices, stats
