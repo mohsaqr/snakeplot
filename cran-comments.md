@@ -1,10 +1,12 @@
 ## R CMD check results
 
-0 errors | 0 warnings | 0 notes
+0 errors | 0 warnings | 1 note
+
+* NOTE: New submission
 
 ## Test environments
 
-* local macOS (aarch64-apple-darwin24.3.0), R 4.5.0
+* local macOS (aarch64-apple-darwin20), R 4.5.2
 * GitHub Actions: ubuntu-latest (R release, R devel), macOS-latest (R release),
   windows-latest (R release)
 

@@ -1,3 +1,15 @@
+# snakeplot 0.3.0
+
+* New `flow` parameter on all snake functions: `"snake"` (boustrophedon,
+  default for most functions) or `"natural"` (all rows read left-to-right,
+  default for `timeline_snake()` and `sequence_snake()`).
+* New `multi_snake()` function for faceted multi-construct panels.
+* New `sequence_snake()` function for categorical sequence visualization.
+* New `timeline_snake()` function for state-transition timelines.
+* Added Sonsoles Lopez-Pernas as package author.
+* Bug fixes: survey_sequence arc gradient, survey_snake first end cap,
+  multi_snake end cap polygon arguments, activity_snake arc labels.
+
 # snakeplot 0.2.0
 
 * 10 built-in color palettes via `snake_palettes` and `snake_palette()`:

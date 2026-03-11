@@ -11,13 +11,12 @@
 - R/survey_sequence.R: Added `flow` param, default "snake". Content refs use `read_direction`.
 - R/multi_snake.R: Added `flow` param, default "snake".
 - R/render.R: `draw_band_labels()` uses `read_direction` for `align="direction"`.
-- R/render.R: `draw_band_labels()` uses `read_direction` for `align="direction"`.
 - All functions: Added `@param flow` roxygen documentation.
 - R/activity_snake.R: Arc labels now flow-aware — in natural mode, right arcs show day-end label, left arcs show day-start label. Accounts for `start_from` direction.
 - R/survey_sequence.R: Fixed arc gradient to use `bands$direction` (geometry) instead of `bands$read_direction` for end-level color.
 - R/survey_snake.R: Fixed first end cap to respect `bands$direction[1]` instead of hardcoding "left".
 - R/multi_snake.R: Fixed `end_cap_polygon` argument order (was passing y_top/y_bottom instead of y_center/radius).
-- Tests: 28 new tests in test-flow.R. Full suite: 498 pass, 0 fail. R CMD check --as-cran: 0 errors, 0 warnings, 2 NOTEs.
+- Tests: 34 new tests in test-flow.R. Full suite: 502 pass, 0 fail, 100% coverage. R CMD check --as-cran: 0 errors, 0 warnings, 2 NOTEs.
 
 ### 2026-03-09 — CRAN polish, 100% coverage, zero warnings
 

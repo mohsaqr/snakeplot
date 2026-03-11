@@ -4,6 +4,8 @@
 - [flow parameter naming] `flow="snake"` = boustrophedon (alternating direction). `flow="natural"` = all bands same direction (like a folded ribbon laid flat, consistent reading order). Same meaning in EVERY function — no special cases per function. Do NOT reverse these meanings.
 - [flow defaults] Only `timeline_snake()` and `sequence_snake()` default to `flow="natural"`. All other functions (`activity_snake`, `survey_snake`, `line_snake`, `survey_sequence`, `multi_snake`) default to `flow="snake"`. All functions accept both values.
 - [direction vs read_direction] `bands$direction` controls arc geometry (always alternates). `bands$read_direction` controls content/block ordering within bands. In snake mode they're the same; in natural mode `read_direction` is uniform while `direction` still alternates. End caps follow `direction`, content follows `read_direction`.
+- [activity arc labels] In natural mode, arc labels must show the correct time for each side: right arcs = day_end when `start_from="left"`, day_start when `start_from="right"`. In snake mode, all arcs show day_end (midnight).
+- [flow visual difference] Uniform random data looks the same reversed or not. Use asymmetric data (e.g. morning-only events) to demonstrate flow difference in examples.
 
 ### 2026-03-09
 - [cor zero-SD] `stats::cor()` warns when standard deviation is zero (constant data). Guard with `sd() > 0` check before calling `cor()`. Add `sd` to `@importFrom stats`.

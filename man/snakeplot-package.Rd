@@ -6,7 +6,7 @@
 \alias{snakeplot-package}
 \title{snakeplot: Serpentine (Snake) Plots for Survey and Activity Data}
 \description{
-Visualize survey responses and experience sampling data using serpentine (snake) layouts where horizontal bands alternate direction row-by-row, connected by U-turn arcs. Supports distribution bars, tick-mark plots, inter-item correlation arcs, faceted multi-construct panels, and daily time-of-day positioning for ecological momentary assessment data. Includes three bundled datasets from Neubauer and Schmiedek (2024) \doi{10.1007/s11618-023-01182-8}. Uses only base 'R' graphics with zero external dependencies.
+Visualize timelines, longer sequences and temporally chained survey responses and experience sampling data using serpentine (snake). Supports distribution bars, tick-mark plots, inter-item correlation arcs, faceted multi-construct panels, and daily time-of-day positioning for ecological momentary assessment data. Uses only base 'R' graphics with zero external dependencies.
 }
 \seealso{
 Useful links:
@@ -18,6 +18,11 @@ Useful links:
 }
 \author{
 \strong{Maintainer}: Mohammed Saqr \email{saqr@saqr.me} [copyright holder]
+
+Authors:
+\itemize{
+  \item Sonsoles Lopez-Pernas
+}
 
 }
 \keyword{internal}
