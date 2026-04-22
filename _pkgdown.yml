@@ -27,6 +27,9 @@ reference:
       - multi_snake
       - sequence_snake
       - facet_snake
+      - survey_snake
+      - timeline_snake
+      - survey_sequence
       - sequential_dist
   - title: "Utilities"
     contents:
@@ -35,6 +38,8 @@ reference:
     contents:
       - ema_beeps
       - ema_emotions
+      - snake_palettes
+      - student_survey
 
 articles:
   - title: "Vignettes"

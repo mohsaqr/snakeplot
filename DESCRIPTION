@@ -16,7 +16,7 @@ License: MIT + file LICENSE
 Depends: R (>= 3.5.0)
 Imports: graphics, grDevices, stats
 LazyData: true
-URL: https://github.com/mohsaqr/snakeplot
+URL: https://github.com/mohsaqr/snakeplot, https://saqr.me/Snakeplot/
 BugReports: https://github.com/mohsaqr/snakeplot/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
