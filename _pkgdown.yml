@@ -1,0 +1,42 @@
+url: https://saqr.me/Snakeplot
+
+template:
+  bootstrap: 5
+  bootswatch: flatly
+
+home:
+  title: "snakeplot — Serpentine Plots for R"
+  description: >
+    Visualize long timelines, extended sequences, and survey data
+    using intuitive serpentine (snake) plots.
+
+navbar:
+  structure:
+    left: [intro, reference, articles]
+    right: [github]
+  components:
+    github:
+      icon: fab fa-github
+      href: https://github.com/mohsaqr/Snakeplot
+
+reference:
+  - title: "Core plot functions"
+    contents:
+      - activity_snake
+      - line_snake
+      - multi_snake
+      - sequence_snake
+      - facet_snake
+      - sequential_dist
+  - title: "Utilities"
+    contents:
+      - snake_palette
+  - title: "Datasets"
+    contents:
+      - ema_beeps
+      - ema_emotions
+
+articles:
+  - title: "Vignettes"
+    contents:
+      - survey-snake-plots
