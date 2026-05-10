@@ -10,6 +10,7 @@ of university students (Neubauer & Schmiedek, 2024), rescaled to a 1–5
 Likert scale, and 10 built-in color palettes via `snake_palettes`:
 
 ``` r
+
 library(snakeplot)
 
 labs5 <- c("1" = "Not at all", "2" = "Slightly", "3" = "Moderate",
@@ -23,6 +24,7 @@ per day. Ticks are positioned within proportional zones by response
 level:
 
 ``` r
+
 survey_snake(ema_beeps, var = "angry", day = "day",
              colors = snake_palettes$sunset, level_labels = labs5,
              title = "Anger — 14 days, value distribution")
@@ -37,6 +39,7 @@ distributions shift across days. Use `bar_reverse = TRUE` to start from
 the highest level:
 
 ``` r
+
 survey_snake(ema_beeps, var = "happy", day = "day",
              tick_shape = "bar", bar_reverse = TRUE,
              colors = snake_palettes$sunset, level_labels = labs5,
@@ -52,6 +55,7 @@ shows daily event timelines — rug ticks or duration blocks on a dark
 ribbon:
 
 ``` r
+
 set.seed(42)
 days <- c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
 d <- data.frame(
@@ -67,6 +71,7 @@ activity_snake(d)
 Pass character timestamps directly — they are parsed automatically:
 
 ``` r
+
 set.seed(42)
 dates <- seq(as.POSIXct("2024-03-11"), as.POSIXct("2024-03-17"),
              by = "day")
@@ -85,6 +90,7 @@ activity_snake(events, title = "From character timestamps — 7 days")
 Duration blocks show event length as filled rectangles:
 
 ``` r
+
 set.seed(42)
 days <- c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
 d2 <- data.frame(
@@ -104,6 +110,7 @@ between left and right on alternate rows, while natural keeps them
 consistently on the left:
 
 ``` r
+
 set.seed(1)
 d_morning <- data.frame(
   day      = rep(days, each = 15),
@@ -122,6 +129,7 @@ activity_snake(d_morning, flow = "natural",
 draws a continuous intensity line winding through bands:
 
 ``` r
+
 set.seed(42)
 hours <- seq(0, 1440, by = 10)
 d_line <- data.frame(
@@ -142,6 +150,7 @@ takes a 3-column data.frame (role, start, end) and auto-generates
 monthly blocks, transition labels, and band year labels:
 
 ``` r
+
 career <- data.frame(
   role  = c("Intern", "Junior Dev", "Mid Dev",
             "Senior Dev", "Tech Lead", "Architect"),
@@ -162,6 +171,7 @@ Individual responses as colored tick marks, with inter-item Pearson *r*
 displayed at each U-turn arc:
 
 ``` r
+
 survey_snake(ema_emotions, tick_shape = "line",
              arc_fill = "correlation", sort_by = "mean",
              colors = snake_palettes$berry, level_labels = labs5,
@@ -176,6 +186,7 @@ Use `band_palette` for darker band shading. Dots with jitter show
 individual responses:
 
 ``` r
+
 survey_snake(ema_emotions, tick_shape = "dot", sort_by = "mean",
              colors = snake_palettes$viridis, level_labels = labs5,
              band_palette = c("#1a1228", "#1a2a42"),
@@ -189,6 +200,7 @@ survey_snake(ema_emotions, tick_shape = "dot", sort_by = "mean",
 A diamond shows the item mean; a dashed line shows the median:
 
 ``` r
+
 survey_snake(ema_emotions, tick_shape = "bar", sort_by = "mean",
              show_mean = TRUE, show_median = TRUE,
              colors = snake_palettes$sunset, level_labels = labs5,
@@ -203,6 +215,7 @@ When column names share a prefix (e.g., `Emo_`, `Mot_`), `facet = TRUE`
 auto-groups them into panels. Prefixes are stripped from labels:
 
 ``` r
+
 survey_snake(student_survey, facet = TRUE, facet_ncol = 2L,
              tick_shape = "bar", sort_by = "mean",
              colors = snake_palettes$earth, level_labels = labs5)
@@ -216,6 +229,7 @@ survey_snake(student_survey, facet = TRUE, facet_ncol = 2L,
 renders 100% stacked horizontal bars in a serpentine layout:
 
 ``` r
+
 survey_sequence(ema_emotions, colors = snake_palettes$earth)
 ```
 
@@ -225,6 +239,7 @@ Matrix with row/col names — labels and levels are inferred
 automatically:
 
 ``` r
+
 m <- matrix(c(50, 120, 80, 30,
               40,  90, 110, 60,
               70, 100,  70, 50,
@@ -248,6 +263,7 @@ is a monochrome variant of
 [`survey_sequence()`](https://saqr.me/Snakeplot/reference/survey_sequence.md):
 
 ``` r
+
 sequential_dist(ema_emotions)
 ```
 
@@ -260,6 +276,7 @@ displays a state sequence as colored blocks flowing through the
 serpentine layout — each block is one time point colored by its state:
 
 ``` r
+
 set.seed(42)
 verbs <- c("Read", "Write", "Discuss", "Listen",
            "Search", "Plan", "Code", "Review")
@@ -277,6 +294,7 @@ Pass a data.frame directly — the first character/factor column is
 auto-detected:
 
 ``` r
+
 set.seed(1)
 logs <- data.frame(
   id     = 1:80,
@@ -296,6 +314,7 @@ sequence_snake(logs, rows = 5,
 [`snake_palette()`](https://saqr.me/Snakeplot/reference/snake_palette.md):
 
 ``` r
+
 names(snake_palettes)
 #>  [1] "classic" "earth"   "ocean"   "sunset"  "berry"   "blues"   "greens" 
 #>  [8] "grays"   "warm"    "viridis"
@@ -304,6 +323,7 @@ names(snake_palettes)
 Use any palette by name:
 
 ``` r
+
 survey_snake(ema_emotions, colors = snake_palettes$earth, tick_shape = "bar")
 snake_palette("sunset", n = 5)  # interpolate to 5 colors
 ```

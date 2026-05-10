@@ -36,23 +36,23 @@
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a></h2>
 <p>The “snake plot” family is a set of survey and activity visualizations that use a <strong>serpentine (boustrophedon) layout</strong>: horizontal bands that alternate direction row-by-row, connected by U-turn arcs at alternating edges. This creates a continuous, flowing ribbon that the eye follows naturally from top to bottom.</p>
 <p>There are <strong>9 plot types</strong> total in the survey visualization suite. Three of them use the snake/serpentine layout:</p>
-<table class="table"><colgroup><col width="17%"><col width="22%"><col width="34%"><col width="25%"></colgroup><thead><tr class="header"><th>Plot</th>
+<table class="table"><colgroup><col width="17%"><col width="22%"><col width="34%"><col width="25%"></colgroup><thead><tr><th>Plot</th>
 <th>Layout</th>
 <th>Data Input</th>
 <th>Purpose</th>
-</tr></thead><tbody><tr class="odd"><td>Survey Snake</td>
+</tr></thead><tbody><tr><td>Survey Snake</td>
 <td>Serpentine bands</td>
 <td>Likert survey responses</td>
 <td>Show response distributions as tick marks on a flowing ribbon, with inter-item correlations at the U-turns</td>
-</tr><tr class="even"><td>Survey Sequence</td>
+</tr><tr><td>Survey Sequence</td>
 <td>Serpentine bands</td>
 <td>Likert survey responses</td>
 <td>100% stacked color segments on a flowing ribbon, one band per item</td>
-</tr><tr class="odd"><td>Sequential Distribution</td>
+</tr><tr><td>Sequential Distribution</td>
 <td>Serpentine bands</td>
 <td>Likert survey responses</td>
 <td>Like Survey Sequence but with sequential (monochrome) coloring instead of diverging</td>
-</tr><tr class="even"><td><strong>Activity Snake</strong></td>
+</tr><tr><td><strong>Activity Snake</strong></td>
 <td><strong>Serpentine bands</strong></td>
 <td><strong>Timestamped events per day</strong></td>
 <td><strong>Timeline of daily activity — each band is one day, events are colored ticks on a dark ribbon</strong></td>
@@ -100,59 +100,59 @@
 </ul></div>
 <div class="section level3">
 <h3 id="key-config-options">Key config options<a class="anchor" aria-label="anchor" href="#key-config-options"></a></h3>
-<table class="table"><colgroup><col width="22%"><col width="16%"><col width="25%"><col width="36%"></colgroup><thead><tr class="header"><th>Option</th>
+<table class="table"><colgroup><col width="22%"><col width="16%"><col width="25%"><col width="36%"></colgroup><thead><tr><th>Option</th>
 <th>Type</th>
 <th>Default</th>
 <th>Description</th>
-</tr></thead><tbody><tr class="odd"><td><code>bandHeight</code></td>
+</tr></thead><tbody><tr><td><code>bandHeight</code></td>
 <td>number</td>
 <td>32</td>
 <td>Band height in px</td>
-</tr><tr class="even"><td><code>bandGap</code></td>
+</tr><tr><td><code>bandGap</code></td>
 <td>number</td>
 <td>34</td>
 <td>Gap between bands (space for labels)</td>
-</tr><tr class="odd"><td><code>tickShape</code></td>
+</tr><tr><td><code>tickShape</code></td>
 <td><code>'line' \| 'dot'</code></td>
 <td><code>'line'</code></td>
 <td>Shape of individual response marks</td>
-</tr><tr class="even"><td><code>tickOpacity</code></td>
+</tr><tr><td><code>tickOpacity</code></td>
 <td>number</td>
 <td>0.55</td>
 <td>Opacity of tick marks</td>
-</tr><tr class="odd"><td><code>colorMode</code></td>
+</tr><tr><td><code>colorMode</code></td>
 <td><code>'level' \| 'individual'</code></td>
 <td><code>'level'</code></td>
 <td>Color ticks by response level or unique per respondent</td>
-</tr><tr class="even"><td><code>shadeByMean</code></td>
+</tr><tr><td><code>shadeByMean</code></td>
 <td>boolean</td>
 <td>true</td>
 <td>Shade band body by item mean (warm→cool)</td>
-</tr><tr class="odd"><td><code>showMean</code></td>
+</tr><tr><td><code>showMean</code></td>
 <td>boolean</td>
 <td>true</td>
 <td>Diamond marker at mean position</td>
-</tr><tr class="even"><td><code>showMedian</code></td>
+</tr><tr><td><code>showMedian</code></td>
 <td>boolean</td>
 <td>false</td>
 <td>Vertical line at median position</td>
-</tr><tr class="odd"><td><code>showCorrelation</code></td>
+</tr><tr><td><code>showCorrelation</code></td>
 <td>boolean</td>
 <td>true</td>
 <td>Show Pearson r at U-turns</td>
-</tr><tr class="even"><td><code>foldTintOpacity</code></td>
+</tr><tr><td><code>foldTintOpacity</code></td>
 <td>number</td>
 <td>0.25</td>
 <td>Opacity of correlation color overlay on arcs</td>
-</tr><tr class="odd"><td><code>jitterRange</code></td>
+</tr><tr><td><code>jitterRange</code></td>
 <td>number</td>
 <td>0.22</td>
 <td>Vertical jitter as fraction of level spacing</td>
-</tr><tr class="even"><td><code>sortBy</code></td>
+</tr><tr><td><code>sortBy</code></td>
 <td><code>'none' \| 'mean' \| 'net'</code></td>
 <td><code>'none'</code></td>
 <td>Sort items by mean or net score</td>
-</tr><tr class="odd"><td><code>showLegend</code></td>
+</tr><tr><td><code>showLegend</code></td>
 <td>boolean</td>
 <td>true</td>
 <td>Show legend below plot</td>
@@ -197,47 +197,47 @@
 </ul></div>
 <div class="section level3">
 <h3 id="key-config-options-1">Key config options<a class="anchor" aria-label="anchor" href="#key-config-options-1"></a></h3>
-<table class="table"><colgroup><col width="22%"><col width="16%"><col width="25%"><col width="36%"></colgroup><thead><tr class="header"><th>Option</th>
+<table class="table"><colgroup><col width="22%"><col width="16%"><col width="25%"><col width="36%"></colgroup><thead><tr><th>Option</th>
 <th>Type</th>
 <th>Default</th>
 <th>Description</th>
-</tr></thead><tbody><tr class="odd"><td><code>bandHeight</code></td>
+</tr></thead><tbody><tr><td><code>bandHeight</code></td>
 <td>number</td>
 <td>28</td>
 <td>Band height in px</td>
-</tr><tr class="even"><td><code>bandGap</code></td>
+</tr><tr><td><code>bandGap</code></td>
 <td>number</td>
 <td>14</td>
 <td>Gap between bands</td>
-</tr><tr class="odd"><td><code>colors</code></td>
+</tr><tr><td><code>colors</code></td>
 <td>string[]</td>
 <td>diverging palette</td>
 <td>One color per response level</td>
-</tr><tr class="even"><td><code>showPercentages</code></td>
+</tr><tr><td><code>showPercentages</code></td>
 <td>boolean</td>
 <td>true</td>
 <td>Show % inside segments</td>
-</tr><tr class="odd"><td><code>minSegmentPx</code></td>
+</tr><tr><td><code>minSegmentPx</code></td>
 <td>number</td>
 <td>34</td>
 <td>Hide % label if segment narrower than this</td>
-</tr><tr class="even"><td><code>arcMode</code></td>
+</tr><tr><td><code>arcMode</code></td>
 <td><code>'gradient' \| 'neutral'</code></td>
 <td><code>'gradient'</code></td>
 <td>Arc coloring strategy</td>
-</tr><tr class="odd"><td><code>arcOpacity</code></td>
+</tr><tr><td><code>arcOpacity</code></td>
 <td>number</td>
 <td>0.5</td>
 <td>Arc opacity</td>
-</tr><tr class="even"><td><code>showLegend</code></td>
+</tr><tr><td><code>showLegend</code></td>
 <td>boolean</td>
 <td>true</td>
 <td>Show legend below</td>
-</tr><tr class="odd"><td><code>sortBy</code></td>
+</tr><tr><td><code>sortBy</code></td>
 <td><code>'none' \| 'net' \| 'mean'</code></td>
 <td><code>'none'</code></td>
 <td>Sort items</td>
-</tr><tr class="even"><td><code>shadowSize</code></td>
+</tr><tr><td><code>shadowSize</code></td>
 <td>number</td>
 <td>4</td>
 <td>Drop shadow blur</td>
@@ -352,127 +352,127 @@ ActivityEvent {
 </div>
 <div class="section level3">
 <h3 id="full-config-reference">Full config reference<a class="anchor" aria-label="anchor" href="#full-config-reference"></a></h3>
-<table class="table"><colgroup><col width="22%"><col width="16%"><col width="25%"><col width="36%"></colgroup><thead><tr class="header"><th>Option</th>
+<table class="table"><colgroup><col width="22%"><col width="16%"><col width="25%"><col width="36%"></colgroup><thead><tr><th>Option</th>
 <th>Type</th>
 <th>Default</th>
 <th>Description</th>
-</tr></thead><tbody><tr class="odd"><td><strong>General</strong></td>
+</tr></thead><tbody><tr><td><strong>General</strong></td>
 <td></td>
 <td></td>
 <td></td>
-</tr><tr class="even"><td><code>title</code></td>
+</tr><tr><td><code>title</code></td>
 <td>string</td>
 <td>—</td>
 <td>Plot title</td>
-</tr><tr class="odd"><td><code>caption</code></td>
+</tr><tr><td><code>caption</code></td>
 <td>string</td>
 <td>—</td>
 <td>Caption below plot</td>
-</tr><tr class="even"><td><code>width</code></td>
+</tr><tr><td><code>width</code></td>
 <td>number</td>
 <td>container width</td>
 <td>SVG width</td>
-</tr><tr class="odd"><td><code>height</code></td>
+</tr><tr><td><code>height</code></td>
 <td>number</td>
 <td>auto-computed</td>
 <td>SVG height</td>
-</tr><tr class="even"><td><strong>Layout</strong></td>
+</tr><tr><td><strong>Layout</strong></td>
 <td></td>
 <td></td>
 <td></td>
-</tr><tr class="odd"><td><code>bandHeight</code></td>
+</tr><tr><td><code>bandHeight</code></td>
 <td>number</td>
 <td>28</td>
 <td>Height of each day band in px</td>
-</tr><tr class="even"><td><code>bandGap</code></td>
+</tr><tr><td><code>bandGap</code></td>
 <td>number</td>
 <td>18</td>
 <td>Gap between bands (arc space)</td>
-</tr><tr class="odd"><td><code>dayStart</code></td>
+</tr><tr><td><code>dayStart</code></td>
 <td>number</td>
 <td>360</td>
 <td>Day start time in minutes (360 = 6AM)</td>
-</tr><tr class="even"><td><code>dayEnd</code></td>
+</tr><tr><td><code>dayEnd</code></td>
 <td>number</td>
 <td>1440</td>
 <td>Day end time in minutes (1440 = midnight)</td>
-</tr><tr class="odd"><td><code>showHourGrid</code></td>
+</tr><tr><td><code>showHourGrid</code></td>
 <td>boolean</td>
 <td>true</td>
 <td>White vertical gridlines at each hour</td>
-</tr><tr class="even"><td><code>showTotal</code></td>
+</tr><tr><td><code>showTotal</code></td>
 <td>boolean</td>
 <td>true</td>
 <td>Show total duration after day label</td>
-</tr><tr class="odd"><td><code>labelAlign</code></td>
+</tr><tr><td><code>labelAlign</code></td>
 <td><code>'left' \| 'center' \| 'right'</code></td>
 <td><code>'left'</code></td>
 <td>Day label alignment</td>
-</tr><tr class="even"><td><code>labelFontSize</code></td>
+</tr><tr><td><code>labelFontSize</code></td>
 <td>number</td>
 <td>13</td>
 <td>Label font size</td>
-</tr><tr class="odd"><td><code>shadowSize</code></td>
+</tr><tr><td><code>shadowSize</code></td>
 <td>number</td>
 <td>5</td>
 <td>Drop shadow blur radius</td>
-</tr><tr class="even"><td><code>minTickWidth</code></td>
+</tr><tr><td><code>minTickWidth</code></td>
 <td>number</td>
 <td>2</td>
 <td>Minimum event tick width in px (1.5 for rug style)</td>
-</tr><tr class="odd"><td><strong>Colors</strong></td>
+</tr><tr><td><strong>Colors</strong></td>
 <td></td>
 <td></td>
 <td></td>
-</tr><tr class="even"><td><code>bandColor</code></td>
+</tr><tr><td><code>bandColor</code></td>
 <td><code>string \| string[]</code></td>
 <td><code>'#3d2518'</code></td>
 <td>Band ribbon color. Array = per-day (cycles).</td>
-</tr><tr class="odd"><td><code>bandOpacity</code></td>
+</tr><tr><td><code>bandOpacity</code></td>
 <td>number</td>
 <td>0.85</td>
 <td>Band opacity</td>
-</tr><tr class="even"><td><code>arcColor</code></td>
+</tr><tr><td><code>arcColor</code></td>
 <td>string</td>
 <td><code>'#1a1a2e'</code></td>
 <td>Overnight arc color</td>
-</tr><tr class="odd"><td><code>arcOpacity</code></td>
+</tr><tr><td><code>arcOpacity</code></td>
 <td>number</td>
 <td>0.85</td>
 <td>Arc opacity</td>
-</tr><tr class="even"><td><code>eventColor</code></td>
+</tr><tr><td><code>eventColor</code></td>
 <td><code>string \| string[]</code></td>
 <td><code>'#e09480'</code></td>
 <td>Event tick color. Array = per-day (cycles).</td>
-</tr><tr class="odd"><td><code>eventOpacity</code></td>
+</tr><tr><td><code>eventOpacity</code></td>
 <td>number</td>
 <td>0.8</td>
 <td>Event tick opacity</td>
-</tr><tr class="even"><td><code>shadowColor</code></td>
+</tr><tr><td><code>shadowColor</code></td>
 <td>string</td>
 <td><code>'#adb5bd'</code></td>
 <td>Drop shadow color</td>
-</tr><tr class="odd"><td><code>shadowOpacity</code></td>
+</tr><tr><td><code>shadowOpacity</code></td>
 <td>number</td>
 <td>0.12</td>
 <td>Drop shadow opacity</td>
-</tr><tr class="even"><td><code>labelColor</code></td>
+</tr><tr><td><code>labelColor</code></td>
 <td>string</td>
 <td>theme text</td>
 <td>Day label color</td>
-</tr><tr class="odd"><td><code>gridColor</code></td>
+</tr><tr><td><code>gridColor</code></td>
 <td>string</td>
 <td><code>'rgba(255,255,255,0.25)'</code></td>
 <td>Hour gridline color</td>
-</tr><tr class="even"><td><code>hourLabelColor</code></td>
+</tr><tr><td><code>hourLabelColor</code></td>
 <td>string</td>
 <td>theme muted</td>
 <td>Hour label color (“12AM” at arcs)</td>
-</tr><tr class="odd"><td><strong>Legend</strong></td>
+</tr><tr><td><strong>Legend</strong></td>
 <td></td>
 <td></td>
 <td></td>
-</tr><tr class="even"><td><code>legend</code></td>
+</tr><tr><td><code>legend</code></td>
 <td><code>{ label: string, color: string }[]</code></td>
 <td>—</td>
 <td>Legend items below plot</td>

@@ -69,41 +69,41 @@
 <col width="52%">
 <col width="47%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th>Function</th>
 <th>Purpose</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code><a href="reference/survey_snake.html">survey_snake()</a></code></td>
 <td>Survey/EMA responses with ticks, bars, correlations, faceting</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code><a href="reference/activity_snake.html">activity_snake()</a></code></td>
 <td>Daily activity timelines with event blocks or rug ticks</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code><a href="reference/sequence_snake.html">sequence_snake()</a></code></td>
 <td>State sequence as colored blocks flowing through serpentine layout</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code><a href="reference/timeline_snake.html">timeline_snake()</a></code></td>
 <td>Career/life-event timeline from a 3-column data.frame (role, start, end)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code><a href="reference/survey_sequence.html">survey_sequence()</a></code></td>
 <td>Stacked 100% horizontal bars in serpentine layout</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code><a href="reference/sequential_dist.html">sequential_dist()</a></code></td>
 <td>Sequential (monochrome) variant of <code><a href="reference/survey_sequence.html">survey_sequence()</a></code>
 </td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code><a href="reference/line_snake.html">line_snake()</a></code></td>
 <td>Continuous intensity line plot (experimental)</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code><a href="reference/facet_snake.html">facet_snake()</a></code></td>
 <td>Generic multi-panel wrapper for any snake function</td>
 </tr>
@@ -120,23 +120,23 @@
 <col width="21%">
 <col width="46%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th>Dataset</th>
 <th>Rows</th>
 <th>Description</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code>ema_emotions</code></td>
 <td>280</td>
 <td>Person-level means for 10 emotions (1-7 scale)</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>student_survey</code></td>
 <td>280</td>
 <td>34 items across 4 constructs, prefixed for faceting</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>ema_beeps</code></td>
 <td>11 474</td>
 <td>Beep-level timestamps + anger/happiness ratings (14 days)</td>
@@ -315,58 +315,58 @@
 <col width="45%">
 <col width="54%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th>Parameter</th>
 <th>Description</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code>tick_shape</code></td>
 <td>
 <code>"line"</code> (default), <code>"dot"</code>, or <code>"bar"</code> (stacked proportional)</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>sort_by</code></td>
 <td>
 <code>"none"</code>, <code>"mean"</code>, or <code>"net"</code>
 </td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>arc_fill</code></td>
 <td>
 <code>"none"</code> (two-tone), <code>"correlation"</code>, <code>"mean_prev"</code>, <code>"blend"</code>
 </td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>colors</code></td>
 <td>Custom color palette or <code>snake_palettes$name</code>
 </td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>band_palette</code></td>
 <td>2+ anchor colors for band shading (default: brown-to-slate)</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>bar_reverse</code></td>
 <td>
 <code>TRUE</code> to draw bars from highest level first</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>level_labels</code></td>
 <td>Named vector mapping levels to display labels</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>facet</code></td>
 <td>
 <code>TRUE</code> (auto-group by prefix) or named list of column groups</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>
 <code>var</code>, <code>day</code>, <code>timestamp</code>
 </td>
 <td>Auto-pivot EMA data into daily bands</td>
 </tr>
-<tr class="even">
+<tr>
 <td>
 <code>show_mean</code>, <code>show_median</code>
 </td>

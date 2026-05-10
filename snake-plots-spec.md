@@ -11,12 +11,12 @@ naturally from top to bottom.
 There are **9 plot types** total in the survey visualization suite.
 Three of them use the snake/serpentine layout:
 
-| Plot                    | Layout               | Data Input                     | Purpose                                                                                                    |
-|-------------------------|----------------------|--------------------------------|------------------------------------------------------------------------------------------------------------|
-| Survey Snake            | Serpentine bands     | Likert survey responses        | Show response distributions as tick marks on a flowing ribbon, with inter-item correlations at the U-turns |
-| Survey Sequence         | Serpentine bands     | Likert survey responses        | 100% stacked color segments on a flowing ribbon, one band per item                                         |
-| Sequential Distribution | Serpentine bands     | Likert survey responses        | Like Survey Sequence but with sequential (monochrome) coloring instead of diverging                        |
-| **Activity Snake**      | **Serpentine bands** | **Timestamped events per day** | **Timeline of daily activity — each band is one day, events are colored ticks on a dark ribbon**           |
+| Plot | Layout | Data Input | Purpose |
+|----|----|----|----|
+| Survey Snake | Serpentine bands | Likert survey responses | Show response distributions as tick marks on a flowing ribbon, with inter-item correlations at the U-turns |
+| Survey Sequence | Serpentine bands | Likert survey responses | 100% stacked color segments on a flowing ribbon, one band per item |
+| Sequential Distribution | Serpentine bands | Likert survey responses | Like Survey Sequence but with sequential (monochrome) coloring instead of diverging |
+| **Activity Snake** | **Serpentine bands** | **Timestamped events per day** | **Timeline of daily activity — each band is one day, events are colored ticks on a dark ribbon** |
 
 The other 5 (Survey Bar, Heatmap, Dot Strip, Cumulative, Rug) use
 standard non-serpentine layouts and are not covered here.
@@ -71,21 +71,21 @@ correlation between adjacent items is displayed as a tinted arc.
 
 ### Key config options
 
-| Option            | Type                        | Default   | Description                                            |
-|-------------------|-----------------------------|-----------|--------------------------------------------------------|
-| `bandHeight`      | number                      | 32        | Band height in px                                      |
-| `bandGap`         | number                      | 34        | Gap between bands (space for labels)                   |
-| `tickShape`       | `'line' \| 'dot'`           | `'line'`  | Shape of individual response marks                     |
-| `tickOpacity`     | number                      | 0.55      | Opacity of tick marks                                  |
-| `colorMode`       | `'level' \| 'individual'`   | `'level'` | Color ticks by response level or unique per respondent |
-| `shadeByMean`     | boolean                     | true      | Shade band body by item mean (warm→cool)               |
-| `showMean`        | boolean                     | true      | Diamond marker at mean position                        |
-| `showMedian`      | boolean                     | false     | Vertical line at median position                       |
-| `showCorrelation` | boolean                     | true      | Show Pearson r at U-turns                              |
-| `foldTintOpacity` | number                      | 0.25      | Opacity of correlation color overlay on arcs           |
-| `jitterRange`     | number                      | 0.22      | Vertical jitter as fraction of level spacing           |
-| `sortBy`          | `'none' \| 'mean' \| 'net'` | `'none'`  | Sort items by mean or net score                        |
-| `showLegend`      | boolean                     | true      | Show legend below plot                                 |
+| Option | Type | Default | Description |
+|----|----|----|----|
+| `bandHeight` | number | 32 | Band height in px |
+| `bandGap` | number | 34 | Gap between bands (space for labels) |
+| `tickShape` | `'line' \| 'dot'` | `'line'` | Shape of individual response marks |
+| `tickOpacity` | number | 0.55 | Opacity of tick marks |
+| `colorMode` | `'level' \| 'individual'` | `'level'` | Color ticks by response level or unique per respondent |
+| `shadeByMean` | boolean | true | Shade band body by item mean (warm→cool) |
+| `showMean` | boolean | true | Diamond marker at mean position |
+| `showMedian` | boolean | false | Vertical line at median position |
+| `showCorrelation` | boolean | true | Show Pearson r at U-turns |
+| `foldTintOpacity` | number | 0.25 | Opacity of correlation color overlay on arcs |
+| `jitterRange` | number | 0.22 | Vertical jitter as fraction of level spacing |
+| `sortBy` | `'none' \| 'mean' \| 'net'` | `'none'` | Sort items by mean or net score |
+| `showLegend` | boolean | true | Show legend below plot |
 
 ### Tick mark positioning
 
@@ -135,18 +135,18 @@ Same `SurveyData` as Survey Snake.
 
 ### Key config options
 
-| Option            | Type                        | Default           | Description                                |
-|-------------------|-----------------------------|-------------------|--------------------------------------------|
-| `bandHeight`      | number                      | 28                | Band height in px                          |
-| `bandGap`         | number                      | 14                | Gap between bands                          |
-| `colors`          | string\[\]                  | diverging palette | One color per response level               |
-| `showPercentages` | boolean                     | true              | Show % inside segments                     |
-| `minSegmentPx`    | number                      | 34                | Hide % label if segment narrower than this |
-| `arcMode`         | `'gradient' \| 'neutral'`   | `'gradient'`      | Arc coloring strategy                      |
-| `arcOpacity`      | number                      | 0.5               | Arc opacity                                |
-| `showLegend`      | boolean                     | true              | Show legend below                          |
-| `sortBy`          | `'none' \| 'net' \| 'mean'` | `'none'`          | Sort items                                 |
-| `shadowSize`      | number                      | 4                 | Drop shadow blur                           |
+| Option | Type | Default | Description |
+|----|----|----|----|
+| `bandHeight` | number | 28 | Band height in px |
+| `bandGap` | number | 14 | Gap between bands |
+| `colors` | string\[\] | diverging palette | One color per response level |
+| `showPercentages` | boolean | true | Show % inside segments |
+| `minSegmentPx` | number | 34 | Hide % label if segment narrower than this |
+| `arcMode` | `'gradient' \| 'neutral'` | `'gradient'` | Arc coloring strategy |
+| `arcOpacity` | number | 0.5 | Arc opacity |
+| `showLegend` | boolean | true | Show legend below |
+| `sortBy` | `'none' \| 'net' \| 'mean'` | `'none'` | Sort items |
+| `shadowSize` | number | 4 | Drop shadow blur |
 
 ------------------------------------------------------------------------
 
@@ -244,6 +244,7 @@ heartbeats. Set `minTickWidth: 1.5` for thin rug style.
 #### Weekly view (7 days)
 
 ``` r
+
 days <- list(
   list(label = "Mon", events = list(
     list(start = 420, duration = 30),   # 7:00 AM, 30 min
@@ -278,44 +279,45 @@ landings
 
 ### Full config reference
 
-| Option           | Type                                 | Default                    | Description                                        |
-|------------------|--------------------------------------|----------------------------|----------------------------------------------------|
-| **General**      |                                      |                            |                                                    |
-| `title`          | string                               | —                          | Plot title                                         |
-| `caption`        | string                               | —                          | Caption below plot                                 |
-| `width`          | number                               | container width            | SVG width                                          |
-| `height`         | number                               | auto-computed              | SVG height                                         |
-| **Layout**       |                                      |                            |                                                    |
-| `bandHeight`     | number                               | 28                         | Height of each day band in px                      |
-| `bandGap`        | number                               | 18                         | Gap between bands (arc space)                      |
-| `dayStart`       | number                               | 360                        | Day start time in minutes (360 = 6AM)              |
-| `dayEnd`         | number                               | 1440                       | Day end time in minutes (1440 = midnight)          |
-| `showHourGrid`   | boolean                              | true                       | White vertical gridlines at each hour              |
-| `showTotal`      | boolean                              | true                       | Show total duration after day label                |
-| `labelAlign`     | `'left' \| 'center' \| 'right'`      | `'left'`                   | Day label alignment                                |
-| `labelFontSize`  | number                               | 13                         | Label font size                                    |
-| `shadowSize`     | number                               | 5                          | Drop shadow blur radius                            |
-| `minTickWidth`   | number                               | 2                          | Minimum event tick width in px (1.5 for rug style) |
-| **Colors**       |                                      |                            |                                                    |
-| `bandColor`      | `string \| string[]`                 | `'#3d2518'`                | Band ribbon color. Array = per-day (cycles).       |
-| `bandOpacity`    | number                               | 0.85                       | Band opacity                                       |
-| `arcColor`       | string                               | `'#1a1a2e'`                | Overnight arc color                                |
-| `arcOpacity`     | number                               | 0.85                       | Arc opacity                                        |
-| `eventColor`     | `string \| string[]`                 | `'#e09480'`                | Event tick color. Array = per-day (cycles).        |
-| `eventOpacity`   | number                               | 0.8                        | Event tick opacity                                 |
-| `shadowColor`    | string                               | `'#adb5bd'`                | Drop shadow color                                  |
-| `shadowOpacity`  | number                               | 0.12                       | Drop shadow opacity                                |
-| `labelColor`     | string                               | theme text                 | Day label color                                    |
-| `gridColor`      | string                               | `'rgba(255,255,255,0.25)'` | Hour gridline color                                |
-| `hourLabelColor` | string                               | theme muted                | Hour label color (“12AM” at arcs)                  |
-| **Legend**       |                                      |                            |                                                    |
-| `legend`         | `{ label: string, color: string }[]` | —                          | Legend items below plot                            |
+| Option | Type | Default | Description |
+|----|----|----|----|
+| **General** |  |  |  |
+| `title` | string | — | Plot title |
+| `caption` | string | — | Caption below plot |
+| `width` | number | container width | SVG width |
+| `height` | number | auto-computed | SVG height |
+| **Layout** |  |  |  |
+| `bandHeight` | number | 28 | Height of each day band in px |
+| `bandGap` | number | 18 | Gap between bands (arc space) |
+| `dayStart` | number | 360 | Day start time in minutes (360 = 6AM) |
+| `dayEnd` | number | 1440 | Day end time in minutes (1440 = midnight) |
+| `showHourGrid` | boolean | true | White vertical gridlines at each hour |
+| `showTotal` | boolean | true | Show total duration after day label |
+| `labelAlign` | `'left' \| 'center' \| 'right'` | `'left'` | Day label alignment |
+| `labelFontSize` | number | 13 | Label font size |
+| `shadowSize` | number | 5 | Drop shadow blur radius |
+| `minTickWidth` | number | 2 | Minimum event tick width in px (1.5 for rug style) |
+| **Colors** |  |  |  |
+| `bandColor` | `string \| string[]` | `'#3d2518'` | Band ribbon color. Array = per-day (cycles). |
+| `bandOpacity` | number | 0.85 | Band opacity |
+| `arcColor` | string | `'#1a1a2e'` | Overnight arc color |
+| `arcOpacity` | number | 0.85 | Arc opacity |
+| `eventColor` | `string \| string[]` | `'#e09480'` | Event tick color. Array = per-day (cycles). |
+| `eventOpacity` | number | 0.8 | Event tick opacity |
+| `shadowColor` | string | `'#adb5bd'` | Drop shadow color |
+| `shadowOpacity` | number | 0.12 | Drop shadow opacity |
+| `labelColor` | string | theme text | Day label color |
+| `gridColor` | string | `'rgba(255,255,255,0.25)'` | Hour gridline color |
+| `hourLabelColor` | string | theme muted | Hour label color (“12AM” at arcs) |
+| **Legend** |  |  |  |
+| `legend` | `{ label: string, color: string }[]` | — | Legend items below plot |
 
 ### Per-day color arrays
 
 Both `bandColor` and `eventColor` accept arrays for per-day coloring:
 
 ``` r
+
 # 7 colors, one per day of week
 eventColor = c("#e74c3c", "#e67e22", "#f1c40f", "#2ecc71", "#3498db", "#9b59b6", "#e91e63")
 
@@ -409,6 +411,7 @@ index modulo array length).
 ### Key R data structures
 
 ``` r
+
 # For Activity Snake
 activity_data <- data.frame(
   day = c("Mon", "Mon", "Mon", "Tue", "Tue", ...),
