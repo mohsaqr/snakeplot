@@ -2,7 +2,7 @@
 
 A named list of 10 color palettes for snake plots. Each palette contains
 7 anchor colors that can be interpolated to any length with
-[`snake_palette`](https://saqr.me/Snakeplot/reference/snake_palette.md).
+[`snake_palette`](https://pak.dynasite.org/Snakeplot/reference/snake_palette.md).
 
 ## Usage
 

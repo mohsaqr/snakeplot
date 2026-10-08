@@ -50,7 +50,7 @@ survey_snake(ema_beeps, var = "happy", day = "day",
 
 ## Activity timelines
 
-[`activity_snake()`](https://saqr.me/Snakeplot/reference/activity_snake.md)
+[`activity_snake()`](https://pak.dynasite.org/Snakeplot/reference/activity_snake.md)
 shows daily event timelines — rug ticks or duration blocks on a dark
 ribbon:
 
@@ -125,7 +125,7 @@ activity_snake(d_morning, flow = "natural",
 
 ## Line snake
 
-[`line_snake()`](https://saqr.me/Snakeplot/reference/line_snake.md)
+[`line_snake()`](https://pak.dynasite.org/Snakeplot/reference/line_snake.md)
 draws a continuous intensity line winding through bands:
 
 ``` r
@@ -145,7 +145,7 @@ line_snake(d_line, fill_color = "#e74c3c")
 
 ## Timeline snake
 
-[`timeline_snake()`](https://saqr.me/Snakeplot/reference/timeline_snake.md)
+[`timeline_snake()`](https://pak.dynasite.org/Snakeplot/reference/timeline_snake.md)
 takes a 3-column data.frame (role, start, end) and auto-generates
 monthly blocks, transition labels, and band year labels:
 
@@ -225,7 +225,7 @@ survey_snake(student_survey, facet = TRUE, facet_ncol = 2L,
 
 ## Survey sequence
 
-[`survey_sequence()`](https://saqr.me/Snakeplot/reference/survey_sequence.md)
+[`survey_sequence()`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md)
 renders 100% stacked horizontal bars in a serpentine layout:
 
 ``` r
@@ -258,9 +258,9 @@ survey_sequence(m, title = "Labels from matrix dimnames",
 
 ## Sequential distribution
 
-[`sequential_dist()`](https://saqr.me/Snakeplot/reference/sequential_dist.md)
+[`sequential_dist()`](https://pak.dynasite.org/Snakeplot/reference/sequential_dist.md)
 is a monochrome variant of
-[`survey_sequence()`](https://saqr.me/Snakeplot/reference/survey_sequence.md):
+[`survey_sequence()`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md):
 
 ``` r
 
@@ -271,7 +271,7 @@ sequential_dist(ema_emotions)
 
 ## Sequence snake
 
-[`sequence_snake()`](https://saqr.me/Snakeplot/reference/sequence_snake.md)
+[`sequence_snake()`](https://pak.dynasite.org/Snakeplot/reference/sequence_snake.md)
 displays a state sequence as colored blocks flowing through the
 serpentine layout — each block is one time point colored by its state:
 
@@ -311,7 +311,7 @@ sequence_snake(logs, rows = 5,
 ## Built-in palettes
 
 10 palettes are available via `snake_palettes` or
-[`snake_palette()`](https://saqr.me/Snakeplot/reference/snake_palette.md):
+[`snake_palette()`](https://pak.dynasite.org/Snakeplot/reference/snake_palette.md):
 
 ``` r
 

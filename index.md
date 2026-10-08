@@ -31,14 +31,14 @@ palettes:
 
 | Function | Purpose |
 |----|----|
-| [`survey_snake()`](https://saqr.me/Snakeplot/reference/survey_snake.md) | Survey/EMA responses with ticks, bars, correlations, faceting |
-| [`activity_snake()`](https://saqr.me/Snakeplot/reference/activity_snake.md) | Daily activity timelines with event blocks or rug ticks |
-| [`sequence_snake()`](https://saqr.me/Snakeplot/reference/sequence_snake.md) | State sequence as colored blocks flowing through serpentine layout |
-| [`timeline_snake()`](https://saqr.me/Snakeplot/reference/timeline_snake.md) | Career/life-event timeline from a 3-column data.frame (role, start, end) |
-| [`survey_sequence()`](https://saqr.me/Snakeplot/reference/survey_sequence.md) | Stacked 100% horizontal bars in serpentine layout |
-| [`sequential_dist()`](https://saqr.me/Snakeplot/reference/sequential_dist.md) | Sequential (monochrome) variant of [`survey_sequence()`](https://saqr.me/Snakeplot/reference/survey_sequence.md) |
-| [`line_snake()`](https://saqr.me/Snakeplot/reference/line_snake.md) | Continuous intensity line plot (experimental) |
-| [`facet_snake()`](https://saqr.me/Snakeplot/reference/facet_snake.md) | Generic multi-panel wrapper for any snake function |
+| [`survey_snake()`](https://pak.dynasite.org/Snakeplot/reference/survey_snake.md) | Survey/EMA responses with ticks, bars, correlations, faceting |
+| [`activity_snake()`](https://pak.dynasite.org/Snakeplot/reference/activity_snake.md) | Daily activity timelines with event blocks or rug ticks |
+| [`sequence_snake()`](https://pak.dynasite.org/Snakeplot/reference/sequence_snake.md) | State sequence as colored blocks flowing through serpentine layout |
+| [`timeline_snake()`](https://pak.dynasite.org/Snakeplot/reference/timeline_snake.md) | Career/life-event timeline from a 3-column data.frame (role, start, end) |
+| [`survey_sequence()`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md) | Stacked 100% horizontal bars in serpentine layout |
+| [`sequential_dist()`](https://pak.dynasite.org/Snakeplot/reference/sequential_dist.md) | Sequential (monochrome) variant of [`survey_sequence()`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md) |
+| [`line_snake()`](https://pak.dynasite.org/Snakeplot/reference/line_snake.md) | Continuous intensity line plot (experimental) |
+| [`facet_snake()`](https://pak.dynasite.org/Snakeplot/reference/facet_snake.md) | Generic multi-panel wrapper for any snake function |
 
 ## Bundled datasets
 

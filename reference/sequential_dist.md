@@ -1,7 +1,7 @@
 # Sequential Distribution Plot
 
 Like
-[`survey_sequence`](https://saqr.me/Snakeplot/reference/survey_sequence.md)
+[`survey_sequence`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md)
 but uses a sequential (monochrome) palette instead of diverging colors.
 Suitable for ordinal scales without a natural midpoint (e.g., "Never" to
 "Always").

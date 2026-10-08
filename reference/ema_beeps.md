@@ -3,7 +3,8 @@
 All 11 474 experience-sampling beeps from a 14-day study of 321
 university students. Each row is one beep with the participant's emotion
 ratings and a timestamp. Use with the `var`/`day`/`timestamp` interface
-of [`survey_snake`](https://saqr.me/Snakeplot/reference/survey_snake.md)
+of
+[`survey_snake`](https://pak.dynasite.org/Snakeplot/reference/survey_snake.md)
 for daily snake plots.
 
 ## Usage

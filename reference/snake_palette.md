@@ -13,7 +13,7 @@ snake_palette(name = "classic", n = 7L)
 - name:
 
   Character, palette name (see
-  [`snake_palettes`](https://saqr.me/Snakeplot/reference/snake_palettes.md)).
+  [`snake_palettes`](https://pak.dynasite.org/Snakeplot/reference/snake_palettes.md)).
 
 - n:
 

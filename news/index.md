@@ -7,17 +7,17 @@ CRAN release: 2026-03-16
 - New `flow` parameter on all snake functions: `"snake"` (boustrophedon,
   default for most functions) or `"natural"` (all rows read
   left-to-right, default for
-  [`timeline_snake()`](https://saqr.me/Snakeplot/reference/timeline_snake.md)
+  [`timeline_snake()`](https://pak.dynasite.org/Snakeplot/reference/timeline_snake.md)
   and
-  [`sequence_snake()`](https://saqr.me/Snakeplot/reference/sequence_snake.md)).
+  [`sequence_snake()`](https://pak.dynasite.org/Snakeplot/reference/sequence_snake.md)).
 - New
-  [`multi_snake()`](https://saqr.me/Snakeplot/reference/multi_snake.md)
+  [`multi_snake()`](https://pak.dynasite.org/Snakeplot/reference/multi_snake.md)
   function for faceted multi-construct panels.
 - New
-  [`sequence_snake()`](https://saqr.me/Snakeplot/reference/sequence_snake.md)
+  [`sequence_snake()`](https://pak.dynasite.org/Snakeplot/reference/sequence_snake.md)
   function for categorical sequence visualization.
 - New
-  [`timeline_snake()`](https://saqr.me/Snakeplot/reference/timeline_snake.md)
+  [`timeline_snake()`](https://pak.dynasite.org/Snakeplot/reference/timeline_snake.md)
   function for state-transition timelines.
 - Added Sonsoles Lopez-Pernas as package author.
 - Bug fixes: survey_sequence arc gradient, survey_snake first end cap,
@@ -26,7 +26,7 @@ CRAN release: 2026-03-16
 ## snakeplot 0.2.0
 
 - 10 built-in color palettes via `snake_palettes` and
-  [`snake_palette()`](https://saqr.me/Snakeplot/reference/snake_palette.md):
+  [`snake_palette()`](https://pak.dynasite.org/Snakeplot/reference/snake_palette.md):
   5 diverging (classic, earth, ocean, sunset, berry) and 5 sequential
   (blues, greens, grays, warm, viridis).
 - New `band_palette` parameter for custom band shading colors.
@@ -40,18 +40,18 @@ CRAN release: 2026-03-16
 ## snakeplot 0.1.0
 
 - Initial release.
-- [`survey_snake()`](https://saqr.me/Snakeplot/reference/survey_snake.md):
+- [`survey_snake()`](https://pak.dynasite.org/Snakeplot/reference/survey_snake.md):
   Survey response snake plots with distribution bars, tick marks,
   inter-item correlation arcs, faceting, and daily EMA support.
-- [`activity_snake()`](https://saqr.me/Snakeplot/reference/activity_snake.md):
+- [`activity_snake()`](https://pak.dynasite.org/Snakeplot/reference/activity_snake.md):
   Daily activity timeline with event blocks and rug ticks.
-- [`survey_sequence()`](https://saqr.me/Snakeplot/reference/survey_sequence.md):
+- [`survey_sequence()`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md):
   Stacked 100% horizontal bar plots in serpentine layout.
-- [`sequential_dist()`](https://saqr.me/Snakeplot/reference/sequential_dist.md):
+- [`sequential_dist()`](https://pak.dynasite.org/Snakeplot/reference/sequential_dist.md):
   Sequential palette variant of
-  [`survey_sequence()`](https://saqr.me/Snakeplot/reference/survey_sequence.md).
-- [`line_snake()`](https://saqr.me/Snakeplot/reference/line_snake.md):
+  [`survey_sequence()`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md).
+- [`line_snake()`](https://pak.dynasite.org/Snakeplot/reference/line_snake.md):
   Continuous intensity line plot (experimental).
-- [`facet_snake()`](https://saqr.me/Snakeplot/reference/facet_snake.md):
+- [`facet_snake()`](https://pak.dynasite.org/Snakeplot/reference/facet_snake.md):
   Generic multi-panel faceting wrapper.
 - Three bundled datasets: `ema_emotions`, `student_survey`, `ema_beeps`.

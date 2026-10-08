@@ -4,7 +4,7 @@ Person-level mean emotion ratings (rounded to integers) from a 14-day
 experience sampling study of 280 university students. Ten emotion items
 rescaled to a 1–5 Likert scale (original study used 1–7; rescaled via
 linear transformation for simplicity). Ready to pass directly to
-[`survey_snake`](https://saqr.me/Snakeplot/reference/survey_snake.md).
+[`survey_snake`](https://pak.dynasite.org/Snakeplot/reference/survey_snake.md).
 
 ## Usage
 

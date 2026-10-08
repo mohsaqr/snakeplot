@@ -3,4 +3,4 @@
 ### Vignettes
 
 - [Snake
-  Plots](https://saqr.me/Snakeplot/articles/survey-snake-plots.md):
+  Plots](https://pak.dynasite.org/Snakeplot/articles/survey-snake-plots.md):

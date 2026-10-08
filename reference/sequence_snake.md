@@ -170,7 +170,7 @@ sequence_snake(
   Character, `"block"` (default) or `"rug"`. `"block"` fills the full
   band height with colored blocks. `"rug"` draws thin colored tick marks
   on a dark ribbon, similar to
-  [`activity_snake`](https://saqr.me/Snakeplot/reference/activity_snake.md).
+  [`activity_snake`](https://pak.dynasite.org/Snakeplot/reference/activity_snake.md).
 
 - band_color:
 
