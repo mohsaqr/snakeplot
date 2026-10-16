@@ -4,7 +4,10 @@
 MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![R-CMD-check](https://github.com/mohsaqr/snakeplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mohsaqr/snakeplot/actions/workflows/R-CMD-check.yaml)
 [![Codecov](https://codecov.io/gh/mohsaqr/snakeplot/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mohsaqr/snakeplot)
-[![Version](https://img.shields.io/badge/version-0.3.0-orange.svg)](https://github.com/mohsaqr/snakeplot)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/snakeplot)](https://CRAN.R-project.org/package=snakeplot)
+[![CRAN
+downloads](https://cranlogs.r-pkg.org/badges/grand-total/snakeplot)](https://CRAN.R-project.org/package=snakeplot)
 [![Dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](https://github.com/mohsaqr/snakeplot)
 
 Serpentine (snake) plots for survey responses, experience sampling
@@ -15,11 +18,11 @@ external dependencies.
 
 ``` r
 
-# From GitHub.
-devtools::install_github("mohsaqr/snakeplot")
-
-# Once on CRAN
+# From CRAN
 install.packages("snakeplot")
+
+# Development version from GitHub
+devtools::install_github("mohsaqr/snakeplot")
 ```
 
 ## Overview
