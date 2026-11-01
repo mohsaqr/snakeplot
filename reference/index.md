@@ -21,10 +21,12 @@
 - [`sequential_dist()`](https://pak.dynasite.org/Snakeplot/reference/sequential_dist.md)
   : Sequential Distribution Plot
 
-## Utilities
+## Palettes
 
 - [`snake_palette()`](https://pak.dynasite.org/Snakeplot/reference/snake_palette.md)
   : Get a Snake Plot Palette
+- [`snake_palettes`](https://pak.dynasite.org/Snakeplot/reference/snake_palettes.md)
+  : Built-in Color Palettes
 
 ## Datasets
 
@@ -32,7 +34,5 @@
   : EMA Beep-Level Data (Daily Emotions)
 - [`ema_emotions`](https://pak.dynasite.org/Snakeplot/reference/ema_emotions.md)
   : EMA Emotion Ratings (Person-Level)
-- [`snake_palettes`](https://pak.dynasite.org/Snakeplot/reference/snake_palettes.md)
-  : Built-in Color Palettes
 - [`student_survey`](https://pak.dynasite.org/Snakeplot/reference/student_survey.md)
   : Student Survey (Cross-Sectional, Multi-Construct)

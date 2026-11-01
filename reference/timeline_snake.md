@@ -1,10 +1,10 @@
 # Timeline Snake Plot
 
 Displays a career or life-event timeline as a serpentine sequence of
-colored phases. Each block represents one month, colored by the current
-state/role. State names are overlaid inside runs of consecutive blocks,
-and transition dates are shown at juncture points where the state
-changes.
+colored phases. With data.frame input each block represents one month,
+colored by the current state/role; with vector input each element is one
+block. State names are overlaid inside runs of consecutive blocks, and
+transition dates are shown at juncture points where the state changes.
 
 ## Usage
 
@@ -66,8 +66,9 @@ timeline_snake(
 
 - rows:
 
-  Integer, number of serpentine rows. If `NULL`, auto-calculated
-  targeting approximately 10 blocks per band.
+  Integer, number of serpentine rows. If `NULL`, chosen automatically
+  (about 20 monthly blocks per band, at least 2 rows, for data.frame
+  input; about 10 blocks per band for vector input).
 
 - band_height:
 
@@ -75,7 +76,9 @@ timeline_snake(
 
 - band_gap:
 
-  Numeric, gap between bands (default 18).
+  Numeric, gap between bands (default 30, wider than in
+  [`sequence_snake`](https://pak.dynasite.org/Snakeplot/reference/sequence_snake.md)
+  to leave room for the year labels).
 
 - plot_width:
 
@@ -146,11 +149,11 @@ timeline_snake(
 
 - tick_color:
 
-  Color for tick marks (default `"#333333"`).
+  Color for tick marks and band labels (default `"#444444"`).
 
 - tick_length:
 
-  Numeric, length of tick marks in pixels (default 5).
+  Numeric, length of tick marks in plot units (default 6).
 
 - tick_size:
 

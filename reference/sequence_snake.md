@@ -81,7 +81,7 @@ sequence_snake(
 
 - band_height:
 
-  Numeric, height of each band in pixels (default 28).
+  Numeric, height of each band in plot units (default 28).
 
 - band_gap:
 
@@ -159,7 +159,7 @@ sequence_snake(
 
 - tick_length:
 
-  Numeric, length of tick marks in pixels (default 5).
+  Numeric, length of tick marks in plot units (default 5).
 
 - tick_size:
 
@@ -169,12 +169,14 @@ sequence_snake(
 
   Character, `"block"` (default) or `"rug"`. `"block"` fills the full
   band height with colored blocks. `"rug"` draws thin colored tick marks
-  on a dark ribbon, similar to
-  [`activity_snake`](https://pak.dynasite.org/Snakeplot/reference/activity_snake.md).
+  on a light gray (`"#F5F5F5"`) band with neutral arcs, which keeps
+  individual events legible when a sequence has many time points.
 
 - band_color:
 
-  Character, band ribbon color for rug mode (default `"#3d3d4a"`).
+  Character, intended band color for rug mode (default `"#3d3d4a"`).
+  Currently not used: rug bands are always drawn in light gray
+  (`"#F5F5F5"`).
 
 - rug_opacity:
 
@@ -184,7 +186,10 @@ sequence_snake(
 
   Numeric 0-1, vertical jitter as fraction of band height (default 0).
   When `> 0`, tick marks scatter vertically across the band instead of
-  sitting at a fixed position.
+  sitting at a fixed position. Only used when `style = "rug"`; the
+  jitter is random, so call
+  [`set.seed()`](https://rdrr.io/r/base/Random.html) first for a
+  reproducible plot.
 
 - border_color:
 

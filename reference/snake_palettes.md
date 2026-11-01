@@ -59,9 +59,15 @@ A named list of 10 character vectors, each with 7 hex color strings.
 ## Examples
 
 ``` r
-snake_palettes$ocean
+names(snake_palettes)
+#>  [1] "classic" "earth"   "ocean"   "sunset"  "berry"   "blues"   "greens" 
+#>  [8] "grays"   "warm"    "viridis"
+# snake_palette() returns a palette by name; with the default n = 7 it
+# gives the 7 anchor colors unchanged
+snake_palette("ocean")
 #> [1] "#D73027" "#F46D43" "#FDAE61" "#E0E0E0" "#ABD9E9" "#74ADD1" "#4575B4"
-survey_snake(ema_emotions, colors = snake_palettes$earth,
+# ema_emotions has 5 levels, so interpolate the palette to 5 colors
+survey_snake(ema_emotions, colors = snake_palette("earth", n = 5),
              tick_shape = "bar", sort_by = "mean")
 
 ```

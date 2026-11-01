@@ -2,8 +2,10 @@
 
 Each survey item is a horizontal band in a serpentine layout. The band
 body is shaded by item mean (warm = low, cool = high). Individual
-responses are shown as colored tick marks. Inter-item correlations
-appear at U-turns.
+responses are shown as colored tick marks. With
+`arc_fill = "correlation"`, the Pearson correlation between adjacent
+items is printed at each U-turn, so items that move together can be read
+off the arcs.
 
 ## Usage
 
@@ -58,26 +60,28 @@ survey_snake(
 
   Input in one of four formats:
 
-  **Raw responses** (data.frame) — each column is a survey item, each
-  row is a respondent. Responses are auto-tabulated into counts.
-  `labels` and `levels` are inferred from column names and unique
-  values. Simplest usage: `survey_snake(survey_df)`.
+  **Raw responses** (data.frame): each column is a survey item, each row
+  is a respondent. Responses are auto-tabulated into counts. `labels`
+  and `levels` are inferred from column names and unique values.
+  Simplest usage: `survey_snake(survey_df)`.
 
-  **Counts matrix** — rows = items, columns = response levels.
+  **Counts matrix**: rows = items, columns = response levels.
 
-  **Counts data.frame** — coerced to matrix.
+  **Counts data.frame**: coerced to matrix.
 
-  **ESM / longitudinal data.frame** — when `var` and `timestamp` are
-  provided, data is automatically pivoted by day. Each band becomes one
-  day. Ticks are positioned by time-of-day.
+  **ESM / longitudinal data.frame**: when `var` and `day` are provided,
+  data is automatically pivoted by day and each band becomes one day. If
+  `timestamp` is also given, ticks are positioned by time of day.
 
 - labels:
 
-  Character vector of item labels (length = nrow(counts)).
+  Character vector of item labels (length = nrow(counts)). `NULL`
+  (default) infers them from row or column names.
 
 - levels:
 
-  Character vector of level labels (length = ncol(counts)).
+  Character vector of level labels (length = ncol(counts)). `NULL`
+  (default) infers them from column names or the unique response values.
 
 - var:
 
@@ -100,7 +104,7 @@ survey_snake(
   Optional named character vector mapping raw level values to display
   labels (e.g. `c("1"="Str. Disagree", "5"="Str. Agree")`). Applied to
   legend and any level-based text. If unnamed and same length as levels,
-  used positionally.
+  used positionally. Names that match no level are ignored.
 
 - band_height:
 
@@ -126,7 +130,7 @@ survey_snake(
 
 - tick_opacity:
 
-  Numeric 0-1 (default 0.55).
+  Numeric 0-1 (default 0.75).
 
 - level_gap:
 
@@ -140,8 +144,10 @@ survey_snake(
 
 - colors:
 
-  Character vector of colors for response levels. Default uses a
-  diverging palette.
+  Character vector of colors, one per response level in level order.
+  Only the first `length(levels)` colors are used, so pass
+  `snake_palette(name, n = <number of levels>)` to spread a full palette
+  over the scale. Default `NULL` uses a diverging palette.
 
 - shade_band:
 
@@ -157,7 +163,8 @@ survey_snake(
 
 - show_correlation:
 
-  Logical. Show Pearson r at U-turns (default TRUE).
+  Logical. Print the Pearson r between adjacent items at each U-turn
+  (default TRUE). Only has an effect when `arc_fill = "correlation"`.
 
 - jitter_range:
 
@@ -165,7 +172,10 @@ survey_snake(
 
 - sort_by:
 
-  Character: "none", "mean", or "net" (default "none").
+  Character: "none" (input order, default), "mean" (ascending item
+  mean), or "net" (ascending net score: share of responses above the
+  scale midpoint minus share below; falls back to the mean for scales
+  with fewer than four levels).
 
 - shadow:
 
@@ -194,11 +204,13 @@ survey_snake(
 
 - arc_color:
 
-  Character (default "#2c3e6b").
+  Character. Arc tint used when `arc_fill = "correlation"` (default
+  "#2c3e6b").
 
 - arc_opacity:
 
-  Numeric (default 0.80).
+  Numeric 0-1. Arc opacity for the "correlation", "mean_prev" and
+  "blend" fills (default 0.80).
 
 - arc_fill:
 
@@ -211,8 +223,7 @@ survey_snake(
 
   "correlation"
 
-  :   Brown/blue tint by correlation sign, opacity scaled by \|r\|. The
-      original behavior.
+  :   Brown/blue tint by correlation sign, opacity scaled by \|r\|.
 
   "mean_prev"
 
@@ -243,7 +254,8 @@ survey_snake(
 - facet:
 
   Logical or named list. When `TRUE`, columns are auto-grouped by their
-  name prefix (e.g. LOC1-LOC5 → "LOC") and each group is drawn as a
+  name prefix (e.g. LOC1-LOC5 become "LOC", or Emo_Happy becomes "Emo"
+  when the prefix ends in an underscore) and each group is drawn as a
   facet panel. A named list of column-name vectors gives explicit
   grouping. Default `FALSE`.
 
@@ -265,11 +277,19 @@ survey_snake(
 
 - seed:
 
-  Integer for reproducible jitter (default 42).
+  Integer for reproducible jitter (default 42). The function calls
+  `set.seed(seed)` before drawing the jittered ticks, which also resets
+  the random number stream of the calling session.
 
 ## Value
 
-Invisible `snake_layout` object (or list of layouts when faceted).
+Called for its side effect of drawing a plot. Invisibly returns a list
+of class `snake_layout` with the computed geometry: `bands` (a
+data.frame with one row per band and columns `i`, `y_center`, `y_top`,
+`y_bottom`, `x_left`, `x_right`, `direction`, `read_direction`), `arcs`
+(a list with one element per U-turn), `canvas`, `plot_area`,
+`orientation`, `flow` and `params`. When `facet` is used, a named list
+of such objects, one per facet group.
 
 ## Examples
 

@@ -145,15 +145,19 @@ line_snake(
 
 - margin:
 
-  Named numeric vector.
+  Named numeric vector with top, right, bottom, left margins.
 
 - background:
 
-  Background color.
+  Background color (default "white").
 
 ## Value
 
-Invisible `snake_layout` object.
+Called for its side effect of drawing a plot. Invisibly returns a list
+of class `snake_layout` holding the computed geometry: `bands` (a
+data.frame with one row per band giving its position and its `direction`
+and `read_direction`), `arcs` (a list with one element per U-turn),
+`canvas`, `plot_area`, `orientation`, `flow` and `params`.
 
 ## Examples
 

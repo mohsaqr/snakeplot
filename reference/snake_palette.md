@@ -12,16 +12,23 @@ snake_palette(name = "classic", n = 7L)
 
 - name:
 
-  Character, palette name (see
-  [`snake_palettes`](https://pak.dynasite.org/Snakeplot/reference/snake_palettes.md)).
+  Character, palette name: one of `names(snake_palettes)` (default
+  `"classic"`). An unknown name is an error that lists the available
+  palettes.
 
 - n:
 
-  Integer, number of colors to return (default 7).
+  Integer, number of colors to return (default 7). With `n = 7` the
+  anchor colors are returned unchanged; other values interpolate between
+  them with
+  [`grDevices::colorRampPalette()`](https://rdrr.io/r/grDevices/colorRamp.html).
+  Pass the number of response levels so a diverging palette spans the
+  whole scale.
 
 ## Value
 
-Character vector of `n` hex color strings.
+Character vector of `n` hex color strings, ordered from the first (low)
+to the last (high) anchor color.
 
 ## Examples
 

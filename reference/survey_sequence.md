@@ -38,15 +38,20 @@ survey_sequence(
 
 - counts:
 
-  Numeric matrix of response counts (rows=items, cols=levels).
+  Response data in one of three formats: a numeric matrix of counts
+  (rows = items, columns = response levels), a data.frame of counts
+  (coerced to a matrix), or a data.frame of raw responses (one column
+  per item, one row per respondent), which is tabulated automatically.
 
 - labels:
 
-  Character vector of item labels.
+  Character vector of item labels. `NULL` (default) infers them from row
+  or column names.
 
 - levels:
 
-  Character vector of level labels.
+  Character vector of level labels. `NULL` (default) infers them from
+  column names or the unique response values.
 
 - band_height:
 
@@ -62,7 +67,9 @@ survey_sequence(
 
 - colors:
 
-  Character vector of segment colors. Default: diverging palette.
+  Character vector of segment colors, one per response level in level
+  order (only the first `length(levels)` are used). Default `NULL` uses
+  a diverging palette.
 
 - show_percent:
 
@@ -82,7 +89,10 @@ survey_sequence(
 
 - sort_by:
 
-  Character: "none", "mean", "net" (default "none").
+  Character: "none" (input order, default), "mean" (ascending item
+  mean), or "net" (ascending net score: share of responses above the
+  scale midpoint minus share below; falls back to the mean for scales
+  with fewer than four levels).
 
 - shadow:
 
@@ -127,15 +137,19 @@ survey_sequence(
 
 - margin:
 
-  Named numeric vector.
+  Named numeric vector with top, right, bottom, left margins.
 
 - background:
 
-  Background color.
+  Background color (default "white").
 
 ## Value
 
-Invisible `snake_layout` object.
+Called for its side effect of drawing a plot. Invisibly returns a list
+of class `snake_layout` holding the computed geometry: `bands` (a
+data.frame with one row per band giving its position and its `direction`
+and `read_direction`), `arcs` (a list with one element per U-turn),
+`canvas`, `plot_area`, `orientation`, `flow` and `params`.
 
 ## Examples
 

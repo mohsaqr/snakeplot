@@ -66,7 +66,7 @@ multi_snake(
 
 - band_height:
 
-  Numeric, height of each band in pixels (default 28).
+  Numeric, height of each band in plot units (default 28).
 
 - band_gap:
 
@@ -134,7 +134,7 @@ Two display modes are supported:
 
 - `"index"`:
 
-  Each block contains thin colored ticks stacked side by side — one tick
+  Each block contains thin colored ticks stacked side by side, one tick
   per sequence, colored by state at that time point. Like TraMineR's
   `seqiplot()` folded into a serpentine.
 

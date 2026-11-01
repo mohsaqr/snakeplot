@@ -7,7 +7,11 @@ preserving adjacency information such as inter-item correlations.
 
 The package ships with three datasets from an experience sampling study
 of university students (Neubauer & Schmiedek, 2024), rescaled to a 1–5
-Likert scale, and 10 built-in color palettes via `snake_palettes`:
+Likert scale, and 10 built-in color palettes via
+[`snake_palette()`](https://pak.dynasite.org/Snakeplot/reference/snake_palette.md).
+The bundled scales have five levels, so every palette below is
+interpolated to `n = 5`; a palette passed with more colors than levels
+would only use its first five.
 
 ``` r
 
@@ -19,14 +23,19 @@ labs5 <- c("1" = "Not at all", "2" = "Slightly", "3" = "Moderate",
 
 ## Daily EMA — value distribution ticks
 
-When you have beep-level data, `var` and `day` auto-pivot into one band
-per day. Ticks are positioned within proportional zones by response
-level:
+Beep-level data hides day-to-day change once it is averaged per person.
+Giving
+[`survey_snake()`](https://pak.dynasite.org/Snakeplot/reference/survey_snake.md)
+the raw beeps with `var` and `day` keeps one band per day, so a shift in
+the response distribution across the study period is visible band by
+band. Ticks are positioned within proportional zones by response level,
+so the width of each colored zone is the share of beeps at that level on
+that day:
 
 ``` r
 
 survey_snake(ema_beeps, var = "angry", day = "day",
-             colors = snake_palettes$sunset, level_labels = labs5,
+             colors = snake_palette("sunset", n = 5), level_labels = labs5,
              title = "Anger — 14 days, value distribution")
 ```
 
@@ -34,15 +43,17 @@ survey_snake(ema_beeps, var = "angry", day = "day",
 
 ## Daily EMA — distribution bars
 
-The same daily data with `tick_shape = "bar"` shows how response
-distributions shift across days. Use `bar_reverse = TRUE` to start from
+Ticks show individual beeps; bars trade that detail for exact shares.
+With `tick_shape = "bar"` each day becomes a stacked percentage bar,
+which is the better choice when the question is how much of each day
+sits at the top of the scale. `bar_reverse = TRUE` starts each bar at
 the highest level:
 
 ``` r
 
 survey_snake(ema_beeps, var = "happy", day = "day",
              tick_shape = "bar", bar_reverse = TRUE,
-             colors = snake_palettes$sunset, level_labels = labs5,
+             colors = snake_palette("sunset", n = 5), level_labels = labs5,
              title = "Happiness — 14 days, distribution bars")
 ```
 
@@ -50,9 +61,11 @@ survey_snake(ema_beeps, var = "happy", day = "day",
 
 ## Activity timelines
 
+A week of time-stamped events is hard to read as one long axis.
 [`activity_snake()`](https://pak.dynasite.org/Snakeplot/reference/activity_snake.md)
-shows daily event timelines — rug ticks or duration blocks on a dark
-ribbon:
+gives each day its own band on a shared clock (6AM to midnight by
+default), so habits such as late-night activity line up across days.
+Events with zero duration appear as rug ticks on a dark ribbon:
 
 ``` r
 
@@ -104,8 +117,8 @@ activity_snake(d2, event_color = "#e09480", band_color = "#3d2518",
 
 ![](survey-snake-plots_files/figure-html/activity_blocks-1.png)
 
-With `flow = "natural"`, all bands read 6AM→12AM left-to-right — no
-alternating. Compare: the default boustrophedon flips morning events
+With `flow = "natural"`, all bands read 6AM to 12AM left-to-right, with
+no alternating. Compare: the default boustrophedon flips morning events
 between left and right on alternate rows, while natural keeps them
 consistently on the left:
 
@@ -125,8 +138,11 @@ activity_snake(d_morning, flow = "natural",
 
 ## Line snake
 
+When the measure is continuous (a sensor reading, a count per interval)
+rather than a set of events,
 [`line_snake()`](https://pak.dynasite.org/Snakeplot/reference/line_snake.md)
-draws a continuous intensity line winding through bands:
+draws it as a line winding through the bands, so the daily rhythm and
+its day-to-day changes sit in one panel:
 
 ``` r
 
@@ -145,9 +161,11 @@ line_snake(d_line, fill_color = "#e74c3c")
 
 ## Timeline snake
 
+A career or project history is a small number of long phases.
 [`timeline_snake()`](https://pak.dynasite.org/Snakeplot/reference/timeline_snake.md)
-takes a 3-column data.frame (role, start, end) and auto-generates
-monthly blocks, transition labels, and band year labels:
+takes a 3-column data.frame (role, start, end), expands it into monthly
+blocks and labels each transition date and each band’s year, so the
+length of each phase can be compared at a glance:
 
 ``` r
 
@@ -167,14 +185,16 @@ timeline_snake(career,
 
 ## Tick lines with correlation arcs
 
-Individual responses as colored tick marks, with inter-item Pearson *r*
-displayed at each U-turn arc:
+Sorting items by their mean places similar items next to each other, and
+`arc_fill = "correlation"` prints the Pearson *r* between each pair of
+adjacent items at the U-turn that joins them. The arcs therefore show
+whether items with similar means also move together across respondents:
 
 ``` r
 
 survey_snake(ema_emotions, tick_shape = "line",
              arc_fill = "correlation", sort_by = "mean",
-             colors = snake_palettes$berry, level_labels = labs5,
+             colors = snake_palette("berry", n = 5), level_labels = labs5,
              title = "Emotions — correlations at U-turns")
 ```
 
@@ -182,13 +202,14 @@ survey_snake(ema_emotions, tick_shape = "line",
 
 ## Dot plot with dark bands
 
-Use `band_palette` for darker band shading. Dots with jitter show
-individual responses:
+Dots with vertical jitter show each respondent separately, which reveals
+clusters that ticks can hide. `band_palette` sets the band shading
+gradient; a dark ramp makes the dots stand out:
 
 ``` r
 
 survey_snake(ema_emotions, tick_shape = "dot", sort_by = "mean",
-             colors = snake_palettes$viridis, level_labels = labs5,
+             colors = snake_palette("viridis", n = 5), level_labels = labs5,
              band_palette = c("#1a1228", "#1a2a42"),
              title = "Emotions — dots on dark bands")
 ```
@@ -197,13 +218,15 @@ survey_snake(ema_emotions, tick_shape = "dot", sort_by = "mean",
 
 ## Mean and median markers
 
-A diamond shows the item mean; a dashed line shows the median:
+On a skewed item the mean and the median part ways. A diamond marks the
+item mean and a dashed line the median, so items where a few extreme
+responses pull the mean away from the typical answer stand out:
 
 ``` r
 
 survey_snake(ema_emotions, tick_shape = "bar", sort_by = "mean",
              show_mean = TRUE, show_median = TRUE,
-             colors = snake_palettes$sunset, level_labels = labs5,
+             colors = snake_palette("sunset", n = 5), level_labels = labs5,
              title = "Emotions — mean (diamond) and median (dashed)")
 ```
 
@@ -211,26 +234,31 @@ survey_snake(ema_emotions, tick_shape = "bar", sort_by = "mean",
 
 ## Faceted multi-construct
 
-When column names share a prefix (e.g., `Emo_`, `Mot_`), `facet = TRUE`
-auto-groups them into panels. Prefixes are stripped from labels:
+A multi-construct survey is easier to read one construct at a time. When
+column names share a prefix (e.g., `Emo_`, `Mot_`), `facet = TRUE`
+auto-groups them into panels, one per construct, and strips the prefix
+from the item labels:
 
 ``` r
 
 survey_snake(student_survey, facet = TRUE, facet_ncol = 2L,
              tick_shape = "bar", sort_by = "mean",
-             colors = snake_palettes$earth, level_labels = labs5)
+             colors = snake_palette("earth", n = 5), level_labels = labs5)
 ```
 
 ![](survey-snake-plots_files/figure-html/facet-1.png)
 
 ## Survey sequence
 
+When only the response shares matter,
 [`survey_sequence()`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md)
-renders 100% stacked horizontal bars in a serpentine layout:
+drops the individual ticks and draws each item as a 100% stacked bar
+with the percentage printed in each segment wide enough to hold it. Raw
+responses are tabulated automatically:
 
 ``` r
 
-survey_sequence(ema_emotions, colors = snake_palettes$earth)
+survey_sequence(ema_emotions, colors = snake_palette("earth", n = 5))
 ```
 
 ![](survey-snake-plots_files/figure-html/survey_seq-1.png)
@@ -246,21 +274,23 @@ m <- matrix(c(50, 120, 80, 30,
               80,  85,  95, 40,
               30, 110,  90, 70,
               60,  75, 105, 55,
-              45, 130,  65, 35), nrow = 7, byrow = TRUE)
-rownames(m) <- c("Satisfaction", "Engagement", "Motivation",
-                  "Belonging", "Autonomy", "Competence", "Wellbeing")
-colnames(m) <- c("Low", "Medium", "High", "Very High")
+              45, 130,  65, 35), nrow = 7, byrow = TRUE,
+            dimnames = list(c("Satisfaction", "Engagement", "Motivation",
+                              "Belonging", "Autonomy", "Competence",
+                              "Wellbeing"),
+                            c("Low", "Medium", "High", "Very High")))
 survey_sequence(m, title = "Labels from matrix dimnames",
-                colors = snake_palettes$sunset)
+                colors = snake_palette("sunset", n = 4))
 ```
 
 ![](survey-snake-plots_files/figure-html/flex_survey-1.png)
 
 ## Sequential distribution
 
+A diverging palette implies a neutral midpoint. For ordinal scales
+without one (frequency scales such as “Never” to “Always”),
 [`sequential_dist()`](https://pak.dynasite.org/Snakeplot/reference/sequential_dist.md)
-is a monochrome variant of
-[`survey_sequence()`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md):
+draws the same stacked bars in a single-hue ramp:
 
 ``` r
 
@@ -271,20 +301,20 @@ sequential_dist(ema_emotions)
 
 ## Sequence snake
 
+A long categorical sequence (for example, the actions in a learning
+session) does not fit on one line.
 [`sequence_snake()`](https://pak.dynasite.org/Snakeplot/reference/sequence_snake.md)
-displays a state sequence as colored blocks flowing through the
-serpentine layout — each block is one time point colored by its state:
+folds it into rows, one block per time point colored by its state, and
+keeps the blocks flowing through the arcs so the order is never broken:
 
 ``` r
 
 set.seed(42)
 verbs <- c("Read", "Write", "Discuss", "Listen",
            "Search", "Plan", "Code", "Review")
-seq75 <- character(0)
-while (length(seq75) < 75) {
-  seq75 <- c(seq75, rep(sample(verbs, 1), sample(1:4, 1)))
-}
-seq75 <- seq75[seq_len(75)]
+# 40 runs of 1-4 repeats each, cut to the first 75 steps
+runs <- replicate(40, rep(sample(verbs, 1), sample(4, 1)), simplify = FALSE)
+seq75 <- head(unlist(runs), 75)
 sequence_snake(seq75, title = "75-step learning sequence")
 ```
 
@@ -310,8 +340,9 @@ sequence_snake(logs, rows = 5,
 
 ## Built-in palettes
 
-10 palettes are available via `snake_palettes` or
-[`snake_palette()`](https://pak.dynasite.org/Snakeplot/reference/snake_palette.md):
+10 palettes are available by name through
+[`snake_palette()`](https://pak.dynasite.org/Snakeplot/reference/snake_palette.md),
+five diverging (for scales with a neutral midpoint) and five sequential:
 
 ``` r
 
@@ -324,6 +355,7 @@ Use any palette by name:
 
 ``` r
 
-survey_snake(ema_emotions, colors = snake_palettes$earth, tick_shape = "bar")
 snake_palette("sunset", n = 5)  # interpolate to 5 colors
+survey_snake(ema_emotions, colors = snake_palette("earth", n = 5),
+             tick_shape = "bar")
 ```

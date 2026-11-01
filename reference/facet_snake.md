@@ -14,7 +14,8 @@ facet_snake(data, facet_var, FUN = activity_snake, ncol = NULL, ...)
 
 - data:
 
-  Data to plot (passed to `FUN`).
+  A data.frame to plot. It is split by `facet_var`; each subset, with
+  the facet column removed, is passed to `FUN`.
 
 - facet_var:
 
@@ -22,7 +23,8 @@ facet_snake(data, facet_var, FUN = activity_snake, ncol = NULL, ...)
 
 - FUN:
 
-  Function to call for each panel. Default `activity_snake`.
+  Function to call for each panel. Default `activity_snake`. It must
+  accept a `title` argument, which receives the facet level.
 
 - ncol:
 
@@ -35,7 +37,10 @@ facet_snake(data, facet_var, FUN = activity_snake, ncol = NULL, ...)
 
 ## Value
 
-Invisible list of results from each panel call.
+Called for its side effect of drawing one panel per facet level.
+Invisibly returns an unnamed list with one element per facet level, in
+order of first appearance, each holding the value returned by `FUN` for
+that panel (a `snake_layout` list for `activity_snake`).
 
 ## Examples
 

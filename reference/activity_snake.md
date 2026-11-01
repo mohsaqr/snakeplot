@@ -136,7 +136,8 @@ activity_snake(
 
 - grid_color:
 
-  Character. Gridline color (default "rgba(255,255,255,0.25)").
+  Character. Gridline color: any R color, or a CSS-style
+  `"rgba(r,g,b,a)"` string (default "rgba(255,255,255,0.25)").
 
 - label_color:
 
@@ -192,7 +193,11 @@ activity_snake(
 
 ## Value
 
-Invisible `snake_layout` object (for downstream use).
+Called for its side effect of drawing a plot. Invisibly returns a list
+of class `snake_layout` holding the computed geometry: `bands` (a
+data.frame with one row per band giving its position and its `direction`
+and `read_direction`), `arcs` (a list with one element per U-turn),
+`canvas`, `plot_area`, `orientation`, `flow` and `params`.
 
 ## Examples
 
