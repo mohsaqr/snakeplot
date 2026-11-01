@@ -36,10 +36,15 @@
 #'   \code{"snake"} uses alternating boustrophedon direction;
 #'   \code{"natural"} reads all bands in the same direction.
 #' @param title Optional title.
-#' @param margin Named numeric vector.
-#' @param background Background color.
+#' @param margin Named numeric vector with top, right, bottom, left margins.
+#' @param background Background color (default "white").
 #'
-#' @return Invisible \code{snake_layout} object.
+#' @return Called for its side effect of drawing a plot. Invisibly returns a
+#'   list of class \code{snake_layout} holding the computed geometry: \code{bands}
+#'   (a data.frame with one row per band giving its position and its
+#'   \code{direction} and \code{read_direction}), \code{arcs} (a list with one
+#'   element per U-turn), \code{canvas}, \code{plot_area}, \code{orientation},
+#'   \code{flow} and \code{params}.
 #'
 #' @examples
 #' set.seed(42)

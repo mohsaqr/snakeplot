@@ -7,11 +7,13 @@
 facet_snake(data, facet_var, FUN = activity_snake, ncol = NULL, ...)
 }
 \arguments{
-\item{data}{Data to plot (passed to \code{FUN}).}
+\item{data}{A data.frame to plot. It is split by \code{facet_var}; each
+subset, with the facet column removed, is passed to \code{FUN}.}
 
 \item{facet_var}{Character. Column name in \code{data} to facet by.}
 
-\item{FUN}{Function to call for each panel. Default \code{activity_snake}.}
+\item{FUN}{Function to call for each panel. Default \code{activity_snake}.
+It must accept a \code{title} argument, which receives the facet level.}
 
 \item{ncol}{Integer. Number of columns in the facet grid. Default: number
 of facet levels (all in one row).}
@@ -19,7 +21,10 @@ of facet levels (all in one row).}
 \item{...}{Additional arguments passed to \code{FUN}.}
 }
 \value{
-Invisible list of results from each panel call.
+Called for its side effect of drawing one panel per facet level.
+Invisibly returns an unnamed list with one element per facet level, in
+order of first appearance, each holding the value returned by \code{FUN}
+for that panel (a \code{snake_layout} list for \code{activity_snake}).
 }
 \description{
 Splits data by a grouping variable and draws side-by-side snake panels.

@@ -7,12 +7,18 @@
 snake_palette(name = "classic", n = 7L)
 }
 \arguments{
-\item{name}{Character, palette name (see \code{\link{snake_palettes}}).}
+\item{name}{Character, palette name: one of \code{names(snake_palettes)}
+(default \code{"classic"}). An unknown name is an error that lists the
+available palettes.}
 
-\item{n}{Integer, number of colors to return (default 7).}
+\item{n}{Integer, number of colors to return (default 7). With \code{n = 7}
+the anchor colors are returned unchanged; other values interpolate
+between them with \code{grDevices::colorRampPalette()}. Pass the number
+of response levels so a diverging palette spans the whole scale.}
 }
 \value{
-Character vector of \code{n} hex color strings.
+Character vector of \code{n} hex color strings, ordered from the
+first (low) to the last (high) anchor color.
 }
 \description{
 Returns a color palette interpolated to \code{n} colors.

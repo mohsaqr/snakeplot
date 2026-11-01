@@ -32,11 +32,16 @@ sequential_dist(
 )
 }
 \arguments{
-\item{counts}{Numeric matrix of response counts (rows=items, cols=levels).}
+\item{counts}{Response data in one of three formats: a numeric matrix of
+counts (rows = items, columns = response levels), a data.frame of counts
+(coerced to a matrix), or a data.frame of raw responses (one column per
+item, one row per respondent), which is tabulated automatically.}
 
-\item{labels}{Character vector of item labels.}
+\item{labels}{Character vector of item labels. \code{NULL} (default)
+infers them from row or column names.}
 
-\item{levels}{Character vector of level labels.}
+\item{levels}{Character vector of level labels. \code{NULL} (default)
+infers them from column names or the unique response values.}
 
 \item{hue}{Numeric 0-360. Base hue for the sequential palette
 (default 210 = blue).}
@@ -47,7 +52,9 @@ sequential_dist(
 
 \item{plot_width}{Numeric (default 500).}
 
-\item{colors}{Character vector of segment colors. Default: diverging palette.}
+\item{colors}{Character vector of segment colors, one per response level in
+level order (only the first \code{length(levels)} are used). Default
+\code{NULL} uses a diverging palette.}
 
 \item{show_percent}{Logical. Show percentages inside segments (default TRUE).}
 
@@ -58,7 +65,10 @@ sequential_dist(
 
 \item{arc_opacity}{Numeric 0-1 (default 0.5).}
 
-\item{sort_by}{Character: "none", "mean", "net" (default "none").}
+\item{sort_by}{Character: "none" (input order, default), "mean" (ascending
+item mean), or "net" (ascending net score: share of responses above the
+scale midpoint minus share below; falls back to the mean for scales with
+fewer than four levels).}
 
 \item{shadow}{Logical (default TRUE).}
 
@@ -83,12 +93,13 @@ first band starts from.}
 
 \item{title}{Optional title.}
 
-\item{margin}{Named numeric vector.}
+\item{margin}{Named numeric vector with top, right, bottom, left margins.}
 
-\item{background}{Background color.}
+\item{background}{Background color (default "white").}
 }
 \value{
-Invisible \code{snake_layout} object.
+Called for its side effect of drawing a plot. Invisibly returns
+the \code{snake_layout} list described in \code{\link{survey_sequence}}.
 }
 \description{
 Like \code{\link{survey_sequence}} but uses a sequential (monochrome)

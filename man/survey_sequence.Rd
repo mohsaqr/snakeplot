@@ -31,11 +31,16 @@ survey_sequence(
 )
 }
 \arguments{
-\item{counts}{Numeric matrix of response counts (rows=items, cols=levels).}
+\item{counts}{Response data in one of three formats: a numeric matrix of
+counts (rows = items, columns = response levels), a data.frame of counts
+(coerced to a matrix), or a data.frame of raw responses (one column per
+item, one row per respondent), which is tabulated automatically.}
 
-\item{labels}{Character vector of item labels.}
+\item{labels}{Character vector of item labels. \code{NULL} (default)
+infers them from row or column names.}
 
-\item{levels}{Character vector of level labels.}
+\item{levels}{Character vector of level labels. \code{NULL} (default)
+infers them from column names or the unique response values.}
 
 \item{band_height}{Numeric (default 28).}
 
@@ -43,7 +48,9 @@ survey_sequence(
 
 \item{plot_width}{Numeric (default 500).}
 
-\item{colors}{Character vector of segment colors. Default: diverging palette.}
+\item{colors}{Character vector of segment colors, one per response level in
+level order (only the first \code{length(levels)} are used). Default
+\code{NULL} uses a diverging palette.}
 
 \item{show_percent}{Logical. Show percentages inside segments (default TRUE).}
 
@@ -54,7 +61,10 @@ survey_sequence(
 
 \item{arc_opacity}{Numeric 0-1 (default 0.5).}
 
-\item{sort_by}{Character: "none", "mean", "net" (default "none").}
+\item{sort_by}{Character: "none" (input order, default), "mean" (ascending
+item mean), or "net" (ascending net score: share of responses above the
+scale midpoint minus share below; falls back to the mean for scales with
+fewer than four levels).}
 
 \item{shadow}{Logical (default TRUE).}
 
@@ -79,12 +89,17 @@ first band starts from.}
 
 \item{title}{Optional title.}
 
-\item{margin}{Named numeric vector.}
+\item{margin}{Named numeric vector with top, right, bottom, left margins.}
 
-\item{background}{Background color.}
+\item{background}{Background color (default "white").}
 }
 \value{
-Invisible \code{snake_layout} object.
+Called for its side effect of drawing a plot. Invisibly returns a
+list of class \code{snake_layout} holding the computed geometry: \code{bands}
+(a data.frame with one row per band giving its position and its
+\code{direction} and \code{read_direction}), \code{arcs} (a list with one
+element per U-turn), \code{canvas}, \code{plot_area}, \code{orientation},
+\code{flow} and \code{params}.
 }
 \description{
 Each survey item is a 100\\% stacked horizontal bar in a serpentine layout.

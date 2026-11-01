@@ -99,8 +99,12 @@ cycle_colors <- function(colors, n) {
 #' @format A named list of 10 character vectors, each with 7 hex color strings.
 #'
 #' @examples
-#' snake_palettes$ocean
-#' survey_snake(ema_emotions, colors = snake_palettes$earth,
+#' names(snake_palettes)
+#' # snake_palette() returns a palette by name; with the default n = 7 it
+#' # gives the 7 anchor colors unchanged
+#' snake_palette("ocean")
+#' # ema_emotions has 5 levels, so interpolate the palette to 5 colors
+#' survey_snake(ema_emotions, colors = snake_palette("earth", n = 5),
 #'              tick_shape = "bar", sort_by = "mean")
 #'
 #' @export
@@ -131,9 +135,15 @@ snake_palettes <- list(
 #'
 #' Returns a color palette interpolated to \code{n} colors.
 #'
-#' @param name Character, palette name (see \code{\link{snake_palettes}}).
-#' @param n Integer, number of colors to return (default 7).
-#' @return Character vector of \code{n} hex color strings.
+#' @param name Character, palette name: one of \code{names(snake_palettes)}
+#'   (default \code{"classic"}). An unknown name is an error that lists the
+#'   available palettes.
+#' @param n Integer, number of colors to return (default 7). With \code{n = 7}
+#'   the anchor colors are returned unchanged; other values interpolate
+#'   between them with \code{grDevices::colorRampPalette()}. Pass the number
+#'   of response levels so a diverging palette spans the whole scale.
+#' @return Character vector of \code{n} hex color strings, ordered from the
+#'   first (low) to the last (high) anchor color.
 #'
 #' @examples
 #' snake_palette("ocean", 5)

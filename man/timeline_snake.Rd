@@ -52,12 +52,14 @@ If \code{NULL}, derived from \code{unique(sequence)}.}
 unnamed vector recycled to match \code{states}. If \code{NULL},
 a built-in qualitative palette is used.}
 
-\item{rows}{Integer, number of serpentine rows. If \code{NULL},
-auto-calculated targeting approximately 10 blocks per band.}
+\item{rows}{Integer, number of serpentine rows. If \code{NULL}, chosen
+automatically (about 20 monthly blocks per band, at least 2 rows, for
+data.frame input; about 10 blocks per band for vector input).}
 
 \item{band_height}{Numeric, height of each band (default 28).}
 
-\item{band_gap}{Numeric, gap between bands (default 18).}
+\item{band_gap}{Numeric, gap between bands (default 30, wider than in
+\code{\link{sequence_snake}} to leave room for the year labels).}
 
 \item{plot_width}{Numeric, width of each band (default 500).}
 
@@ -102,9 +104,10 @@ transition labels (e.g., \code{c(6.5, 24.3)}). When provided, labels
 are placed at exact interpolated positions along the serpentine path
 rather than at state-change boundaries.}
 
-\item{tick_color}{Color for tick marks (default \code{"#333333"}).}
+\item{tick_color}{Color for tick marks and band labels
+(default \code{"#444444"}).}
 
-\item{tick_length}{Numeric, length of tick marks in pixels (default 5).}
+\item{tick_length}{Numeric, length of tick marks in plot units (default 6).}
 
 \item{tick_size}{Numeric, text size for band and transition labels
 (default 0.8).}
@@ -134,8 +137,9 @@ a plot.
 }
 \description{
 Displays a career or life-event timeline as a serpentine sequence of
-colored phases. Each block represents one month, colored by the current
-state/role. State names are overlaid inside runs of consecutive blocks,
+colored phases. With data.frame input each block represents one month,
+colored by the current state/role; with vector input each element is one
+block. State names are overlaid inside runs of consecutive blocks,
 and transition dates are shown at juncture points where the state changes.
 }
 \examples{

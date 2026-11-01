@@ -20,7 +20,7 @@
 #'   a built-in qualitative palette is used.
 #' @param rows Integer, number of serpentine rows. If \code{NULL},
 #'   auto-calculated targeting approximately 10 blocks per band.
-#' @param band_height Numeric, height of each band in pixels (default 28).
+#' @param band_height Numeric, height of each band in plot units (default 28).
 #' @param band_gap Numeric, gap between bands (default 18).
 #' @param plot_width Numeric, width of each band (default 500).
 #' @param margin Named numeric vector with top, right, bottom, left margins.
@@ -51,19 +51,23 @@
 #'   are placed at exact interpolated positions along the serpentine path
 #'   rather than at state-change boundaries.
 #' @param tick_color Color for tick marks (default \code{"#333333"}).
-#' @param tick_length Numeric, length of tick marks in pixels (default 5).
+#' @param tick_length Numeric, length of tick marks in plot units (default 5).
 #' @param tick_size Numeric, text size for tick labels (default 0.4).
 #' @param style Character, \code{"block"} (default) or \code{"rug"}.
 #'   \code{"block"} fills the full band height with colored blocks.
-#'   \code{"rug"} draws thin colored tick marks on a dark ribbon,
-#'   similar to \code{\link{activity_snake}}.
-#' @param band_color Character, band ribbon color for rug mode
-#'   (default \code{"#3d3d4a"}).
+#'   \code{"rug"} draws thin colored tick marks on a light gray
+#'   (\code{"#F5F5F5"}) band with neutral arcs, which keeps individual
+#'   events legible when a sequence has many time points.
+#' @param band_color Character, intended band color for rug mode
+#'   (default \code{"#3d3d4a"}). Currently not used: rug bands are always
+#'   drawn in light gray (\code{"#F5F5F5"}).
 #' @param rug_opacity Numeric 0-1, opacity of rug tick marks
 #'   (default 0.9).
 #' @param jitter Numeric 0-1, vertical jitter as fraction of band
 #'   height (default 0). When \code{> 0}, tick marks scatter vertically
-#'   across the band instead of sitting at a fixed position.
+#'   across the band instead of sitting at a fixed position. Only used when
+#'   \code{style = "rug"}; the jitter is random, so call \code{set.seed()}
+#'   first for a reproducible plot.
 #' @param border_color Color for thin borders between blocks, or \code{NA}
 #'   for no borders (default \code{NA}).
 #' @param title Optional character string for plot title.

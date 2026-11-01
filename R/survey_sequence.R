@@ -4,19 +4,29 @@
 #' Color segments represent response levels; percentages are shown inside
 #' segments when wide enough. Arcs blend adjacent end-colors.
 #'
-#' @param counts Numeric matrix of response counts (rows=items, cols=levels).
-#' @param labels Character vector of item labels.
-#' @param levels Character vector of level labels.
+#' @param counts Response data in one of three formats: a numeric matrix of
+#'   counts (rows = items, columns = response levels), a data.frame of counts
+#'   (coerced to a matrix), or a data.frame of raw responses (one column per
+#'   item, one row per respondent), which is tabulated automatically.
+#' @param labels Character vector of item labels. \code{NULL} (default)
+#'   infers them from row or column names.
+#' @param levels Character vector of level labels. \code{NULL} (default)
+#'   infers them from column names or the unique response values.
 #' @param band_height Numeric (default 28).
 #' @param band_gap Numeric (default 14).
 #' @param plot_width Numeric (default 500).
-#' @param colors Character vector of segment colors. Default: diverging palette.
+#' @param colors Character vector of segment colors, one per response level in
+#'   level order (only the first \code{length(levels)} are used). Default
+#'   \code{NULL} uses a diverging palette.
 #' @param show_percent Logical. Show percentages inside segments (default TRUE).
 #' @param min_segment Numeric. Hide label if segment narrower than this
 #'   (default 34).
 #' @param arc_style Character: "gradient" or "neutral" (default "gradient").
 #' @param arc_opacity Numeric 0-1 (default 0.5).
-#' @param sort_by Character: "none", "mean", "net" (default "none").
+#' @param sort_by Character: "none" (input order, default), "mean" (ascending
+#'   item mean), or "net" (ascending net score: share of responses above the
+#'   scale midpoint minus share below; falls back to the mean for scales with
+#'   fewer than four levels).
 #' @param shadow Logical (default TRUE).
 #' @param show_legend Logical (default TRUE).
 #' @param label_color Character (default "#333333").
@@ -31,10 +41,15 @@
 #'   \code{"snake"} uses alternating boustrophedon direction;
 #'   \code{"natural"} reads all bands in the same direction.
 #' @param title Optional title.
-#' @param margin Named numeric vector.
-#' @param background Background color.
+#' @param margin Named numeric vector with top, right, bottom, left margins.
+#' @param background Background color (default "white").
 #'
-#' @return Invisible \code{snake_layout} object.
+#' @return Called for its side effect of drawing a plot. Invisibly returns a
+#'   list of class \code{snake_layout} holding the computed geometry: \code{bands}
+#'   (a data.frame with one row per band giving its position and its
+#'   \code{direction} and \code{read_direction}), \code{arcs} (a list with one
+#'   element per U-turn), \code{canvas}, \code{plot_area}, \code{orientation},
+#'   \code{flow} and \code{params}.
 #'
 #' @examples
 #' counts <- matrix(c(
@@ -250,7 +265,8 @@ survey_sequence <- function(counts, labels = NULL, levels = NULL,
 #' @param hue Numeric 0-360. Base hue for the sequential palette
 #'   (default 210 = blue).
 #'
-#' @return Invisible \code{snake_layout} object.
+#' @return Called for its side effect of drawing a plot. Invisibly returns
+#'   the \code{snake_layout} list described in \code{\link{survey_sequence}}.
 #'
 #' @examples
 #' counts <- matrix(c(

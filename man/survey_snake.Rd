@@ -50,23 +50,27 @@ survey_snake(
 \arguments{
 \item{counts}{Input in one of four formats:
 
-\strong{Raw responses} (data.frame) — each column is a survey item, each row
+\strong{Raw responses} (data.frame): each column is a survey item, each row
 is a respondent. Responses are auto-tabulated into counts.
 \code{labels} and \code{levels} are inferred from column names and
 unique values. Simplest usage:
 \code{survey_snake(survey_df)}.
 
-\strong{Counts matrix} — rows = items, columns = response levels.
+\strong{Counts matrix}: rows = items, columns = response levels.
 
-\strong{Counts data.frame} — coerced to matrix.
+\strong{Counts data.frame}: coerced to matrix.
 
-\strong{ESM / longitudinal data.frame} — when \code{var} and
-\code{timestamp} are provided, data is automatically pivoted by day.
-Each band becomes one day. Ticks are positioned by time-of-day.}
+\strong{ESM / longitudinal data.frame}: when \code{var} and \code{day} are
+provided, data is automatically pivoted by day and each band becomes
+one day. If \code{timestamp} is also given, ticks are positioned by
+time of day.}
 
-\item{labels}{Character vector of item labels (length = nrow(counts)).}
+\item{labels}{Character vector of item labels (length = nrow(counts)).
+\code{NULL} (default) infers them from row or column names.}
 
-\item{levels}{Character vector of level labels (length = ncol(counts)).}
+\item{levels}{Character vector of level labels (length = ncol(counts)).
+\code{NULL} (default) infers them from column names or the unique
+response values.}
 
 \item{var}{Character, column name of the response variable for ESM mode.
 When provided with \code{day}, data is auto-pivoted by period.}
@@ -82,7 +86,7 @@ positioned by time-of-day within each band.}
 values to display labels (e.g.
 \code{c("1"="Str. Disagree", "5"="Str. Agree")}). Applied to legend
 and any level-based text. If unnamed and same length as levels, used
-positionally.}
+positionally. Names that match no level are ignored.}
 
 \item{band_height}{Numeric (default 28).}
 
@@ -97,7 +101,7 @@ positionally.}
 draw segments from the highest level (left) to the lowest (right).
 Default \code{FALSE}.}
 
-\item{tick_opacity}{Numeric 0-1 (default 0.55).}
+\item{tick_opacity}{Numeric 0-1 (default 0.75).}
 
 \item{level_gap}{Numeric. Gap between response-level zones in plot units
 (default 15). Set to 0 for no separation.}
@@ -105,8 +109,10 @@ Default \code{FALSE}.}
 \item{color_mode}{Character, "level" (color by response level) or
 "individual" (unique hue per respondent). Default "level".}
 
-\item{colors}{Character vector of colors for response levels.
-Default uses a diverging palette.}
+\item{colors}{Character vector of colors, one per response level in level
+order. Only the first \code{length(levels)} colors are used, so pass
+\code{snake_palette(name, n = <number of levels>)} to spread a full
+palette over the scale. Default \code{NULL} uses a diverging palette.}
 
 \item{shade_band}{Logical. Shade band body by item mean (default TRUE).}
 
@@ -114,11 +120,16 @@ Default uses a diverging palette.}
 
 \item{show_median}{Logical. Vertical line at median (default FALSE).}
 
-\item{show_correlation}{Logical. Show Pearson r at U-turns (default TRUE).}
+\item{show_correlation}{Logical. Print the Pearson r between adjacent items
+at each U-turn (default TRUE). Only has an effect when
+\code{arc_fill = "correlation"}.}
 
 \item{jitter_range}{Numeric. Vertical jitter fraction (default 0.22).}
 
-\item{sort_by}{Character: "none", "mean", or "net" (default "none").}
+\item{sort_by}{Character: "none" (input order, default), "mean" (ascending
+item mean), or "net" (ascending net score: share of responses above the
+scale midpoint minus share below; falls back to the mean for scales with
+fewer than four levels).}
 
 \item{shadow}{Logical (default TRUE).}
 
@@ -133,16 +144,18 @@ or "direction" (follows band reading direction).}
 
 \item{legend_text_size}{Numeric, legend text size (default 0.65).}
 
-\item{arc_color}{Character (default "#2c3e6b").}
+\item{arc_color}{Character. Arc tint used when
+\code{arc_fill = "correlation"} (default "#2c3e6b").}
 
-\item{arc_opacity}{Numeric (default 0.80).}
+\item{arc_opacity}{Numeric 0-1. Arc opacity for the "correlation",
+"mean_prev" and "blend" fills (default 0.80).}
 
 \item{arc_fill}{Character controlling arc fill style:
 \describe{
 \item{"none"}{(default) Two-tone split: upper half colored by the upper
 band's mean shade, lower half by the lower band's mean shade.}
 \item{"correlation"}{Brown/blue tint by correlation sign, opacity scaled
-by |r|. The original behavior.}
+by |r|.}
 \item{"mean_prev"}{Solid fill using the upper (preceding) band's mean
 shade.}
 \item{"blend"}{Solid fill: 50/50 RGB average of adjacent band shades.}
@@ -161,7 +174,8 @@ first band starts from.}
 \code{"natural"} reads all bands in the same direction.}
 
 \item{facet}{Logical or named list. When \code{TRUE}, columns are
-auto-grouped by their name prefix (e.g. LOC1-LOC5 → "LOC") and each
+auto-grouped by their name prefix (e.g. LOC1-LOC5 become "LOC", or
+Emo_Happy becomes "Emo" when the prefix ends in an underscore) and each
 group is drawn as a facet panel. A named list of column-name vectors
 gives explicit grouping. Default \code{FALSE}.}
 
@@ -174,16 +188,27 @@ gives explicit grouping. Default \code{FALSE}.}
 
 \item{background}{Background color.}
 
-\item{seed}{Integer for reproducible jitter (default 42).}
+\item{seed}{Integer for reproducible jitter (default 42). The function
+calls \code{set.seed(seed)} before drawing the jittered ticks, which
+also resets the random number stream of the calling session.}
 }
 \value{
-Invisible \code{snake_layout} object (or list of layouts when
-faceted).
+Called for its side effect of drawing a plot. Invisibly returns a
+list of class \code{snake_layout} with the computed geometry:
+\code{bands} (a data.frame with one row per band and columns \code{i},
+\code{y_center}, \code{y_top}, \code{y_bottom}, \code{x_left},
+\code{x_right}, \code{direction}, \code{read_direction}), \code{arcs}
+(a list with one element per U-turn), \code{canvas}, \code{plot_area},
+\code{orientation}, \code{flow} and \code{params}. When
+\code{facet} is used, a named list of such objects, one per facet
+group.
 }
 \description{
 Each survey item is a horizontal band in a serpentine layout. The band body
 is shaded by item mean (warm = low, cool = high). Individual responses are
-shown as colored tick marks. Inter-item correlations appear at U-turns.
+shown as colored tick marks. With \code{arc_fill = "correlation"}, the
+Pearson correlation between adjacent items is printed at each U-turn, so
+items that move together can be read off the arcs.
 }
 \examples{
 counts <- matrix(c(

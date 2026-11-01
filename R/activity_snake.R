@@ -42,8 +42,8 @@
 #' @param show_hour_labels Logical. Show hour labels at bottom (default TRUE).
 #' @param show_arc_labels Logical. Show "12AM" at arc tips (default TRUE).
 #' @param shadow Logical. Draw drop shadows (default TRUE).
-#' @param grid_color Character. Gridline color
-#'   (default "rgba(255,255,255,0.25)").
+#' @param grid_color Character. Gridline color: any R color, or a CSS-style
+#'   \code{"rgba(r,g,b,a)"} string (default "rgba(255,255,255,0.25)").
 #' @param label_color Character. Day label color (default "#cccccc").
 #' @param label_size Numeric. Label font size multiplier (default 0.85).
 #' @param label_align Character. Label alignment: "left" (default), "right",
@@ -65,7 +65,12 @@
 #' @param margin Named numeric vector with top, right, bottom, left margins.
 #' @param background Background color (default "white").
 #'
-#' @return Invisible \code{snake_layout} object (for downstream use).
+#' @return Called for its side effect of drawing a plot. Invisibly returns a
+#'   list of class \code{snake_layout} holding the computed geometry: \code{bands}
+#'   (a data.frame with one row per band giving its position and its
+#'   \code{direction} and \code{read_direction}), \code{arcs} (a list with one
+#'   element per U-turn), \code{canvas}, \code{plot_area}, \code{orientation},
+#'   \code{flow} and \code{params}.
 #'
 #' @examples
 #' # Weekly rug-style activity plot

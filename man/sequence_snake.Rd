@@ -62,7 +62,7 @@ a built-in qualitative palette is used.}
 \item{rows}{Integer, number of serpentine rows. If \code{NULL},
 auto-calculated targeting approximately 10 blocks per band.}
 
-\item{band_height}{Numeric, height of each band in pixels (default 28).}
+\item{band_height}{Numeric, height of each band in plot units (default 28).}
 
 \item{band_gap}{Numeric, gap between bands (default 18).}
 
@@ -110,24 +110,28 @@ rather than at state-change boundaries.}
 
 \item{tick_color}{Color for tick marks (default \code{"#333333"}).}
 
-\item{tick_length}{Numeric, length of tick marks in pixels (default 5).}
+\item{tick_length}{Numeric, length of tick marks in plot units (default 5).}
 
 \item{tick_size}{Numeric, text size for tick labels (default 0.4).}
 
 \item{style}{Character, \code{"block"} (default) or \code{"rug"}.
 \code{"block"} fills the full band height with colored blocks.
-\code{"rug"} draws thin colored tick marks on a dark ribbon,
-similar to \code{\link{activity_snake}}.}
+\code{"rug"} draws thin colored tick marks on a light gray
+(\code{"#F5F5F5"}) band with neutral arcs, which keeps individual
+events legible when a sequence has many time points.}
 
-\item{band_color}{Character, band ribbon color for rug mode
-(default \code{"#3d3d4a"}).}
+\item{band_color}{Character, intended band color for rug mode
+(default \code{"#3d3d4a"}). Currently not used: rug bands are always
+drawn in light gray (\code{"#F5F5F5"}).}
 
 \item{rug_opacity}{Numeric 0-1, opacity of rug tick marks
 (default 0.9).}
 
 \item{jitter}{Numeric 0-1, vertical jitter as fraction of band
 height (default 0). When \code{> 0}, tick marks scatter vertically
-across the band instead of sitting at a fixed position.}
+across the band instead of sitting at a fixed position. Only used when
+\code{style = "rug"}; the jitter is random, so call \code{set.seed()}
+first for a reproducible plot.}
 
 \item{border_color}{Color for thin borders between blocks, or \code{NA}
 for no borders (default \code{NA}).}

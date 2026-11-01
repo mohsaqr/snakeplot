@@ -1,8 +1,9 @@
 #' Timeline Snake Plot
 #'
 #' Displays a career or life-event timeline as a serpentine sequence of
-#' colored phases. Each block represents one month, colored by the current
-#' state/role. State names are overlaid inside runs of consecutive blocks,
+#' colored phases. With data.frame input each block represents one month,
+#' colored by the current state/role; with vector input each element is one
+#' block. State names are overlaid inside runs of consecutive blocks,
 #' and transition dates are shown at juncture points where the state changes.
 #'
 #' @param sequence Either a character/factor vector of states (one per time
@@ -15,7 +16,11 @@
 #'   \code{"natural"} reads all bands left-to-right; \code{"snake"} uses
 #'   alternating boustrophedon direction.
 #' @param band_height Numeric, height of each band (default 28).
-#' @param band_gap Numeric, gap between bands (default 18).
+#' @param rows Integer, number of serpentine rows. If \code{NULL}, chosen
+#'   automatically (about 20 monthly blocks per band, at least 2 rows, for
+#'   data.frame input; about 10 blocks per band for vector input).
+#' @param band_gap Numeric, gap between bands (default 30, wider than in
+#'   \code{\link{sequence_snake}} to leave room for the year labels).
 #' @param plot_width Numeric, width of each band (default 500).
 #' @param margin Named numeric vector with top, right, bottom, left margins
 #'   (default \code{c(top = 35, right = 10, bottom = 65, left = 20)}).
@@ -24,6 +29,9 @@
 #' @param show_state Logical, show state names inside blocks (default
 #'   \code{TRUE}).
 #' @param state_size Numeric, state label size (default 1).
+#' @param tick_color Color for tick marks and band labels
+#'   (default \code{"#444444"}).
+#' @param tick_length Numeric, length of tick marks in plot units (default 6).
 #' @param tick_size Numeric, text size for band and transition labels
 #'   (default 0.8).
 #' @param legend_text_size Numeric, legend text size (default 1.2).

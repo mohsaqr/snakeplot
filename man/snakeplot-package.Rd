@@ -6,12 +6,13 @@
 \alias{snakeplot-package}
 \title{snakeplot: Serpentine Plots for Long Timeline, Sequential and Survey Data}
 \description{
-Visualize long timelines, extended sequences and temporally chained survey responses and experience sampling data using intuitive serpentine (snake) plots. Supports distribution bars, tick-mark plots, inter-item correlation arcs, faceted multi-construct panels, and daily time-of-day positioning for ecological momentary assessment data.
+Visualize long timelines, extended sequences and temporally chained survey responses and experience sampling data using intuitive serpentine (snake) plots. Supports distribution bars, tick-mark plots, inter-item correlation arcs, faceted multi-construct panels, and daily time-of-day positioning for ecological momentary assessment data. Further plot types fold categorical state sequences, career timelines and daily activity logs into the same serpentine layout. All plots are drawn with base 'R' graphics.
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://github.com/mohsaqr/snakeplot}
+  \item \url{https://pak.dynasite.org/Snakeplot/}
   \item Report bugs at \url{https://github.com/mohsaqr/snakeplot/issues}
 }
 

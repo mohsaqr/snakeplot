@@ -96,8 +96,8 @@ If a vector, colors cycle per day (default "#d4a843").}
 
 \item{shadow}{Logical. Draw drop shadows (default TRUE).}
 
-\item{grid_color}{Character. Gridline color
-(default "rgba(255,255,255,0.25)").}
+\item{grid_color}{Character. Gridline color: any R color, or a CSS-style
+\code{"rgba(r,g,b,a)"} string (default "rgba(255,255,255,0.25)").}
 
 \item{label_color}{Character. Day label color (default "#cccccc").}
 
@@ -131,7 +131,12 @@ dates). NULL = auto-detect (\code{"\%a"} for 7 or fewer days,
 \item{background}{Background color (default "white").}
 }
 \value{
-Invisible \code{snake_layout} object (for downstream use).
+Called for its side effect of drawing a plot. Invisibly returns a
+list of class \code{snake_layout} holding the computed geometry: \code{bands}
+(a data.frame with one row per band giving its position and its
+\code{direction} and \code{read_direction}), \code{arcs} (a list with one
+element per U-turn), \code{canvas}, \code{plot_area}, \code{orientation},
+\code{flow} and \code{params}.
 }
 \description{
 A daily activity timeline where each band is one day and colored

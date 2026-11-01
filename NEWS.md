@@ -1,3 +1,17 @@
+# snakeplot 0.3.2
+
+* Documentation revision: corrected stale defaults (`survey_snake()`
+  `tick_opacity`, `timeline_snake()` `band_gap`, `tick_color`, `tick_length`,
+  `rows`), described the structure of every returned object, documented that
+  `colors` uses only the first `length(levels)` colors and that
+  `show_correlation` only acts with `arc_fill = "correlation"`, and fixed the
+  `sequence_snake()` rug-style description (light gray band; `band_color` is
+  currently unused).
+* Examples, README and vignette use `snake_palette(name, n = 5)` instead of
+  `snake_palettes$name`, so diverging palettes span the bundled 1-5 scales;
+  the README uses 5-point level labels to match the data and lists
+  `multi_snake()`. The vignette explains why to use each plot.
+
 # snakeplot 0.3.0
 
 * New `flow` parameter on all snake functions: `"snake"` (boustrophedon,

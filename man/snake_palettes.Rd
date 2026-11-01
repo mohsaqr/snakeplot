@@ -30,8 +30,12 @@ A named list of 10 color palettes for snake plots. Each palette contains
 }
 }
 \examples{
-snake_palettes$ocean
-survey_snake(ema_emotions, colors = snake_palettes$earth,
+names(snake_palettes)
+# snake_palette() returns a palette by name; with the default n = 7 it
+# gives the 7 anchor colors unchanged
+snake_palette("ocean")
+# ema_emotions has 5 levels, so interpolate the palette to 5 colors
+survey_snake(ema_emotions, colors = snake_palette("earth", n = 5),
              tick_shape = "bar", sort_by = "mean")
 
 }

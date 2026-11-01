@@ -17,7 +17,7 @@ navbar:
   components:
     github:
       icon: fab fa-github
-      href: https://github.com/mohsaqr/Snakeplot
+      href: https://github.com/mohsaqr/snakeplot
 
 reference:
   - title: "Core plot functions"
@@ -31,14 +31,14 @@ reference:
       - timeline_snake
       - survey_sequence
       - sequential_dist
-  - title: "Utilities"
+  - title: "Palettes"
     contents:
       - snake_palette
+      - snake_palettes
   - title: "Datasets"
     contents:
       - ema_beeps
       - ema_emotions
-      - snake_palettes
       - student_survey
 
 articles:

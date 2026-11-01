@@ -8,7 +8,8 @@
 [![Dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](https://github.com/mohsaqr/snakeplot)
 
 Serpentine (snake) plots for survey responses, experience sampling (EMA/ESM)
-data, and activity timelines using base R graphics. Zero external dependencies.
+data, state sequences and activity timelines using base R graphics. No
+dependencies beyond the packages that ship with R.
 
 ## Installation
 
@@ -24,13 +25,14 @@ devtools::install_github("mohsaqr/snakeplot")
 
 Snake plots arrange data as horizontal bands in a serpentine layout — each
 row reverses direction and connects to the next through a U-turn arc. The
-package provides six plotting functions and 10 built-in color palettes:
+package provides nine plotting functions and 10 built-in color palettes:
 
 | Function | Purpose |
 |----------|---------|
 | `survey_snake()` | Survey/EMA responses with ticks, bars, correlations, faceting |
 | `activity_snake()` | Daily activity timelines with event blocks or rug ticks |
 | `sequence_snake()` | State sequence as colored blocks flowing through serpentine layout |
+| `multi_snake()` | Many sequences at once: per-sequence ticks (index) or state proportions (distribution) |
 | `timeline_snake()` | Career/life-event timeline from a 3-column data.frame (role, start, end) |
 | `survey_sequence()` | Stacked 100% horizontal bars in serpentine layout |
 | `sequential_dist()` | Sequential (monochrome) variant of `survey_sequence()` |
@@ -43,25 +45,24 @@ Three datasets from Neubauer & Schmiedek (2024) are included:
 
 | Dataset | Rows | Description |
 |---------|------|-------------|
-| `ema_emotions` | 280 | Person-level means for 10 emotions (1-7 scale) |
-| `student_survey` | 280 | 34 items across 4 constructs, prefixed for faceting |
-| `ema_beeps` | 11 474 | Beep-level timestamps + anger/happiness ratings (14 days) |
+| `ema_emotions` | 280 | Person-level means for 10 emotions (1-5 scale) |
+| `student_survey` | 280 | 34 items across 4 constructs (1-5 scale), prefixed for faceting |
+| `ema_beeps` | 11 474 | Beep-level timestamps + anger/happiness ratings (1-5 scale, 14 days) |
 
 ## Examples
 
 ```r
 library(snakeplot)
 
-labs7 <- c("1" = "Not at all", "2" = "Slightly", "3" = "Somewhat",
-           "4" = "Moderate",   "5" = "Quite",    "6" = "Very",
-           "7" = "Extremely")
+labs5 <- c("1" = "Not at all", "2" = "Slightly", "3" = "Moderate",
+           "4" = "Quite",      "5" = "Extremely")
 ```
 
 ### `survey_snake()` — daily value distribution ticks
 
 ```r
 survey_snake(ema_beeps, var = "angry", day = "day",
-             colors = snake_palettes$ocean, level_labels = labs7,
+             colors = snake_palette("ocean", n = 5), level_labels = labs5,
              title = "Anger — 14 days, value distribution")
 ```
 
@@ -72,7 +73,7 @@ survey_snake(ema_beeps, var = "angry", day = "day",
 ```r
 survey_snake(ema_emotions, tick_shape = "line",
              arc_fill = "correlation", sort_by = "mean",
-             colors = snake_palettes$ocean, level_labels = labs7,
+             colors = snake_palette("ocean", n = 5), level_labels = labs5,
              title = "Emotions — correlations at U-turns")
 ```
 
@@ -82,7 +83,7 @@ survey_snake(ema_emotions, tick_shape = "line",
 
 ```r
 survey_snake(ema_emotions, tick_shape = "dot", sort_by = "mean",
-             colors = snake_palettes$ocean, level_labels = labs7,
+             colors = snake_palette("ocean", n = 5), level_labels = labs5,
              band_palette = c("#1a1228", "#1a2a42"),
              title = "Emotions — dots on dark bands")
 ```
@@ -94,7 +95,7 @@ survey_snake(ema_emotions, tick_shape = "dot", sort_by = "mean",
 ```r
 survey_snake(student_survey, facet = TRUE, facet_ncol = 2L,
              tick_shape = "bar", sort_by = "mean",
-             colors = snake_palettes$ocean, level_labels = labs7)
+             colors = snake_palette("ocean", n = 5), level_labels = labs5)
 ```
 
 <img src="man/figures/survey_snake_facet.png" width="100%">
@@ -104,7 +105,7 @@ survey_snake(student_survey, facet = TRUE, facet_ncol = 2L,
 ```r
 survey_snake(ema_beeps, var = "happy", day = "day",
              tick_shape = "bar", bar_reverse = TRUE,
-             colors = snake_palettes$ocean, level_labels = labs7,
+             colors = snake_palette("ocean", n = 5), level_labels = labs5,
              title = "Happiness — 14 days, distribution bars")
 ```
 
@@ -144,11 +145,9 @@ activity_snake(d2, event_color = "#e09480", band_color = "#3d2518")
 set.seed(42)
 verbs <- c("Read", "Write", "Discuss", "Listen",
            "Search", "Plan", "Code", "Review")
-seq75 <- character(0)
-while (length(seq75) < 75) {
-  seq75 <- c(seq75, rep(sample(verbs, 1), sample(1:4, 1)))
-}
-seq75 <- seq75[seq_len(75)]
+# 40 runs of 1-4 repeats each, cut to the first 75 steps
+runs <- replicate(40, rep(sample(verbs, 1), sample(4, 1)), simplify = FALSE)
+seq75 <- head(unlist(runs), 75)
 sequence_snake(seq75, title = "75-step learning sequence")
 ```
 
@@ -174,7 +173,7 @@ timeline_snake(career,
 ### `survey_sequence()` — stacked bars
 
 ```r
-survey_sequence(ema_emotions, colors = snake_palettes$ocean)
+survey_sequence(ema_emotions, colors = snake_palette("ocean", n = 5))
 ```
 
 <img src="man/figures/survey_sequence.png" width="100%">
@@ -201,13 +200,13 @@ line_snake(d_line, fill_color = "#e74c3c")
 
 ```r
 names(snake_palettes)
-#> "classic" "earth" "ocean" "sunset" "berry" "blues" "greens" "grays" "warm" "viridis"
+#>  [1] "classic" "earth"   "ocean"   "sunset"  "berry"   "blues"   "greens" 
+#>  [8] "grays"   "warm"    "viridis"
 
-# Use directly
-survey_snake(ema_emotions, colors = snake_palettes$earth, tick_shape = "bar")
-
-# Interpolate to any length
+# Interpolate to the number of response levels (5 for the bundled data)
 snake_palette("sunset", n = 5)
+survey_snake(ema_emotions, colors = snake_palette("earth", n = 5),
+             tick_shape = "bar")
 ```
 
 ## Key parameters for `survey_snake()`
@@ -217,7 +216,7 @@ snake_palette("sunset", n = 5)
 | `tick_shape` | `"line"` (default), `"dot"`, or `"bar"` (stacked proportional) |
 | `sort_by` | `"none"`, `"mean"`, or `"net"` |
 | `arc_fill` | `"none"` (two-tone), `"correlation"`, `"mean_prev"`, `"blend"` |
-| `colors` | Custom color palette or `snake_palettes$name` |
+| `colors` | One color per response level, e.g. `snake_palette("earth", n = 5)` |
 | `band_palette` | 2+ anchor colors for band shading (default: brown-to-slate) |
 | `bar_reverse` | `TRUE` to draw bars from highest level first |
 | `level_labels` | Named vector mapping levels to display labels |

@@ -4,14 +4,19 @@
 #' Works with \code{activity_snake}, \code{survey_snake}, \code{survey_sequence},
 #' \code{sequential_dist}, or \code{line_snake}.
 #'
-#' @param data Data to plot (passed to \code{FUN}).
+#' @param data A data.frame to plot. It is split by \code{facet_var}; each
+#'   subset, with the facet column removed, is passed to \code{FUN}.
 #' @param facet_var Character. Column name in \code{data} to facet by.
 #' @param FUN Function to call for each panel. Default \code{activity_snake}.
+#'   It must accept a \code{title} argument, which receives the facet level.
 #' @param ncol Integer. Number of columns in the facet grid. Default: number
 #'   of facet levels (all in one row).
 #' @param ... Additional arguments passed to \code{FUN}.
 #'
-#' @return Invisible list of results from each panel call.
+#' @return Called for its side effect of drawing one panel per facet level.
+#'   Invisibly returns an unnamed list with one element per facet level, in
+#'   order of first appearance, each holding the value returned by \code{FUN}
+#'   for that panel (a \code{snake_layout} list for \code{activity_snake}).
 #'
 #' @examples
 #' set.seed(42)

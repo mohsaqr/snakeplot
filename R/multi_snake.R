@@ -7,7 +7,7 @@
 #' Two display modes are supported:
 #' \describe{
 #'   \item{\code{"index"}}{Each block contains thin colored ticks stacked
-#'     side by side — one tick per sequence, colored by state at that time
+#'     side by side, one tick per sequence, colored by state at that time
 #'     point. Like TraMineR's \code{seqiplot()} folded into a serpentine.}
 #'   \item{\code{"distribution"}}{Each block is a stacked proportional bar
 #'     showing what fraction of sequences is in each state at that time
@@ -27,7 +27,7 @@
 #'   frequent state), or \code{"entropy"} (sort by Shannon entropy).
 #' @param rows Integer, number of serpentine rows. If \code{NULL},
 #'   auto-calculated (~10 blocks per band).
-#' @param band_height Numeric, height of each band in pixels (default 28).
+#' @param band_height Numeric, height of each band in plot units (default 28).
 #' @param band_gap Numeric, gap between bands (default 18).
 #' @param plot_width Numeric, width of each band (default 500).
 #' @param margin Named numeric vector with top, right, bottom, left margins.
