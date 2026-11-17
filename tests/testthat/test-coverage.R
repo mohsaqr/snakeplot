@@ -362,47 +362,41 @@ describe("survey_snake() uncovered branches", {
   })
 
   it("correlation arc_fill with negative correlations", {
-    # Create count vectors that are negatively correlated across levels
-    # Item 1: high counts at level 1, low at level 5
-    # Item 2: low counts at level 1, high at level 5
-    counts <- matrix(c(
-      80, 60, 30, 10, 5,   # item 1: skewed low
-      5, 10, 30, 60, 80,   # item 2: skewed high (negative r with item 1)
-      40, 40, 40, 40, 40,  # item 3: uniform
-      80, 60, 30, 10, 5    # item 4: same as item 1
-    ), nrow = 4, byrow = TRUE)
+    # Q2 mirrors Q1 across respondents, so r(Q1, Q2) = -1 and the arc
+    # takes the complementary (negative) tint
+    q1 <- rep(1:5, times = 8)
+    raw <- data.frame(Q1 = q1, Q2 = 6L - q1, Q3 = rev(q1), Q4 = q1)
     pdf(nullfile())
     on.exit(dev.off())
-    result <- survey_snake(counts, paste0("Q", 1:4), as.character(1:5),
-                           arc_fill = "correlation",
+    result <- survey_snake(raw, arc_fill = "correlation",
                            show_correlation = TRUE)
     expect_s3_class(result, "snake_layout")
+    expect_lt(result$correlations$r[1L], 0)
   })
 
   it("correlation arc_fill with equal correlations (rel_frac = 0.5)", {
-    # All items identical → all r = 1.0 → r_range has 0 spread
-    counts <- matrix(rep(c(10, 20, 30, 20, 10), 3), nrow = 3, byrow = TRUE)
+    # Identical items -> every r = 1 -> |r| range has zero spread
+    q <- rep(1:5, times = 8)
+    raw <- data.frame(Q1 = q, Q2 = q, Q3 = q)
     pdf(nullfile())
     on.exit(dev.off())
-    result <- survey_snake(counts, paste0("Q", 1:3), as.character(1:5),
-                           arc_fill = "correlation",
+    result <- survey_snake(raw, arc_fill = "correlation",
                            show_correlation = TRUE)
     expect_s3_class(result, "snake_layout")
+    expect_equal(result$correlations$r, c(1, 1))
   })
 
   it("correlation arc_fill with NA r_val", {
-    # Item with constant values → SD=0 → cor=NA
-    counts <- matrix(c(
-      0, 0, 100, 0, 0,  # item 1: all at level 3
-      0, 0, 100, 0, 0,  # item 2: all at level 3 (cor = NA: 0 variance)
-      10, 20, 40, 20, 10 # item 3: has variance
-    ), nrow = 3, byrow = TRUE)
+    # A constant item has zero variance -> r is undefined (NA)
+    q <- rep(1:5, times = 8)
+    raw <- data.frame(Q1 = rep(3L, 40), Q2 = q, Q3 = rev(q))
     pdf(nullfile())
     on.exit(dev.off())
-    result <- survey_snake(counts, paste0("Q", 1:3), as.character(1:5),
+    result <- survey_snake(raw, levels = as.character(1:5),
                            arc_fill = "correlation",
                            show_correlation = TRUE)
     expect_s3_class(result, "snake_layout")
+    expect_true(is.na(result$correlations$r[1L]))
   })
 
   it("ESM dot tick_shape with timestamp", {

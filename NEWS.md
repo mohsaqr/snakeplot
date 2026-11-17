@@ -1,3 +1,27 @@
+# snakeplot 0.3.3
+
+## Changes
+
+* The correlation arcs of `survey_snake(arc_fill = "correlation")` are now
+  computed from respondent-level rows: Pearson r between adjacent items
+  across the respondents who answered both (pairwise-complete), `NA` when
+  fewer than three did or either item is constant among them. Previously
+  they were computed from the response counts.
+* `arc_fill = "correlation"` now requires raw responses (one row per
+  respondent, one column per item). Counts input and the `var`/`day` (ESM)
+  mode, which do not identify respondents, raise an error of class
+  `snakeplot_no_respondent_data`.
+* The returned `snake_layout` holds `correlations`, a data frame with one
+  row per U-turn (`from`, `to`, `r`, `n`), so the printed values can be
+  checked and reported.
+* The legend entry for the arcs reads "Item r (arc)" and uses `arc_color`.
+
+## Packaging
+
+* README figures in `man/figures/` are now included in the package; a
+  `.Rbuildignore` pattern for `.png` files had excluded them, so the README
+  showed broken images on CRAN.
+
 # snakeplot 0.3.2
 
 * Documentation revision: corrected stale defaults (`survey_snake()`

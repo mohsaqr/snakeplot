@@ -154,8 +154,12 @@ or "direction" (follows band reading direction).}
 \describe{
 \item{"none"}{(default) Two-tone split: upper half colored by the upper
 band's mean shade, lower half by the lower band's mean shade.}
-\item{"correlation"}{Brown/blue tint by correlation sign, opacity scaled
-by |r|.}
+\item{"correlation"}{Tint by correlation sign (\code{arc_color} for
+positive r, its complement for negative r), darker for larger |r|.
+r is the Pearson correlation between the two items across the
+respondents who answered both. Requires raw responses; counts input
+and the \code{var}/\code{day} (ESM) mode raise an error of class
+\code{snakeplot_no_respondent_data}.}
 \item{"mean_prev"}{Solid fill using the upper (preceding) band's mean
 shade.}
 \item{"blend"}{Solid fill: 50/50 RGB average of adjacent band shades.}
@@ -199,7 +203,12 @@ list of class \code{snake_layout} with the computed geometry:
 \code{y_center}, \code{y_top}, \code{y_bottom}, \code{x_left},
 \code{x_right}, \code{direction}, \code{read_direction}), \code{arcs}
 (a list with one element per U-turn), \code{canvas}, \code{plot_area},
-\code{orientation}, \code{flow} and \code{params}. When
+\code{orientation}, \code{flow} and \code{params}. With
+\code{arc_fill = "correlation"} it also holds \code{correlations}, a
+data.frame with one row per U-turn and columns \code{from}, \code{to}
+(item names), \code{r} (Pearson correlation; \code{NA} when fewer than
+three respondents answered both items or either is constant among them)
+and \code{n} (respondents who answered both). When
 \code{facet} is used, a named list of such objects, one per facet
 group.
 }
@@ -208,7 +217,10 @@ Each survey item is a horizontal band in a serpentine layout. The band body
 is shaded by item mean (warm = low, cool = high). Individual responses are
 shown as colored tick marks. With \code{arc_fill = "correlation"}, the
 Pearson correlation between adjacent items is printed at each U-turn, so
-items that move together can be read off the arcs.
+items that move together can be read off the arcs. The correlation is
+computed across respondents, so it requires raw responses (one row per
+respondent); a counts table does not record which respondent gave which
+answer.
 }
 \examples{
 counts <- matrix(c(

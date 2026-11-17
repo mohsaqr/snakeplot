@@ -175,7 +175,11 @@ timeline_snake(career,
 Sorting items by their mean places similar items next to each other, and
 `arc_fill = "correlation"` prints the Pearson *r* between each pair of
 adjacent items at the U-turn that joins them. The arcs therefore show
-whether items with similar means also move together across respondents:
+whether items with similar means also move together across respondents.
+Because r is computed across respondents, it needs the raw responses, one
+row per respondent, as in `ema_emotions`; a table of counts does not record
+which respondent gave which answer, and `survey_snake()` refuses it for this
+fill:
 
 ```{r corr, fig.height = 7}
 survey_snake(ema_emotions, tick_shape = "line",
@@ -183,6 +187,9 @@ survey_snake(ema_emotions, tick_shape = "line",
              colors = snake_palette("berry", n = 5), level_labels = labs5,
              title = "Emotions — correlations at U-turns")
 ```
+
+Arcs take `arc_color` for a positive r and its complement for a negative
+r, darker as |r| grows.
 
 ## Dot plot with dark bands
 

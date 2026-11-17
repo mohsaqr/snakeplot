@@ -1,7 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^snake-plots-spec\.md$
-^.*\.png$
+^[^/]*\.png$
 ^LICENSE\.md$
 ^tmp$
 ^LEARNINGS\.md$
@@ -13,3 +13,6 @@
 ^cran-comments\.md$
 ^\.github$
 ^docs$
+^_pkgdown\.yml$
+^\.mini-ci$
+^\.ci$

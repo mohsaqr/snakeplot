@@ -141,13 +141,12 @@ describe("survey_snake()", {
     })
   })
 
-  it("arc_fill='correlation' preserves r labels", {
-    counts <- make_counts(4, 5)
+  it("arc_fill='correlation' draws r labels from raw responses", {
     expect_no_error({
       pdf(nullfile())
       on.exit(dev.off())
-      survey_snake(counts, paste0("Q", 1:4), as.character(1:5),
-                   arc_fill = "correlation", show_correlation = TRUE)
+      survey_snake(ema_emotions, arc_fill = "correlation",
+                   show_correlation = TRUE)
     })
   })
 
@@ -390,8 +389,7 @@ describe("survey_snake()", {
     pdf(nullfile())
     on.exit(dev.off())
     expect_no_error(
-      survey_snake(counts, paste0("Q", 1:4), as.character(1:5),
-                   arc_fill = "correlation",
+      survey_snake(ema_emotions, arc_fill = "correlation",
                    band_palette = c("#0a0a1a", "#1a1a3a"))
     )
     expect_no_error(

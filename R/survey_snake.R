@@ -4,7 +4,10 @@
 #' is shaded by item mean (warm = low, cool = high). Individual responses are
 #' shown as colored tick marks. With \code{arc_fill = "correlation"}, the
 #' Pearson correlation between adjacent items is printed at each U-turn, so
-#' items that move together can be read off the arcs.
+#' items that move together can be read off the arcs. The correlation is
+#' computed across respondents, so it requires raw responses (one row per
+#' respondent); a counts table does not record which respondent gave which
+#' answer.
 #'
 #' @param counts Input in one of four formats:
 #'
@@ -82,8 +85,12 @@
 #'   \describe{
 #'     \item{"none"}{(default) Two-tone split: upper half colored by the upper
 #'       band's mean shade, lower half by the lower band's mean shade.}
-#'     \item{"correlation"}{Brown/blue tint by correlation sign, opacity scaled
-#'       by |r|.}
+#'     \item{"correlation"}{Tint by correlation sign (\code{arc_color} for
+#'       positive r, its complement for negative r), darker for larger |r|.
+#'       r is the Pearson correlation between the two items across the
+#'       respondents who answered both. Requires raw responses; counts input
+#'       and the \code{var}/\code{day} (ESM) mode raise an error of class
+#'       \code{snakeplot_no_respondent_data}.}
 #'     \item{"mean_prev"}{Solid fill using the upper (preceding) band's mean
 #'       shade.}
 #'     \item{"blend"}{Solid fill: 50/50 RGB average of adjacent band shades.}
@@ -117,7 +124,12 @@
 #'   \code{y_center}, \code{y_top}, \code{y_bottom}, \code{x_left},
 #'   \code{x_right}, \code{direction}, \code{read_direction}), \code{arcs}
 #'   (a list with one element per U-turn), \code{canvas}, \code{plot_area},
-#'   \code{orientation}, \code{flow} and \code{params}. When
+#'   \code{orientation}, \code{flow} and \code{params}. With
+#'   \code{arc_fill = "correlation"} it also holds \code{correlations}, a
+#'   data.frame with one row per U-turn and columns \code{from}, \code{to}
+#'   (item names), \code{r} (Pearson correlation; \code{NA} when fewer than
+#'   three respondents answered both items or either is constant among them)
+#'   and \code{n} (respondents who answered both). When
 #'   \code{facet} is used, a named list of such objects, one per facet
 #'   group.
 #'
@@ -295,7 +307,7 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
         list(label = f_levels[j], color = f_colors[j], type = "tick")
       })
       if (show_correlation && arc_fill_m == "correlation") {
-        items <- c(items, list(list(label = "Profile r (curve)",
+        items <- c(items, list(list(label = "Item r (arc)",
                                     color = arc_color, type = "gradient")))
       }
       items <- c(items, list(list(label = "Low -> High mean",
@@ -333,6 +345,7 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
   counts  <- coerced$counts
   labels  <- coerced$labels
   levels  <- coerced$levels
+  scores  <- coerced$scores
 
   # Apply level_labels mapping for display
   if (!is.null(level_labels)) {
@@ -354,6 +367,21 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
   start_from  <- match.arg(start_from)
   arc_fill    <- match.arg(arc_fill)
   flow        <- match.arg(flow)
+
+  # A correlation needs each respondent's answers to both items; a counts
+  # table (or an ESM pivot, whose bands are days) has lost that pairing.
+  if (arc_fill == "correlation" && is.null(scores)) {
+    stop(errorCondition(
+      paste(
+        "`arc_fill = \"correlation\"` needs raw responses: a data frame with",
+        "one row per respondent and one column per item.",
+        "A counts table or a `var`/`day` (ESM) pivot does not record which",
+        "respondent gave which answer, so item correlations cannot be",
+        "computed from it."
+      ),
+      class = "snakeplot_no_respondent_data", call = NULL
+    ))
+  }
 
   n_items  <- nrow(counts)
   n_levels <- ncol(counts)
@@ -400,15 +428,7 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
   labels      <- labels[item_order]
   item_means  <- item_means[item_order]
   item_medians <- item_medians[item_order]
-
-  # Reconstruct raw data only when correlations are needed
-  raw_data <- if (arc_fill == "correlation") {
-    lapply(seq_len(n_items), function(i) {
-      rep(level_vals, counts[i, ])
-    })
-  } else {
-    NULL
-  }
+  if (!is.null(scores)) scores <- scores[, item_order, drop = FALSE]
 
   # Adjust margins for legend
   if (show_legend) margin["bottom"] <- margin["bottom"] + 15
@@ -463,23 +483,22 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
     }, logical(1))
   }
 
-  # Pre-compute adjacent correlations for correlation mode (need range)
-  arc_r_vals <- if (arc_fill == "correlation" && length(layout$arcs) > 0L) {
-    vapply(layout$arcs, function(a) {
-      i1 <- a$from + 1L
-      i2 <- a$to + 1L
-      n_min <- min(length(raw_data[[i1]]), length(raw_data[[i2]]))
-      if (n_min > 2L &&
-          stats::sd(raw_data[[i1]][seq_len(n_min)]) > 0 &&
-          stats::sd(raw_data[[i2]][seq_len(n_min)]) > 0) {
-        stats::cor(raw_data[[i1]][seq_len(n_min)],
-                   raw_data[[i2]][seq_len(n_min)])
-      } else {
-        NA_real_
-      }
-    }, numeric(1))
+  # Pre-compute adjacent correlations for correlation mode (need range).
+  # Computed from respondent-level scores: correlating counts-rebuilt
+  # vectors (sorted, pairing lost) gives r near +1 whatever the data.
+  correlations <- if (arc_fill == "correlation") {
+    .adjacent_correlations(
+      scores,
+      from = vapply(layout$arcs, function(a) a$from + 1L, integer(1)),
+      to   = vapply(layout$arcs, function(a) a$to + 1L, integer(1))
+    )
   } else {
+    NULL
+  }
+  arc_r_vals <- if (is.null(correlations)) {
     rep(NA_real_, length(layout$arcs))
+  } else {
+    correlations$r
   }
 
   # Arcs — fill style controlled by arc_fill
@@ -505,11 +524,11 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
 
       acol <- if (!is.na(r_val)) {
         # Positive r → arc_color, negative r → complementary
-        tint <- if (r_val >= 0) arc_color else { # nocov start
+        tint <- if (r_val >= 0) arc_color else {
           rgb_ac <- grDevices::col2rgb(arc_color)[, 1L]
           grDevices::rgb(255L - rgb_ac[1L], 255L - rgb_ac[2L],
                          255L - rgb_ac[3L], maxColorValue = 255)
-        } # nocov end
+        }
         # Blend absolute |r| (85%) with relative rank (15%)
         # so high-r arcs stay dark with mild differentiation
         abs_r <- abs(arc_r_vals)
@@ -712,8 +731,8 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
       list(label = levels[j], color = colors[j], type = "tick")
     })
     if (show_correlation && arc_fill == "correlation") {
-      items <- c(items, list(list(label = "Profile r (curve)",
-                                  color = "#8B4513", type = "gradient")))
+      items <- c(items, list(list(label = "Item r (arc)",
+                                  color = arc_color, type = "gradient")))
     }
     items <- c(items, list(list(label = "Low -> High mean",
                                 color = shade_by_value(3, 1, 5, palette = band_palette),
@@ -721,5 +740,6 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
     draw_snake_legend(layout, items, cex = legend_text_size)
   }
 
+  layout$correlations <- correlations
   invisible(layout)
 }
