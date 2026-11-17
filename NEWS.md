@@ -1,4 +1,4 @@
-# snakeplot 0.3.4
+# snakeplot 0.3.5
 
 ## Changes
 
@@ -21,6 +21,9 @@
   "Sep 2016"), and the `timestamp` mode of `survey_snake()` measured the
   time of day of a prompt answered shortly after midnight from the previous
   midnight, placing its tick beyond the end of the band.
+* `survey_snake()` restores the session's random number state on exit. It
+  still seeds its tick jitter with `seed` (default 42), so plots are
+  unchanged, but it no longer resets the caller's random number stream.
 
 ## Documentation
 

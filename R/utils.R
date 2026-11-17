@@ -462,6 +462,28 @@ coerce_survey_input <- function(counts, labels, levels) {
   as.Date(format(x, "%Y-%m-%d"))
 }
 
+#' Save the session's random number state
+#'
+#' Records \code{.Random.seed} (or its absence) so a function that seeds the
+#' generator can put the caller's state back with
+#' \code{on.exit(restore(), add = TRUE)}.
+#'
+#' @return A function of no arguments that restores the recorded state.
+#' @noRd
+.save_rng <- function() {
+  env <- globalenv()
+  had_seed <- exists(".Random.seed", envir = env, inherits = FALSE)
+  old_seed <- if (had_seed) get(".Random.seed", envir = env, inherits = FALSE)
+  function() {
+    if (had_seed) {
+      assign(".Random.seed", old_seed, envir = env)
+    } else if (exists(".Random.seed", envir = env, inherits = FALSE)) {
+      rm(".Random.seed", envir = env)
+    }
+    invisible(NULL)
+  }
+}
+
 #' Pearson correlations between adjacent items
 #'
 #' Correlates each pair of items joined by a U-turn, using the respondents

@@ -176,8 +176,8 @@ margins in plot units (default
 \item{background}{Background color (default \code{"white"}).}
 
 \item{seed}{Seed for the random placement of ticks within their zones
-(default 42). It is set with \code{\link[=set.seed]{set.seed()}}, which changes the random
-number stream of the session.}
+(default 42), so the same call draws the same plot. The session's
+random number state is restored when the function returns.}
 }
 \value{
 The plot is drawn on the current device. The function returns,
@@ -199,7 +199,7 @@ among them) and \code{n} (the number of those respondents). With other
 With \code{facet}, a named list of such objects, one per panel.
 }
 \description{
-A survey snake shows the distribution of responses to a set of rating
+A survey snake plot shows the distribution of responses to a set of rating
 items, one band per item, with consecutive items joined by U-turns so that
 a long instrument fits in one panel in its item order. Each band shows
 every response as a tick placed in the zone of its response level, the

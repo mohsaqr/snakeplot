@@ -92,7 +92,7 @@ one element per U-turn), \code{canvas} and \code{plot_area} (dimensions in plot
 units), \code{orientation}, \code{flow} and \code{params} (the sizes used).
 }
 \description{
-A line snake shows a continuous measurement, such as foot traffic or a
+A line snake plot shows a continuous measurement, such as foot traffic or a
 sensor reading, over many days. Each day is a band covering the same
 time-of-day window; within a band the height of the line encodes the
 value, and the line continues through the U-turn into the next day. The

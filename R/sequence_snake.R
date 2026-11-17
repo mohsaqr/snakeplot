@@ -1,7 +1,7 @@
 #' Plot a long state sequence as blocks along a serpentine path
 #'
 #' @description
-#' A sequence snake shows one long categorical sequence, such as the actions
+#' A sequence snake plot shows one long categorical sequence, such as the actions
 #' in a learning session or a person's daily states over months, as a row of
 #' colored blocks, one per position. The row is folded into bands joined by
 #' U-turns, and the blocks continue through the U-turns, so a sequence of

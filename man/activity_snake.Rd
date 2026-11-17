@@ -136,7 +136,7 @@ one element per U-turn), \code{canvas} and \code{plot_area} (dimensions in plot
 units), \code{orientation}, \code{flow} and \code{params} (the sizes used).
 }
 \description{
-An activity snake shows when events occur over many days. Each day is a
+An activity snake plot shows when events occur over many days. Each day is a
 band spanning the same time-of-day window, and consecutive days are joined
 by U-turns, so a long run of days fits in one panel while their order is
 kept. Events appear as thin ticks (instantaneous events) or as blocks whose
@@ -156,7 +156,7 @@ The display encodes the timing of events, not their values. For a
 continuous measurement through the day use \code{\link[=line_snake]{line_snake()}}; for a sequence
 of categorical states use \code{\link[=sequence_snake]{sequence_snake()}}; for ratings collected at each
 prompt use the \code{var}/\code{day} interface of \code{\link[=survey_snake]{survey_snake()}}. \code{\link[=facet_snake]{facet_snake()}}
-draws one activity snake per group.
+draws one activity snake plot per group.
 }
 \examples{
 # One participant's 69 prompts over 14 days of experience sampling

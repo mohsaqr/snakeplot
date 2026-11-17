@@ -1,7 +1,7 @@
 #' Plot survey responses as a serpentine band per item
 #'
 #' @description
-#' A survey snake shows the distribution of responses to a set of rating
+#' A survey snake plot shows the distribution of responses to a set of rating
 #' items, one band per item, with consecutive items joined by U-turns so that
 #' a long instrument fits in one panel in its item order. Each band shows
 #' every response as a tick placed in the zone of its response level, the
@@ -114,8 +114,8 @@
 #'   `c(top = 30, right = 10, bottom = 55, left = 100)`).
 #' @param background Background color (default `"white"`).
 #' @param seed Seed for the random placement of ticks within their zones
-#'   (default 42). It is set with [set.seed()], which changes the random
-#'   number stream of the session.
+#'   (default 42), so the same call draws the same plot. The session's
+#'   random number state is restored when the function returns.
 #'
 #' @return The plot is drawn on the current device. The function returns,
 #'   invisibly, an object of class `snake_layout`: a list describing the drawn
@@ -626,7 +626,11 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
   }
 
   # Tick marks — sorted by level so color bands are visible (low→high),
-  # then each level's ticks are shuffled within their proportional zone
+  # then each level's ticks are shuffled within their proportional zone.
+  # The seed makes the jitter reproducible; the caller's random number
+  # state is restored on exit.
+  restore_rng <- .save_rng()
+  on.exit(restore_rng(), add = TRUE)
   set.seed(seed)
   vapply(seq_len(n_items), function(k) {
     xl  <- bands$x_left[k]

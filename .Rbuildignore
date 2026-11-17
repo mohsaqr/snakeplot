@@ -9,7 +9,7 @@
 ^CHANGES\.md$
 ^data-raw$
 ^\.claude$
-^Rplots\.pdf$
+(^|/)Rplots\.pdf$
 ^cran-comments\.md$
 ^\.github$
 ^docs$
