@@ -4,11 +4,11 @@ Rating-scale items are usually summarized by a mean per item or by a
 stacked bar of response shares per item. Both lose information that
 matters when items are many: the mean hides the shape of the
 distribution, and a column of stacked bars soon outgrows the page. A
-survey snake gives each item a horizontal band, places every response in
-the band as a tick inside the zone of its response level, and folds the
-bands into a serpentine so that a long questionnaire, or a long run of
-study days, fits one panel. The band shading carries the item mean, so
-location and distribution are read together.
+survey snake plot gives each item a horizontal band, places every
+response in the band as a tick inside the zone of its response level,
+and folds the bands into a serpentine so that a long questionnaire, or a
+long run of study days, fits one panel. The band shading carries the
+item mean, so location and distribution are read together.
 
 This vignette covers the survey displays of the package:
 [`survey_snake()`](https://pak.dynasite.org/Snakeplot/reference/survey_snake.md)
@@ -89,8 +89,8 @@ Happy the highest, 3.6; no item mean reaches 4.
 ## Ordering the items
 
 Input order follows the questionnaire. Ordering by `sort_by = "mean"`
-places items of similar level next to each other, so the snake reads as
-a gradient from the least to the most endorsed item. `sort_by = "net"`
+places items of similar level next to each other, so the plot reads as a
+gradient from the least to the most endorsed item. `sort_by = "net"`
 orders by the share of responses above the scale midpoint minus the
 share below, which is the ordering used for diverging stacked bars
 (Heiberger & Robbins, 2014).

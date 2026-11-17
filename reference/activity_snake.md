@@ -1,7 +1,7 @@
 # Plot daily activity as a serpentine timeline of days
 
-An activity snake shows when events occur over many days. Each day is a
-band spanning the same time-of-day window, and consecutive days are
+An activity snake plot shows when events occur over many days. Each day
+is a band spanning the same time-of-day window, and consecutive days are
 joined by U-turns, so a long run of days fits in one panel while their
 order is kept. Events appear as thin ticks (instantaneous events) or as
 blocks whose width is the event's duration, which places daily rhythms,
@@ -24,7 +24,7 @@ for a sequence of categorical states use
 for ratings collected at each prompt use the `var`/`day` interface of
 [`survey_snake()`](https://pak.dynasite.org/Snakeplot/reference/survey_snake.md).
 [`facet_snake()`](https://pak.dynasite.org/Snakeplot/reference/facet_snake.md)
-draws one activity snake per group.
+draws one activity snake plot per group.
 
 ## Usage
 

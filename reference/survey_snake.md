@@ -1,12 +1,12 @@
 # Plot survey responses as a serpentine band per item
 
-A survey snake shows the distribution of responses to a set of rating
-items, one band per item, with consecutive items joined by U-turns so
-that a long instrument fits in one panel in its item order. Each band
-shows every response as a tick placed in the zone of its response level,
-the item mean as a diamond, and a shade running from warm (low mean) to
-cool (high mean). The display shows how responses are spread on each
-item and how the items compare.
+A survey snake plot shows the distribution of responses to a set of
+rating items, one band per item, with consecutive items joined by
+U-turns so that a long instrument fits in one panel in its item order.
+Each band shows every response as a tick placed in the zone of its
+response level, the item mean as a diamond, and a shade running from
+warm (low mean) to cool (high mean). The display shows how responses are
+spread on each item and how the items compare.
 
 `survey_snake()` accepts raw responses (one row per respondent, one
 column per item), a table of counts (one row per item, one column per
@@ -275,9 +275,8 @@ survey_snake(
 - seed:
 
   Seed for the random placement of ticks within their zones (default
-  42). It is set with
-  [`set.seed()`](https://rdrr.io/r/base/Random.html), which changes the
-  random number stream of the session.
+  42), so the same call draws the same plot. The session's random number
+  state is restored when the function returns.
 
 ## Value
 

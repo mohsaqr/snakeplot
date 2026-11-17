@@ -19,7 +19,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">snakeplot</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,11 +82,11 @@
 stacked bar of response shares per item. Both lose information that
 matters when items are many: the mean hides the shape of the
 distribution, and a column of stacked bars soon outgrows the page. A
-survey snake gives each item a horizontal band, places every response in
-the band as a tick inside the zone of its response level, and folds the
-bands into a serpentine so that a long questionnaire, or a long run of
-study days, fits one panel. The band shading carries the item mean, so
-location and distribution are read together.</p>
+survey snake plot gives each item a horizontal band, places every
+response in the band as a tick inside the zone of its response level,
+and folds the bands into a serpentine so that a long questionnaire, or a
+long run of study days, fits one panel. The band shading carries the
+item mean, so location and distribution are read together.</p>
 <p>This vignette covers the survey displays of the package:
 <code><a href="../reference/survey_snake.html">survey_snake()</a></code> for responses as ticks, dots or bars,
 <code><a href="../reference/survey_sequence.html">survey_sequence()</a></code> for response shares on a diverging scale,
@@ -162,7 +162,7 @@ middle of the scale on the positive ones. Angry has the lowest mean,
 </h2>
 <p>Input order follows the questionnaire. Ordering by
 <code>sort_by = "mean"</code> places items of similar level next to each
-other, so the snake reads as a gradient from the least to the most
+other, so the plot reads as a gradient from the least to the most
 endorsed item. <code>sort_by = "net"</code> orders by the share of
 responses above the scale midpoint minus the share below, which is the
 ordering used for diverging stacked bars (Heiberger &amp; Robbins,

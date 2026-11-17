@@ -1,10 +1,10 @@
 # Plot a timeline of phases as a serpentine of monthly blocks
 
-A timeline snake shows a succession of phases, such as the positions
-held in a career or the stages of a project, as colored blocks folded
-into bands joined by U-turns. With dated input each block is one month,
-so the length of a phase is proportional to its duration and a span of
-many years fits in one panel while its order is kept.
+A timeline snake plot shows a succession of phases, such as the
+positions held in a career or the stages of a project, as colored blocks
+folded into bands joined by U-turns. With dated input each block is one
+month, so the length of a phase is proportional to its duration and a
+span of many years fits in one panel while its order is kept.
 
 `timeline_snake()` takes a data frame with one row per phase (state,
 start date, end date) and builds the monthly sequence. It labels each
