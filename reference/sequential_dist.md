@@ -1,17 +1,19 @@
 # Plot unipolar survey responses as a serpentine of single-hue stacked bars
 
-Some rating scales have no neutral midpoint: frequency scales from
-"Never" to "Always", or intensity scales from "Not at all" to
-"Extremely". For such scales a diverging palette suggests a midpoint the
-scale does not have. `sequential_dist()` draws the display of
+`sequential_dist()` draws the survey sequence plot of
 [`survey_sequence()`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md),
 one 100% stacked bar per item along a serpentine, with a light-to-dark
 palette of a single hue, so that darker segments stand for higher
-levels.
+levels. It is meant for rating scales with no neutral midpoint:
+frequency scales from "Never" to "Always", or intensity scales from "Not
+at all" to "Extremely". For such scales a diverging palette suggests a
+midpoint the scale does not have.
 
 Input, sorting, labels and layout options are those of
 [`survey_sequence()`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md);
-`hue` sets the color of the palette. For bipolar (agree-disagree) scales
+`hue` sets the color of the palette. It returns the value of
+[`survey_sequence()`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md),
+a `snake_layout` object, invisibly. For bipolar (agree-disagree) scales
 use
 [`survey_sequence()`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md);
 to show individual responses use

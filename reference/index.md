@@ -54,7 +54,7 @@ One serpentine plot per group.
 The tables of a drawn plot’s layout.
 
 - [`as.data.frame(`*`<snake_layout>`*`)`](https://pak.dynasite.org/Snakeplot/reference/as.data.frame.snake_layout.md)
-  : Tables of a serpentine plot's layout
+  : Extract the tables of a serpentine plot's layout
 
 ## Palettes
 

@@ -1,9 +1,10 @@
-# Tables of a serpentine plot's layout
+# Extract the tables of a serpentine plot's layout
 
-The plot functions return their layout invisibly as a `snake_layout`
-object. [`as.data.frame()`](https://rdrr.io/r/base/as.data.frame.html)
-gives its tables: the geometry of the bands, the correlations printed at
-the U-turns, or the size of the canvas.
+[`as.data.frame()`](https://rdrr.io/r/base/as.data.frame.html) returns a
+table of a `snake_layout` object, chosen by `what`: the geometry of the
+bands, the correlations printed at the U-turns, or the size of the
+canvas. The plot functions return their layout invisibly as a
+`snake_layout` object.
 
 ## Usage
 

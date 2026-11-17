@@ -1,6 +1,7 @@
 # Person-level ratings of emotion, motivation, regulation and engagement
 
-Mean ratings of 34 items for the 280 university students of
+`student_survey` is a dataset of the mean ratings of 34 items for the
+280 university students of
 [ema_emotions](https://pak.dynasite.org/Snakeplot/reference/ema_emotions.md),
 from the same 14-day experience-sampling study (Neubauer & Schmiedek,
 2024). Each value is a student's mean rating of one item over all

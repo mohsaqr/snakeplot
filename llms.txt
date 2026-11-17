@@ -27,17 +27,19 @@
 
 ## Overview
 
-The `snakeplot` R package draws serpentine plots of long ordered data:
-survey responses item by item, experience sampling ratings day by day,
-categorical state sequences, timelines of phases, and time-stamped daily
-activity. The ordered axis is divided into segments drawn as horizontal
-bands, and consecutive bands are joined by U-turn arcs, so a long record
-fits one panel while its order is kept. Survey displays show the
-response distribution of each item as ticks, dots or stacked bars, with
-the item mean, optional median, and the correlation between adjacent
-items. Experience sampling data can be drawn with one band per study day
-and each prompt placed at its time of day. All plots use base R graphics
-and the package has no dependencies beyond those that ship with R.
+`snakeplot` draws serpentine plots of long ordered data: a questionnaire
+item by item, experience-sampling ratings day by day, categorical state
+sequences, timelines of phases, and time-stamped daily activity. The
+ordered axis is folded into horizontal bands joined by U-turn arcs, so a
+long record fits one panel with its order kept and neighbouring segments
+can be compared directly. A survey snake plot shows the response
+distribution of each item as ticks, dots or stacked bars, with the item
+mean, an optional median and the correlation between adjacent items; an
+activity snake plot gives each study day its own band and places each
+prompt at its time of day.
+
+All plots use base R graphics, and the package has no dependencies
+beyond those that ship with R.
 
 ## The serpentine layout
 
@@ -210,7 +212,7 @@ One serpentine plot per group.
 The tables of a drawn plot’s layout.
 
 - [`as.data.frame(`*`<snake_layout>`*`)`](https://pak.dynasite.org/Snakeplot/reference/as.data.frame.snake_layout.md)
-  : Tables of a serpentine plot's layout
+  : Extract the tables of a serpentine plot's layout
 
 ## Palettes
 

@@ -6,7 +6,8 @@ Each panel is drawn by FUN, by default activity_snake(), with the
 group value as its title.
 The panels are independent plots: each is scaled to its own data. The
 grid is set with par(mfrow) and the previous graphical parameters are
-restored afterwards.
+restored afterwards. It returns, invisibly, a list with the value FUN
+returned for each panel.
 To draw groups of items (columns) rather than groups of rows, use the
 facet argument of survey_snake()."><meta property="og:description" content="facet_snake() splits a data frame by a grouping column and draws one
 snake plot per group in a grid of panels, so that groups such as
@@ -15,7 +16,8 @@ Each panel is drawn by FUN, by default activity_snake(), with the
 group value as its title.
 The panels are independent plots: each is scaled to its own data. The
 grid is set with par(mfrow) and the previous graphical parameters are
-restored afterwards.
+restored afterwards. It returns, invisibly, a list with the value FUN
+returned for each panel.
 To draw groups of items (columns) rather than groups of rows, use the
 facet argument of survey_snake()."></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -25,7 +27,7 @@ facet argument of survey_snake()."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">snakeplot</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,7 +77,8 @@ Each panel is drawn by <code>FUN</code>, by default <code><a href="activity_snak
 group value as its title.</p>
 <p>The panels are independent plots: each is scaled to its own data. The
 grid is set with <code>par(mfrow)</code> and the previous graphical parameters are
-restored afterwards.</p>
+restored afterwards. It returns, invisibly, a list with the value <code>FUN</code>
+returned for each panel.</p>
 <p>To draw groups of items (columns) rather than groups of rows, use the
 <code>facet</code> argument of <code><a href="survey_snake.html">survey_snake()</a></code>.</p>
     </div>

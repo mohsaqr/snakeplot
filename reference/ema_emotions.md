@@ -1,11 +1,11 @@
 # Person-level emotion ratings from an experience-sampling study
 
-Mean ratings of ten emotions for 280 university students who took part
-in a 14-day experience-sampling study (Neubauer & Schmiedek, 2024). Each
-value is a student's mean rating of one emotion over all prompts,
-rounded to a whole number and rescaled from the original 1-7 scale to
-1-5 by `round(1 + (x - 1) * 4 / 6)`. Students without a mean on every
-item of
+`ema_emotions` is a dataset of the mean ratings of ten emotions for 280
+university students who took part in a 14-day experience-sampling study
+(Neubauer & Schmiedek, 2024). Each value is a student's mean rating of
+one emotion over all prompts, rounded to a whole number and rescaled
+from the original 1-7 scale to 1-5 by `round(1 + (x - 1) * 4 / 6)`.
+Students without a mean on every item of
 [student_survey](https://pak.dynasite.org/Snakeplot/reference/student_survey.md)
 were excluded.
 

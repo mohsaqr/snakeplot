@@ -1,17 +1,19 @@
 # Plot survey responses as a serpentine of stacked bars
 
-A survey sequence shows the distribution of responses to a set of rating
-items as one 100% stacked bar per item. The bars are the bands of a
-serpentine joined by U-turns, so a long instrument fits in one panel in
-its item order and the share of each response level can be compared
-between items. Heiberger and Robbins (2014) discuss the design of
-stacked bar charts for rating scales.
+`survey_sequence()` draws a survey sequence plot, which shows the
+distribution of responses to a set of rating items as one 100% stacked
+bar per item. The bars are the bands of a serpentine joined by U-turns,
+so a long instrument fits in one panel in its item order and the share
+of each response level can be compared between items. Heiberger and
+Robbins (2014) discuss the design of stacked bar charts for rating
+scales.
 
-`survey_sequence()` accepts raw responses or a table of counts. Segments
-are colored by response level, with a diverging palette by default, and
+The function accepts raw responses or a table of counts. Segments are
+colored by response level, with a diverging palette by default, and
 carry their percentage when wide enough. Items can be sorted by mean or
 by net agreement. Each U-turn takes the color midway between the levels
-at the two ends it joins, or a neutral grey.
+at the two ends it joins, or a neutral grey. It returns the layout
+invisibly as a `snake_layout` object.
 
 [`sequential_dist()`](https://pak.dynasite.org/Snakeplot/reference/sequential_dist.md)
 draws the same display with a single-hue palette for scales without a
