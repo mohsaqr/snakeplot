@@ -1,21 +1,22 @@
 #' Plot daily activity as a serpentine timeline of days
 #'
 #' @description
-#' An activity snake plot shows when events occur over many days. Each day is a
-#' band spanning the same time-of-day window, and consecutive days are joined
-#' by U-turns, so a long run of days fits in one panel while their order is
-#' kept. Events appear as thin ticks (instantaneous events) or as blocks whose
-#' width is the event's duration, which places daily rhythms, gaps and
-#' irregular days side by side for comparison.
+#' `activity_snake()` draws an activity snake plot, which shows when events
+#' occur over many days. Each day is a band spanning the same time-of-day
+#' window, and consecutive days are joined by U-turns, so a long run of days
+#' fits in one panel while their order is kept. Events appear as thin ticks
+#' (instantaneous events) or as blocks whose width is the event's duration,
+#' which places daily rhythms, gaps and irregular days side by side for
+#' comparison.
 #'
-#' `activity_snake()` takes event times as a vector of timestamps, a data
-#' frame of timestamps, or a data frame of day, start time and duration. It
-#' draws one band per day on a dark ribbon, with hourly gridlines, an hour
-#' axis, day labels carrying the day's total duration or number of events,
-#' and the clock time at each U-turn. Bands can alternate direction
+#' The function takes event times as a vector of timestamps, a data frame of
+#' timestamps, or a data frame of day, start time and duration. It draws one
+#' band per day on a dark ribbon, with hourly gridlines, an hour axis, day
+#' labels carrying the day's total duration or number of events, and the
+#' clock time at each U-turn. Bands can alternate direction
 #' (`flow = "snake"`) so that time runs on through each U-turn, or all read
 #' in the same direction (`flow = "natural"`); the layout can be horizontal
-#' or vertical.
+#' or vertical. It returns the layout invisibly as a `snake_layout` object.
 #'
 #' The display encodes the timing of events, not their values. For a
 #' continuous measurement through the day use [line_snake()]; for a sequence

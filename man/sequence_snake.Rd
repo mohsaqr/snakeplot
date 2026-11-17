@@ -151,21 +151,22 @@ The plot is drawn on the current device; the function returns
 \code{NULL} invisibly.
 }
 \description{
-A sequence snake plot shows one long categorical sequence, such as the actions
-in a learning session or a person's daily states over months, as a row of
-colored blocks, one per position. The row is folded into bands joined by
-U-turns, and the blocks continue through the U-turns, so a sequence of
-several hundred positions fits in one panel while the order of positions
-is kept. Runs, recurrences and changes of state can be followed along the
-path, as in a sequence index plot of a single sequence (Gabadinho et al.,
-2011).
+\code{sequence_snake()} draws a sequence snake plot, which shows one long
+categorical sequence, such as the actions in a learning session or a
+person's daily states over months, as a row of colored blocks, one per
+position. The row is folded into bands joined by U-turns, and the blocks
+continue through the U-turns, so a sequence of several hundred positions
+fits in one panel while the order of positions is kept. Runs, recurrences
+and changes of state can be followed along the path, as in a sequence
+index plot of a single sequence (Gabadinho et al., 2011).
 
-\code{sequence_snake()} accepts the sequence as a vector, a comma-separated
-string, a list, or a data frame whose first character or factor column
-holds the states. Blocks can carry position numbers, state names or other
-labels, and the path can be annotated with ruler ticks, a label for each
-band and labels at changes of state. With \code{style = "rug"} blocks become
-thin ticks on a light band, which keeps many positions legible.
+The function accepts the sequence as a vector, a comma-separated string, a
+list, or a data frame whose first character or factor column holds the
+states. Blocks can carry position numbers, state names or other labels,
+and the path can be annotated with ruler ticks, a label for each band and
+labels at changes of state. With \code{style = "rug"} blocks become thin ticks
+on a light band, which keeps many positions legible. The plot is drawn on
+the current device and \code{NULL} is returned invisibly.
 
 For many sequences at once use \code{\link[=multi_snake]{multi_snake()}}. For phases defined by start
 and end dates use \code{\link[=timeline_snake]{timeline_snake()}}, which builds the monthly sequence and

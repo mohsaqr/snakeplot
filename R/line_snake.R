@@ -1,19 +1,19 @@
 #' Plot a continuous series as a line through a serpentine of days
 #'
 #' @description
-#' A line snake plot shows a continuous measurement, such as foot traffic or a
-#' sensor reading, over many days. Each day is a band covering the same
-#' time-of-day window; within a band the height of the line encodes the
-#' value, and the line continues through the U-turn into the next day. The
-#' series stays unbroken while each day can be compared with the days above
-#' and below it.
+#' `line_snake()` draws a line snake plot, which shows a continuous
+#' measurement, such as foot traffic or a sensor reading, over many days.
+#' Each day is a band covering the same time-of-day window; within a band the
+#' height of the line encodes the value, and the line continues through the
+#' U-turn into the next day. The series stays unbroken while each day can be
+#' compared with the days above and below it.
 #'
-#' `line_snake()` takes a data frame of times and values, optionally with a
+#' The function takes a data frame of times and values, optionally with a
 #' day column, or a numeric vector drawn as one band of evenly spaced values.
 #' The value axis is shared by all bands and runs from the overall minimum to
-#' the overall maximum. An optional fill shades the area under the line. The
-#' interface of this function is experimental and may change in a later
-#' release.
+#' the overall maximum. An optional fill shades the area under the line. It
+#' returns the layout invisibly as a `snake_layout` object. The interface of
+#' this function is experimental and may change in a later release.
 #'
 #' For the timing of discrete events use [activity_snake()]; for categorical
 #' states use [sequence_snake()].

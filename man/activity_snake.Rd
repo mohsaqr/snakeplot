@@ -136,21 +136,22 @@ one element per U-turn), \code{canvas} and \code{plot_area} (dimensions in plot
 units), \code{orientation}, \code{flow} and \code{params} (the sizes used).
 }
 \description{
-An activity snake plot shows when events occur over many days. Each day is a
-band spanning the same time-of-day window, and consecutive days are joined
-by U-turns, so a long run of days fits in one panel while their order is
-kept. Events appear as thin ticks (instantaneous events) or as blocks whose
-width is the event's duration, which places daily rhythms, gaps and
-irregular days side by side for comparison.
+\code{activity_snake()} draws an activity snake plot, which shows when events
+occur over many days. Each day is a band spanning the same time-of-day
+window, and consecutive days are joined by U-turns, so a long run of days
+fits in one panel while their order is kept. Events appear as thin ticks
+(instantaneous events) or as blocks whose width is the event's duration,
+which places daily rhythms, gaps and irregular days side by side for
+comparison.
 
-\code{activity_snake()} takes event times as a vector of timestamps, a data
-frame of timestamps, or a data frame of day, start time and duration. It
-draws one band per day on a dark ribbon, with hourly gridlines, an hour
-axis, day labels carrying the day's total duration or number of events,
-and the clock time at each U-turn. Bands can alternate direction
+The function takes event times as a vector of timestamps, a data frame of
+timestamps, or a data frame of day, start time and duration. It draws one
+band per day on a dark ribbon, with hourly gridlines, an hour axis, day
+labels carrying the day's total duration or number of events, and the
+clock time at each U-turn. Bands can alternate direction
 (\code{flow = "snake"}) so that time runs on through each U-turn, or all read
 in the same direction (\code{flow = "natural"}); the layout can be horizontal
-or vertical.
+or vertical. It returns the layout invisibly as a \code{snake_layout} object.
 
 The display encodes the timing of events, not their values. For a
 continuous measurement through the day use \code{\link[=line_snake]{line_snake()}}; for a sequence

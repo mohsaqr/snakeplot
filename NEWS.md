@@ -1,4 +1,4 @@
-# snakeplot 0.3.5
+# snakeplot 0.3.6
 
 ## Changes
 

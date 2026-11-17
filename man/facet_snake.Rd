@@ -38,7 +38,8 @@ group value as its title.
 
 The panels are independent plots: each is scaled to its own data. The
 grid is set with \code{par(mfrow)} and the previous graphical parameters are
-restored afterwards.
+restored afterwards. It returns, invisibly, a list with the value \code{FUN}
+returned for each panel.
 
 To draw groups of items (columns) rather than groups of rows, use the
 \code{facet} argument of \code{\link[=survey_snake]{survey_snake()}}.

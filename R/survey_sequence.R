@@ -1,18 +1,19 @@
 #' Plot survey responses as a serpentine of stacked bars
 #'
 #' @description
-#' A survey sequence shows the distribution of responses to a set of rating
-#' items as one 100% stacked bar per item. The bars are the bands of a
-#' serpentine joined by U-turns, so a long instrument fits in one panel in
-#' its item order and the share of each response level can be compared
-#' between items. Heiberger and Robbins (2014) discuss the design of stacked
-#' bar charts for rating scales.
+#' `survey_sequence()` draws a survey sequence plot, which shows the
+#' distribution of responses to a set of rating items as one 100% stacked bar
+#' per item. The bars are the bands of a serpentine joined by U-turns, so a
+#' long instrument fits in one panel in its item order and the share of each
+#' response level can be compared between items. Heiberger and Robbins (2014)
+#' discuss the design of stacked bar charts for rating scales.
 #'
-#' `survey_sequence()` accepts raw responses or a table of counts. Segments
-#' are colored by response level, with a diverging palette by default, and
-#' carry their percentage when wide enough. Items can be sorted by mean or by
-#' net agreement. Each U-turn takes the color midway between the levels at
-#' the two ends it joins, or a neutral grey.
+#' The function accepts raw responses or a table of counts. Segments are
+#' colored by response level, with a diverging palette by default, and carry
+#' their percentage when wide enough. Items can be sorted by mean or by net
+#' agreement. Each U-turn takes the color midway between the levels at the
+#' two ends it joins, or a neutral grey. It returns the layout invisibly as a
+#' `snake_layout` object.
 #'
 #' [sequential_dist()] draws the same display with a single-hue palette for
 #' scales without a neutral midpoint. [survey_snake()] shows each response as
@@ -285,15 +286,17 @@ survey_sequence <- function(counts, labels = NULL, levels = NULL,
 #' Plot unipolar survey responses as a serpentine of single-hue stacked bars
 #'
 #' @description
-#' Some rating scales have no neutral midpoint: frequency scales from "Never"
-#' to "Always", or intensity scales from "Not at all" to "Extremely". For
-#' such scales a diverging palette suggests a midpoint the scale does not
-#' have. `sequential_dist()` draws the display of [survey_sequence()], one
-#' 100% stacked bar per item along a serpentine, with a light-to-dark palette
-#' of a single hue, so that darker segments stand for higher levels.
+#' `sequential_dist()` draws the survey sequence plot of [survey_sequence()],
+#' one 100% stacked bar per item along a serpentine, with a light-to-dark
+#' palette of a single hue, so that darker segments stand for higher levels.
+#' It is meant for rating scales with no neutral midpoint: frequency scales
+#' from "Never" to "Always", or intensity scales from "Not at all" to
+#' "Extremely". For such scales a diverging palette suggests a midpoint the
+#' scale does not have.
 #'
 #' Input, sorting, labels and layout options are those of
-#' [survey_sequence()]; `hue` sets the color of the palette. For bipolar
+#' [survey_sequence()]; `hue` sets the color of the palette. It returns the
+#' value of [survey_sequence()], a `snake_layout` object, invisibly. For bipolar
 #' (agree-disagree) scales use [survey_sequence()]; to show individual
 #' responses use [survey_snake()].
 #'

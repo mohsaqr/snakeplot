@@ -110,18 +110,19 @@ with one element per U-turn), \code{canvas} and \code{plot_area} (dimensions in
 plot units), \code{orientation}, \code{flow} and \code{params} (the sizes used).
 }
 \description{
-A survey sequence shows the distribution of responses to a set of rating
-items as one 100\% stacked bar per item. The bars are the bands of a
-serpentine joined by U-turns, so a long instrument fits in one panel in
-its item order and the share of each response level can be compared
-between items. Heiberger and Robbins (2014) discuss the design of stacked
-bar charts for rating scales.
+\code{survey_sequence()} draws a survey sequence plot, which shows the
+distribution of responses to a set of rating items as one 100\% stacked bar
+per item. The bars are the bands of a serpentine joined by U-turns, so a
+long instrument fits in one panel in its item order and the share of each
+response level can be compared between items. Heiberger and Robbins (2014)
+discuss the design of stacked bar charts for rating scales.
 
-\code{survey_sequence()} accepts raw responses or a table of counts. Segments
-are colored by response level, with a diverging palette by default, and
-carry their percentage when wide enough. Items can be sorted by mean or by
-net agreement. Each U-turn takes the color midway between the levels at
-the two ends it joins, or a neutral grey.
+The function accepts raw responses or a table of counts. Segments are
+colored by response level, with a diverging palette by default, and carry
+their percentage when wide enough. Items can be sorted by mean or by net
+agreement. Each U-turn takes the color midway between the levels at the
+two ends it joins, or a neutral grey. It returns the layout invisibly as a
+\code{snake_layout} object.
 
 \code{\link[=sequential_dist]{sequential_dist()}} draws the same display with a single-hue palette for
 scales without a neutral midpoint. \code{\link[=survey_snake]{survey_snake()}} shows each response as

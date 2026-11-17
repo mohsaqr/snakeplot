@@ -1,19 +1,21 @@
 #' Plot a timeline of phases as a serpentine of monthly blocks
 #'
 #' @description
-#' A timeline snake plot shows a succession of phases, such as the positions held
-#' in a career or the stages of a project, as colored blocks folded into
-#' bands joined by U-turns. With dated input each block is one month, so the
-#' length of a phase is proportional to its duration and a span of many years
-#' fits in one panel while its order is kept.
+#' `timeline_snake()` draws a timeline snake plot, which shows a succession
+#' of phases, such as the positions held in a career or the stages of a
+#' project, as colored blocks folded into bands joined by U-turns. With dated
+#' input each block is one month, so the length of a phase is proportional to
+#' its duration and a span of many years fits in one panel while its order
+#' is kept.
 #'
-#' `timeline_snake()` takes a data frame with one row per phase (state, start
+#' The function takes a data frame with one row per phase (state, start
 #' date, end date) and builds the monthly sequence. It labels each change of
 #' phase with its start month, labels each band with the year at its middle,
 #' and prints the state names inside the phases. A vector of states, one per
 #' time unit, is drawn as given. Colors default to a light-to-dark blue ramp
 #' in phase order. The drawing is done by [sequence_snake()], and its display
-#' options can be passed here.
+#' options can be passed here. The plot is drawn on the current device and
+#' `NULL` is returned invisibly.
 #'
 #' For an undated sequence of many short events use [sequence_snake()]; for
 #' many sequences use [multi_snake()].

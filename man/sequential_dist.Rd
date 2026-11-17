@@ -107,15 +107,17 @@ The value of \code{\link[=survey_sequence]{survey_sequence()}}: the plot is draw
 device and an object of class \code{snake_layout} is returned invisibly.
 }
 \description{
-Some rating scales have no neutral midpoint: frequency scales from "Never"
-to "Always", or intensity scales from "Not at all" to "Extremely". For
-such scales a diverging palette suggests a midpoint the scale does not
-have. \code{sequential_dist()} draws the display of \code{\link[=survey_sequence]{survey_sequence()}}, one
-100\% stacked bar per item along a serpentine, with a light-to-dark palette
-of a single hue, so that darker segments stand for higher levels.
+\code{sequential_dist()} draws the survey sequence plot of \code{\link[=survey_sequence]{survey_sequence()}},
+one 100\% stacked bar per item along a serpentine, with a light-to-dark
+palette of a single hue, so that darker segments stand for higher levels.
+It is meant for rating scales with no neutral midpoint: frequency scales
+from "Never" to "Always", or intensity scales from "Not at all" to
+"Extremely". For such scales a diverging palette suggests a midpoint the
+scale does not have.
 
 Input, sorting, labels and layout options are those of
-\code{\link[=survey_sequence]{survey_sequence()}}; \code{hue} sets the color of the palette. For bipolar
+\code{\link[=survey_sequence]{survey_sequence()}}; \code{hue} sets the color of the palette. It returns the
+value of \code{\link[=survey_sequence]{survey_sequence()}}, a \code{snake_layout} object, invisibly. For bipolar
 (agree-disagree) scales use \code{\link[=survey_sequence]{survey_sequence()}}; to show individual
 responses use \code{\link[=survey_snake]{survey_snake()}}.
 }

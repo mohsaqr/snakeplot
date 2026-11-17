@@ -295,12 +295,13 @@ end_cap_polygon <- function(x, y, radius, side = "left", n_pts = 40L) {
   }
 }
 
-#' Tables of a serpentine plot's layout
+#' Extract the tables of a serpentine plot's layout
 #'
 #' @description
-#' The plot functions return their layout invisibly as a `snake_layout`
-#' object. `as.data.frame()` gives its tables: the geometry of the bands, the
-#' correlations printed at the U-turns, or the size of the canvas.
+#' `as.data.frame()` returns a table of a `snake_layout` object, chosen by
+#' `what`: the geometry of the bands, the correlations printed at the
+#' U-turns, or the size of the canvas. The plot functions return their layout
+#' invisibly as a `snake_layout` object.
 #'
 #' @param x A `snake_layout`, as returned by [survey_snake()],
 #'   [survey_sequence()], [sequential_dist()], [activity_snake()] or

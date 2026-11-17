@@ -1,6 +1,6 @@
 Package: snakeplot
 Title: Serpentine Plots for Long Timeline, Sequential and Survey Data
-Version: 0.3.5
+Version: 0.3.6
 Authors@R: c(
     person("Mohammed", "Saqr", email = "saqr@saqr.me",
            role = c("aut", "cre", "cph")),

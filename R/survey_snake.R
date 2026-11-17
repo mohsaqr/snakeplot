@@ -1,15 +1,15 @@
 #' Plot survey responses as a serpentine band per item
 #'
 #' @description
-#' A survey snake plot shows the distribution of responses to a set of rating
-#' items, one band per item, with consecutive items joined by U-turns so that
-#' a long instrument fits in one panel in its item order. Each band shows
-#' every response as a tick placed in the zone of its response level, the
-#' item mean as a diamond, and a shade running from warm (low mean) to cool
-#' (high mean). The display shows how responses are spread on each item and
-#' how the items compare.
+#' `survey_snake()` draws a survey snake plot, which shows the distribution of
+#' responses to a set of rating items, one band per item, with consecutive
+#' items joined by U-turns so that a long instrument fits in one panel in its
+#' item order. Each band shows every response as a tick placed in the zone of
+#' its response level, the item mean as a diamond, and a shade running from
+#' warm (low mean) to cool (high mean). The display shows how responses are
+#' spread on each item and how the items compare.
 #'
-#' `survey_snake()` accepts raw responses (one row per respondent, one column
+#' The function accepts raw responses (one row per respondent, one column
 #' per item), a table of counts (one row per item, one column per response
 #' level), or experience-sampling data in long format, where `var` and `day`
 #' make each day a band and `timestamp` places each response at its time of
@@ -17,7 +17,9 @@
 #' percentages. The U-turns can carry the Pearson correlation between the two
 #' items they join (`arc_fill = "correlation"`); this needs raw responses,
 #' because a table of counts does not record which respondent gave which
-#' answer. With `facet`, groups of items are drawn as separate panels.
+#' answer. With `facet`, groups of items are drawn as separate panels. It
+#' returns the layout invisibly as a `snake_layout` object, or a list of them
+#' with `facet`.
 #'
 #' For a compact 100% stacked bar per item use [survey_sequence()], or
 #' [sequential_dist()] for scales without a neutral midpoint. Palettes for

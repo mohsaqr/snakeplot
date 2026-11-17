@@ -6,7 +6,7 @@
 \alias{snakeplot-package}
 \title{snakeplot: Serpentine Plots for Long Timeline, Sequential and Survey Data}
 \description{
-\pkg{snakeplot} draws serpentine ("snake") plots: displays in which a long
+\code{snakeplot} draws serpentine ("snake") plots: displays in which a long
 ordered axis (days, time points, positions in a sequence or items of a
 questionnaire) is folded into parallel bands joined by U-turns. The whole
 axis fits in one panel, its order is kept, and neighbouring bands can be

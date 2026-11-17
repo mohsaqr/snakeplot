@@ -9,12 +9,12 @@
 #' Person-level emotion ratings from an experience-sampling study
 #'
 #' @description
-#' Mean ratings of ten emotions for 280 university students who took part in
-#' a 14-day experience-sampling study (Neubauer & Schmiedek, 2024). Each
-#' value is a student's mean rating of one emotion over all prompts, rounded
-#' to a whole number and rescaled from the original 1-7 scale to 1-5 by
-#' `round(1 + (x - 1) * 4 / 6)`. Students without a mean on every item of
-#' [student_survey] were excluded.
+#' `ema_emotions` is a dataset of the mean ratings of ten emotions for 280
+#' university students who took part in a 14-day experience-sampling study
+#' (Neubauer & Schmiedek, 2024). Each value is a student's mean rating of one
+#' emotion over all prompts, rounded to a whole number and rescaled from the
+#' original 1-7 scale to 1-5 by `round(1 + (x - 1) * 4 / 6)`. Students without a
+#' mean on every item of [student_survey] were excluded.
 #'
 #' The data have one row per student and one column per emotion, the raw
 #' response format read by [survey_snake()], [survey_sequence()] and
@@ -48,11 +48,11 @@
 #' Person-level ratings of emotion, motivation, regulation and engagement
 #'
 #' @description
-#' Mean ratings of 34 items for the 280 university students of
-#' [ema_emotions], from the same 14-day experience-sampling study (Neubauer &
-#' Schmiedek, 2024). Each value is a student's mean rating of one item over
-#' all prompts, rounded to a whole number and rescaled from 1-7 to 1-5 by
-#' `round(1 + (x - 1) * 4 / 6)`.
+#' `student_survey` is a dataset of the mean ratings of 34 items for the 280
+#' university students of [ema_emotions], from the same 14-day
+#' experience-sampling study (Neubauer & Schmiedek, 2024). Each value is a
+#' student's mean rating of one item over all prompts, rounded to a whole number
+#' and rescaled from 1-7 to 1-5 by `round(1 + (x - 1) * 4 / 6)`.
 #'
 #' The items belong to four constructs, marked by a column-name prefix, so
 #' that `survey_snake(student_survey, facet = TRUE)` draws one panel per
@@ -92,12 +92,12 @@
 #' Prompt-level happiness and anger ratings from an experience-sampling study
 #'
 #' @description
-#' All 11,474 answered prompts ("beeps") from a 14-day experience-sampling
-#' study of 321 university students (Neubauer & Schmiedek, 2024). Each row is
-#' one prompt with the participant, the study day, the time of the prompt and
-#' the ratings of happiness and anger, rescaled from 1-7 to 1-5 by
-#' `round(1 + (x - 1) * 4 / 6)`. Participants answered between 1 and 69
-#' prompts; the 14 study days of one participant need not be consecutive
+#' `ema_beeps` is a dataset of all 11,474 answered prompts ("beeps") from a
+#' 14-day experience-sampling study of 321 university students (Neubauer &
+#' Schmiedek, 2024). Each row is one prompt with the participant, the study day,
+#' the time of the prompt and the ratings of happiness and anger, rescaled from
+#' 1-7 to 1-5 by `round(1 + (x - 1) * 4 / 6)`. Participants answered between 1
+#' and 69 prompts; the 14 study days of one participant need not be consecutive
 #' calendar days.
 #'
 #' The data are in long format. With the `var`, `day` and `timestamp`

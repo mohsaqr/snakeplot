@@ -22,11 +22,11 @@ License: CC-BY 4.0
 student_survey
 }
 \description{
-Mean ratings of 34 items for the 280 university students of
-\link{ema_emotions}, from the same 14-day experience-sampling study (Neubauer &
-Schmiedek, 2024). Each value is a student's mean rating of one item over
-all prompts, rounded to a whole number and rescaled from 1-7 to 1-5 by
-\code{round(1 + (x - 1) * 4 / 6)}.
+\code{student_survey} is a dataset of the mean ratings of 34 items for the 280
+university students of \link{ema_emotions}, from the same 14-day
+experience-sampling study (Neubauer & Schmiedek, 2024). Each value is a
+student's mean rating of one item over all prompts, rounded to a whole number
+and rescaled from 1-7 to 1-5 by \code{round(1 + (x - 1) * 4 / 6)}.
 
 The items belong to four constructs, marked by a column-name prefix, so
 that \code{survey_snake(student_survey, facet = TRUE)} draws one panel per

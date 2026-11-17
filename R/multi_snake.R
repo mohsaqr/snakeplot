@@ -1,11 +1,11 @@
 #' Plot many state sequences as a serpentine index or distribution plot
 #'
 #' @description
-#' A multi-sequence snake displays a set of categorical sequences, such as
-#' the weekly activity states of a class of students, with their common time
-#' axis folded into bands joined by U-turns. Each time point is a block along
-#' the serpentine path, so long sequences fit in one panel while the order of
-#' time points is kept.
+#' `multi_snake()` draws a multi-sequence snake plot, which shows a set of
+#' categorical sequences, such as the weekly activity states of a class of
+#' students, with their common time axis folded into bands joined by U-turns.
+#' Each time point is a block along the serpentine path, so long sequences
+#' fit in one panel while the order of time points is kept.
 #'
 #' Two displays are available. With `type = "index"` each block holds one
 #' thin tick per sequence, colored by that sequence's state at the time
@@ -15,7 +15,8 @@
 #' sequences in each state at that time point, as in a state distribution
 #' plot (Gabadinho et al., 2011). The U-turns are neutral connectors: time
 #' points that fall on a U-turn are not drawn, and the label of each band
-#' gives the range of time points it shows.
+#' gives the range of time points it shows. The plot is drawn on the current
+#' device and `NULL` is returned invisibly.
 #'
 #' For a single long sequence use [sequence_snake()]; for phases with start
 #' and end dates use [timeline_snake()]. Distributions of ordinal survey

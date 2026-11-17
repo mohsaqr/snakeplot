@@ -9,7 +9,8 @@
 #'
 #' The panels are independent plots: each is scaled to its own data. The
 #' grid is set with `par(mfrow)` and the previous graphical parameters are
-#' restored afterwards.
+#' restored afterwards. It returns, invisibly, a list with the value `FUN`
+#' returned for each panel.
 #'
 #' To draw groups of items (columns) rather than groups of rows, use the
 #' `facet` argument of [survey_snake()].

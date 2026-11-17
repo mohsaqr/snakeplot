@@ -92,19 +92,19 @@ one element per U-turn), \code{canvas} and \code{plot_area} (dimensions in plot
 units), \code{orientation}, \code{flow} and \code{params} (the sizes used).
 }
 \description{
-A line snake plot shows a continuous measurement, such as foot traffic or a
-sensor reading, over many days. Each day is a band covering the same
-time-of-day window; within a band the height of the line encodes the
-value, and the line continues through the U-turn into the next day. The
-series stays unbroken while each day can be compared with the days above
-and below it.
+\code{line_snake()} draws a line snake plot, which shows a continuous
+measurement, such as foot traffic or a sensor reading, over many days.
+Each day is a band covering the same time-of-day window; within a band the
+height of the line encodes the value, and the line continues through the
+U-turn into the next day. The series stays unbroken while each day can be
+compared with the days above and below it.
 
-\code{line_snake()} takes a data frame of times and values, optionally with a
+The function takes a data frame of times and values, optionally with a
 day column, or a numeric vector drawn as one band of evenly spaced values.
 The value axis is shared by all bands and runs from the overall minimum to
-the overall maximum. An optional fill shades the area under the line. The
-interface of this function is experimental and may change in a later
-release.
+the overall maximum. An optional fill shades the area under the line. It
+returns the layout invisibly as a \code{snake_layout} object. The interface of
+this function is experimental and may change in a later release.
 
 For the timing of discrete events use \code{\link[=activity_snake]{activity_snake()}}; for categorical
 states use \code{\link[=sequence_snake]{sequence_snake()}}.

@@ -29,12 +29,12 @@ License: CC-BY 4.0
 ema_beeps
 }
 \description{
-All 11,474 answered prompts ("beeps") from a 14-day experience-sampling
-study of 321 university students (Neubauer & Schmiedek, 2024). Each row is
-one prompt with the participant, the study day, the time of the prompt and
-the ratings of happiness and anger, rescaled from 1-7 to 1-5 by
-\code{round(1 + (x - 1) * 4 / 6)}. Participants answered between 1 and 69
-prompts; the 14 study days of one participant need not be consecutive
+\code{ema_beeps} is a dataset of all 11,474 answered prompts ("beeps") from a
+14-day experience-sampling study of 321 university students (Neubauer &
+Schmiedek, 2024). Each row is one prompt with the participant, the study day,
+the time of the prompt and the ratings of happiness and anger, rescaled from
+1-7 to 1-5 by \code{round(1 + (x - 1) * 4 / 6)}. Participants answered between 1
+and 69 prompts; the 14 study days of one participant need not be consecutive
 calendar days.
 
 The data are in long format. With the \code{var}, \code{day} and \code{timestamp}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/layout.R
 \name{as.data.frame.snake_layout}
 \alias{as.data.frame.snake_layout}
-\title{Tables of a serpentine plot's layout}
+\title{Extract the tables of a serpentine plot's layout}
 \usage{
 \method{as.data.frame}{snake_layout}(
   x,
@@ -42,9 +42,10 @@ plot units.
 }
 }
 \description{
-The plot functions return their layout invisibly as a \code{snake_layout}
-object. \code{as.data.frame()} gives its tables: the geometry of the bands, the
-correlations printed at the U-turns, or the size of the canvas.
+\code{as.data.frame()} returns a table of a \code{snake_layout} object, chosen by
+\code{what}: the geometry of the bands, the correlations printed at the
+U-turns, or the size of the canvas. The plot functions return their layout
+invisibly as a \code{snake_layout} object.
 }
 \section{Conditions}{
 
