@@ -3,11 +3,11 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">snakeplot</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,9 +15,27 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
-      </ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/mohsaqr/snakeplot"><span class="fa fab fa-github"></span></a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/snakeplot.html">Get started</a></li>
+<li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Vignettes</h6></li>
+    <li><a class="dropdown-item" href="../articles/survey-responses.html">Survey and experience sampling responses</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Guides</h6></li>
+    <li><a class="dropdown-item" href="../articles/sequences.html">Categorical sequences and timelines</a></li>
+    <li><a class="dropdown-item" href="../articles/activity.html">Daily activity and continuous signals</a></li>
+    <li><a class="dropdown-item" href="../articles/palettes-and-layout.html">Palettes, reading order and layout</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Case studies</h6></li>
+    <li><a class="dropdown-item" href="../articles/case-daily-emotions.html">Case study: daily emotions over fourteen days</a></li>
+    <li><a class="dropdown-item" href="../articles/case-student-survey.html">Case study: a multi-construct student survey</a></li>
+  </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
+      </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/mohsaqr/snakeplot/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -30,9 +48,85 @@
     </div>
 
     <div class="section level2">
-      <h2 id="core-plot-functions">Core plot functions<a class="anchor" aria-label="anchor" href="#core-plot-functions"></a></h2>
+      <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a></h2>
 
 
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="snakeplot-package.html">snakeplot</a></code> <code><a href="snakeplot-package.html">snakeplot-package</a></code>
+
+        </dt>
+        <dd>snakeplot: Serpentine Plots for Long Timeline, Sequential and Survey Data</dd>
+      </dl></div><div class="section level2">
+      <h2 id="survey-and-experience-sampling-responses">Survey and experience sampling responses<a class="anchor" aria-label="anchor" href="#survey-and-experience-sampling-responses"></a></h2>
+
+      <div class="section-desc"><p>One band per item, or one band per study day for beep-level ratings; responses as ticks, dots or stacked bars.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="survey_snake.html">survey_snake()</a></code>
+
+        </dt>
+        <dd>Plot survey responses as a serpentine band per item</dd>
+
+        <dt>
+
+          <code><a href="survey_sequence.html">survey_sequence()</a></code>
+
+        </dt>
+        <dd>Plot survey responses as a serpentine of stacked bars</dd>
+
+        <dt>
+
+          <code><a href="sequential_dist.html">sequential_dist()</a></code>
+
+        </dt>
+        <dd>Plot unipolar survey responses as a serpentine of single-hue stacked bars</dd>
+      </dl></div><div class="section level2">
+      <h2 id="sequences-and-timelines">Sequences and timelines<a class="anchor" aria-label="anchor" href="#sequences-and-timelines"></a></h2>
+
+      <div class="section-desc"><p>Ordered categorical states, several sequences at once, and phases with start and end dates.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="sequence_snake.html">sequence_snake()</a></code>
+
+        </dt>
+        <dd>Plot a long state sequence as blocks along a serpentine path</dd>
+
+        <dt>
+
+          <code><a href="multi_snake.html">multi_snake()</a></code>
+
+        </dt>
+        <dd>Plot many state sequences as a serpentine index or distribution plot</dd>
+
+        <dt>
+
+          <code><a href="timeline_snake.html">timeline_snake()</a></code>
+
+        </dt>
+        <dd>Plot a timeline of phases as a serpentine of monthly blocks</dd>
+      </dl></div><div class="section level2">
+      <h2 id="daily-activity">Daily activity<a class="anchor" aria-label="anchor" href="#daily-activity"></a></h2>
+
+      <div class="section-desc"><p>Time-stamped events and continuous signals on a daily clock, one band per day.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -44,67 +138,50 @@
           <code><a href="activity_snake.html">activity_snake()</a></code>
 
         </dt>
-        <dd>Activity Snake Plot</dd>
+        <dd>Plot daily activity as a serpentine timeline of days</dd>
 
         <dt>
 
           <code><a href="line_snake.html">line_snake()</a></code>
 
         </dt>
-        <dd>Line Snake Plot (Experimental)</dd>
+        <dd>Plot a continuous series as a line through a serpentine of days</dd>
+      </dl></div><div class="section level2">
+      <h2 id="panels">Panels<a class="anchor" aria-label="anchor" href="#panels"></a></h2>
 
-        <dt>
+      <div class="section-desc"><p>One serpentine plot per group.</p></div>
 
-          <code><a href="multi_snake.html">multi_snake()</a></code>
+      <dl></dl></div><div class="section level2">
 
-        </dt>
-        <dd>Multi-Sequence Snake Plot</dd>
 
-        <dt>
 
-          <code><a href="sequence_snake.html">sequence_snake()</a></code>
 
-        </dt>
-        <dd>Sequence Index Snake Plot</dd>
-
-        <dt>
+      <dl><dt>
 
           <code><a href="facet_snake.html">facet_snake()</a></code>
 
         </dt>
-        <dd>Faceted Snake Plot</dd>
+        <dd>Draw one snake plot per group in a grid of panels</dd>
+      </dl></div><div class="section level2">
+      <h2 id="results">Results<a class="anchor" aria-label="anchor" href="#results"></a></h2>
 
-        <dt>
+      <div class="section-desc"><p>The tables of a drawn plot’s layout.</p></div>
 
-          <code><a href="survey_snake.html">survey_snake()</a></code>
+      <dl></dl></div><div class="section level2">
 
-        </dt>
-        <dd>Survey Snake Plot</dd>
 
-        <dt>
 
-          <code><a href="timeline_snake.html">timeline_snake()</a></code>
 
-        </dt>
-        <dd>Timeline Snake Plot</dd>
+      <dl><dt>
 
-        <dt>
-
-          <code><a href="survey_sequence.html">survey_sequence()</a></code>
+          <code><a href="as.data.frame.snake_layout.html">as.data.frame(<i>&lt;snake_layout&gt;</i>)</a></code>
 
         </dt>
-        <dd>Survey Sequence Plot</dd>
-
-        <dt>
-
-          <code><a href="sequential_dist.html">sequential_dist()</a></code>
-
-        </dt>
-        <dd>Sequential Distribution Plot</dd>
+        <dd>Tables of a serpentine plot's layout</dd>
       </dl></div><div class="section level2">
       <h2 id="palettes">Palettes<a class="anchor" aria-label="anchor" href="#palettes"></a></h2>
 
-
+      <div class="section-desc"><p>Diverging and sequential colors, interpolated to the number of levels.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -116,18 +193,18 @@
           <code><a href="snake_palette.html">snake_palette()</a></code>
 
         </dt>
-        <dd>Get a Snake Plot Palette</dd>
+        <dd>Get a built-in palette for snake plots</dd>
 
         <dt>
 
           <code><a href="snake_palettes.html">snake_palettes</a></code>
 
         </dt>
-        <dd>Built-in Color Palettes</dd>
+        <dd>Built-in color palettes for snake plots</dd>
       </dl></div><div class="section level2">
-      <h2 id="datasets">Datasets<a class="anchor" aria-label="anchor" href="#datasets"></a></h2>
+      <h2 id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a></h2>
 
-
+      <div class="section-desc"><p>A 14-day experience sampling study of university students.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -136,31 +213,31 @@
 
       <dl><dt>
 
-          <code><a href="ema_beeps.html">ema_beeps</a></code>
-
-        </dt>
-        <dd>EMA Beep-Level Data (Daily Emotions)</dd>
-
-        <dt>
-
           <code><a href="ema_emotions.html">ema_emotions</a></code>
 
         </dt>
-        <dd>EMA Emotion Ratings (Person-Level)</dd>
+        <dd>Person-level emotion ratings from an experience-sampling study</dd>
 
         <dt>
 
           <code><a href="student_survey.html">student_survey</a></code>
 
         </dt>
-        <dd>Student Survey (Cross-Sectional, Multi-Construct)</dd>
+        <dd>Person-level ratings of emotion, motivation, regulation and engagement</dd>
+
+        <dt>
+
+          <code><a href="ema_beeps.html">ema_beeps</a></code>
+
+        </dt>
+        <dd>Prompt-level happiness and anger ratings from an experience-sampling study</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Mohammed Saqr, Sonsoles Lopez-Pernas.</p>
+  <p>Developed by <a href="https://saqr.me" class="external-link">Mohammed Saqr</a>, <a href="https://sonsoles.me" class="external-link">Sonsoles Lopez-Pernas</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">

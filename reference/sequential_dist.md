@@ -1,10 +1,21 @@
-# Sequential Distribution Plot
+# Plot unipolar survey responses as a serpentine of single-hue stacked bars
 
-Like
-[`survey_sequence`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md)
-but uses a sequential (monochrome) palette instead of diverging colors.
-Suitable for ordinal scales without a natural midpoint (e.g., "Never" to
-"Always").
+Some rating scales have no neutral midpoint: frequency scales from
+"Never" to "Always", or intensity scales from "Not at all" to
+"Extremely". For such scales a diverging palette suggests a midpoint the
+scale does not have. `sequential_dist()` draws the display of
+[`survey_sequence()`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md),
+one 100% stacked bar per item along a serpentine, with a light-to-dark
+palette of a single hue, so that darker segments stand for higher
+levels.
+
+Input, sorting, labels and layout options are those of
+[`survey_sequence()`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md);
+`hue` sets the color of the palette. For bipolar (agree-disagree) scales
+use
+[`survey_sequence()`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md);
+to show individual responses use
+[`survey_snake()`](https://pak.dynasite.org/Snakeplot/reference/survey_snake.md).
 
 ## Usage
 
@@ -41,132 +52,158 @@ sequential_dist(
 
 - counts:
 
-  Response data in one of three formats: a numeric matrix of counts
-  (rows = items, columns = response levels), a data.frame of counts
-  (coerced to a matrix), or a data.frame of raw responses (one column
-  per item, one row per respondent), which is tabulated automatically.
+  Responses: a data frame of raw responses (one row per respondent, one
+  column per item), a numeric matrix of counts (items in rows, response
+  levels in columns), or a data frame of counts. A data frame is read as
+  raw responses when its columns hold few distinct whole-number or
+  categorical values relative to its number of rows.
 
 - labels:
 
-  Character vector of item labels. `NULL` (default) infers them from row
-  or column names.
+  Item labels, one per item. `NULL` (default) uses the row names of a
+  count table, or, for raw responses, the column names with the number
+  of responses.
 
 - levels:
 
-  Character vector of level labels. `NULL` (default) infers them from
-  column names or the unique response values.
+  Response levels in scale order. `NULL` (default) uses the column names
+  of a count table, or, for raw responses, the factor levels or the
+  sorted distinct values. For raw responses the levels must match the
+  values in the data.
 
 - hue:
 
-  Numeric 0-360. Base hue for the sequential palette (default 210 =
-  blue).
+  Hue of the palette in degrees, 0-360 (default 210, blue).
 
 - band_height:
 
-  Numeric (default 28).
+  Height of each band in plot units (default 28).
 
 - band_gap:
 
-  Numeric (default 14).
+  Gap between bands in plot units (default 14).
 
 - plot_width:
 
-  Numeric (default 500).
+  Length of each band in plot units (default 500).
 
 - colors:
 
-  Character vector of segment colors, one per response level in level
-  order (only the first `length(levels)` are used). Default `NULL` uses
-  a diverging palette.
+  One color per response level, in scale order. `NULL` (default) uses a
+  light-to-dark palette of `hue`.
 
 - show_percent:
 
-  Logical. Show percentages inside segments (default TRUE).
+  Print percentages inside the segments (default `TRUE`).
 
 - min_segment:
 
-  Numeric. Hide label if segment narrower than this (default 34).
+  Minimum segment width, in plot units, for a percentage to be printed
+  (default 34).
 
 - arc_style:
 
-  Character: "gradient" or "neutral" (default "gradient").
+  `"gradient"` (default) colors each U-turn midway between the levels at
+  its two ends; `"neutral"` draws it grey.
 
 - arc_opacity:
 
-  Numeric 0-1 (default 0.5).
+  Opacity of the U-turns, between 0 and 1 (default 0.85).
 
 - sort_by:
 
-  Character: "none" (input order, default), "mean" (ascending item
-  mean), or "net" (ascending net score: share of responses above the
-  scale midpoint minus share below; falls back to the mean for scales
-  with fewer than four levels).
+  Order of the items: `"none"` (default, input order), `"mean"`
+  (increasing item mean) or `"net"` (increasing share of responses above
+  the middle level minus share below; the mean for scales with fewer
+  than four levels).
 
 - shadow:
 
-  Logical (default TRUE).
+  Draw drop shadows (default `TRUE`).
 
 - show_legend:
 
-  Logical (default TRUE).
+  Draw the legend (default `TRUE`).
 
-- label_color:
+- label_color, label_size:
 
-  Character (default "#333333").
-
-- label_size:
-
-  Numeric (default 0.85).
+  Color and size multiplier of the item labels (defaults `"#333333"` and
+  0.85).
 
 - label_align:
 
-  Character. Label alignment: "left" (default), "right", or "direction"
-  (follows band reading direction).
+  Alignment of the item labels: `"left"` (default), `"right"`, or
+  `"direction"` to follow each band's reading direction.
 
 - reverse_rtl:
 
-  Logical. Reverse segment order on right-to-left bands so the visual
-  reading direction mirrors the data order (default FALSE).
+  Reverse the order of levels on bands that read right to left, so every
+  band starts with the lowest level in its reading direction (default
+  `FALSE`: lowest level on the left of every band).
 
 - start_from:
 
-  Character: "left" (default) or "right". Which side the first band
-  starts from.
+  Side on which the first band starts: `"left"` (default) or `"right"`.
 
 - flow:
 
-  Character, `"snake"` (default) or `"natural"`. `"snake"` uses
-  alternating boustrophedon direction; `"natural"` reads all bands in
-  the same direction.
+  `"snake"` (default): bands alternate direction. `"natural"`: every
+  band reads in the same direction.
 
 - title:
 
-  Optional title.
+  Plot title, or `NULL` (default) for none.
 
 - margin:
 
-  Named numeric vector with top, right, bottom, left margins.
+  Named numeric vector of `top`, `right`, `bottom` and `left` margins in
+  plot units (default
+  `c(top = 30, right = 10, bottom = 55, left = 100)`).
 
 - background:
 
-  Background color (default "white").
+  Background color (default `"white"`).
 
 ## Value
 
-Called for its side effect of drawing a plot. Invisibly returns the
-`snake_layout` list described in
-[`survey_sequence`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md).
+The value of
+[`survey_sequence()`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md):
+the plot is drawn on the current device and an object of class
+`snake_layout` is returned invisibly.
+
+## References
+
+Heiberger, R. M., & Robbins, N. B. (2014). Design of diverging stacked
+bar charts for Likert scales and other applications. *Journal of
+Statistical Software*, 57(5), 1-32.
+[doi:10.18637/jss.v057.i05](https://doi.org/10.18637/jss.v057.i05)
+
+## See also
+
+[`survey_sequence()`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md)
+for diverging colors;
+[`survey_snake()`](https://pak.dynasite.org/Snakeplot/reference/survey_snake.md)
+for individual responses;
+[`snake_palette()`](https://pak.dynasite.org/Snakeplot/reference/snake_palette.md)
+for the sequential palettes `"blues"`, `"greens"`, `"grays"`, `"warm"`
+and `"viridis"`.
 
 ## Examples
 
 ``` r
-counts <- matrix(c(
-  15, 25, 60, 80, 45,
-  10, 20, 50, 90, 55,
-  20, 30, 65, 70, 40
-), nrow = 3, byrow = TRUE)
-labels <- c("Behavior A", "Behavior B", "Behavior C")
-levs <- c("Never", "Rarely", "Sometimes", "Often", "Always")
-sequential_dist(counts, labels, levs, hue = 160)
+# Emotion intensity rated 1-5, a unipolar scale
+sequential_dist(ema_emotions, sort_by = "mean", hue = 160)
+
+
+# A table of counts on a frequency scale
+counts <- matrix(c(15, 25, 60, 80, 45,
+                   10, 20, 50, 90, 55,
+                   20, 30, 65, 70, 40),
+                 nrow = 3, byrow = TRUE)
+sequential_dist(counts,
+                labels = c("Plans study time", "Reviews notes",
+                           "Asks for help"),
+                levels = c("Never", "Rarely", "Sometimes", "Often",
+                           "Always"))
 
 ```

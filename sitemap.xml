@@ -1,12 +1,19 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://pak.dynasite.org/Snakeplot/404.html</loc></url>
 <url><loc>https://pak.dynasite.org/Snakeplot/LICENSE-text.html</loc></url>
+<url><loc>https://pak.dynasite.org/Snakeplot/articles/activity.html</loc></url>
+<url><loc>https://pak.dynasite.org/Snakeplot/articles/case-daily-emotions.html</loc></url>
+<url><loc>https://pak.dynasite.org/Snakeplot/articles/case-student-survey.html</loc></url>
 <url><loc>https://pak.dynasite.org/Snakeplot/articles/index.html</loc></url>
-<url><loc>https://pak.dynasite.org/Snakeplot/articles/survey-snake-plots.html</loc></url>
+<url><loc>https://pak.dynasite.org/Snakeplot/articles/palettes-and-layout.html</loc></url>
+<url><loc>https://pak.dynasite.org/Snakeplot/articles/sequences.html</loc></url>
+<url><loc>https://pak.dynasite.org/Snakeplot/articles/snakeplot.html</loc></url>
+<url><loc>https://pak.dynasite.org/Snakeplot/articles/survey-responses.html</loc></url>
 <url><loc>https://pak.dynasite.org/Snakeplot/authors.html</loc></url>
 <url><loc>https://pak.dynasite.org/Snakeplot/index.html</loc></url>
 <url><loc>https://pak.dynasite.org/Snakeplot/news/index.html</loc></url>
 <url><loc>https://pak.dynasite.org/Snakeplot/reference/activity_snake.html</loc></url>
+<url><loc>https://pak.dynasite.org/Snakeplot/reference/as.data.frame.snake_layout.html</loc></url>
 <url><loc>https://pak.dynasite.org/Snakeplot/reference/ema_beeps.html</loc></url>
 <url><loc>https://pak.dynasite.org/Snakeplot/reference/ema_emotions.html</loc></url>
 <url><loc>https://pak.dynasite.org/Snakeplot/reference/facet_snake.html</loc></url>

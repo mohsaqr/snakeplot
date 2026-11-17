@@ -1,8 +1,19 @@
-# Faceted Snake Plot
+# Draw one snake plot per group in a grid of panels
 
-Splits data by a grouping variable and draws side-by-side snake panels.
-Works with `activity_snake`, `survey_snake`, `survey_sequence`,
-`sequential_dist`, or `line_snake`.
+`facet_snake()` splits a data frame by a grouping column and draws one
+snake plot per group in a grid of panels, so that groups such as
+participants, classes or conditions can be compared in the same display.
+Each panel is drawn by `FUN`, by default
+[`activity_snake()`](https://pak.dynasite.org/Snakeplot/reference/activity_snake.md),
+with the group value as its title.
+
+The panels are independent plots: each is scaled to its own data. The
+grid is set with `par(mfrow)` and the previous graphical parameters are
+restored afterwards.
+
+To draw groups of items (columns) rather than groups of rows, use the
+`facet` argument of
+[`survey_snake()`](https://pak.dynasite.org/Snakeplot/reference/survey_snake.md).
 
 ## Usage
 
@@ -14,45 +25,56 @@ facet_snake(data, facet_var, FUN = activity_snake, ncol = NULL, ...)
 
 - data:
 
-  A data.frame to plot. It is split by `facet_var`; each subset, with
-  the facet column removed, is passed to `FUN`.
+  A data frame. It is split by `facet_var`, and each part, without the
+  grouping column, is passed to `FUN` as its first argument.
 
 - facet_var:
 
-  Character. Column name in `data` to facet by.
+  Name of the grouping column. Panels follow the order in which its
+  values first appear.
 
 - FUN:
 
-  Function to call for each panel. Default `activity_snake`. It must
-  accept a `title` argument, which receives the facet level.
+  Plotting function for each panel (default
+  [`activity_snake()`](https://pak.dynasite.org/Snakeplot/reference/activity_snake.md)).
+  It must take the data as its first argument and accept a `title`
+  argument;
+  [`line_snake()`](https://pak.dynasite.org/Snakeplot/reference/line_snake.md),
+  [`survey_snake()`](https://pak.dynasite.org/Snakeplot/reference/survey_snake.md),
+  [`survey_sequence()`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md)
+  and
+  [`sequential_dist()`](https://pak.dynasite.org/Snakeplot/reference/sequential_dist.md)
+  qualify.
 
 - ncol:
 
-  Integer. Number of columns in the facet grid. Default: number of facet
-  levels (all in one row).
+  Number of panel columns. `NULL` (default) places all panels in one
+  row.
 
 - ...:
 
-  Additional arguments passed to `FUN`.
+  Further arguments passed to `FUN`.
 
 ## Value
 
-Called for its side effect of drawing one panel per facet level.
-Invisibly returns an unnamed list with one element per facet level, in
-order of first appearance, each holding the value returned by `FUN` for
-that panel (a `snake_layout` list for `activity_snake`).
+The panels are drawn on the current device. The function returns,
+invisibly, an unnamed list with one element per group, in order of first
+appearance, holding the value `FUN` returned for that panel (a
+`snake_layout` object for
+[`activity_snake()`](https://pak.dynasite.org/Snakeplot/reference/activity_snake.md)).
+
+## See also
+
+[`activity_snake()`](https://pak.dynasite.org/Snakeplot/reference/activity_snake.md),
+[`survey_snake()`](https://pak.dynasite.org/Snakeplot/reference/survey_snake.md)
+and its `facet` argument.
 
 ## Examples
 
 ``` r
-set.seed(42)
-d <- data.frame(
-  group    = rep(c("A", "B"), each = 70),
-  day      = rep(rep(c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"),
-                 each = 10), 2),
-  start    = round(runif(140, 360, 1400)),
-  duration = 0
-)
-facet_snake(d, "group")
+# Two participants' prompts, one panel each
+two <- subset(ema_beeps, id %in% c("xcVDLRQOwn", "6pig43CFyl"),
+              select = c(id, start_time))
+facet_snake(two, facet_var = "id", ncol = 1, show_total = FALSE)
 
 ```

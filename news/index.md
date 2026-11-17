@@ -1,5 +1,50 @@
 # Changelog
 
+## snakeplot 0.3.4
+
+### Changes
+
+- The correlation arcs of `survey_snake(arc_fill = "correlation")` are
+  now computed from respondent-level rows: Pearson r between adjacent
+  items across the respondents who answered both (pairwise-complete),
+  `NA` when fewer than three did or either item is constant among them.
+  Previously they were computed from the response counts.
+- `arc_fill = "correlation"` now requires raw responses (one row per
+  respondent, one column per item). Counts input and the `var`/`day`
+  (ESM) mode, which do not identify respondents, raise an error of class
+  `snakeplot_no_respondent_data`.
+- The returned `snake_layout` holds `correlations`, a data frame with
+  one row per U-turn (`from`, `to`, `r`, `n`), so the printed values can
+  be checked and reported.
+- The legend entry for the arcs reads “Item r (arc)” and uses
+  `arc_color`.
+- Dates of date-times are taken in the time zone of the data.
+  [`as.Date()`](https://rdrr.io/r/base/as.Date.html) converted through
+  UTC, so in time zones east of UTC
+  [`timeline_snake()`](https://pak.dynasite.org/Snakeplot/reference/timeline_snake.md)
+  labelled each phase one month early (a phase starting 2016-10 as “Sep
+  2016”), and the `timestamp` mode of
+  [`survey_snake()`](https://pak.dynasite.org/Snakeplot/reference/survey_snake.md)
+  measured the time of day of a prompt answered shortly after midnight
+  from the previous midnight, placing its tick beyond the end of the
+  band.
+
+### Documentation
+
+- Help pages rewritten: each opens with what the display represents and
+  when to use it, with cross-references, references and examples on the
+  bundled data.
+- New vignettes “Serpentine plots” and “Survey and experience sampling
+  responses”; guides on sequences and timelines, daily activity, and
+  palettes and layout; case studies on the bundled experience sampling
+  data. The README is generated from `README.Rmd`.
+
+### Packaging
+
+- README figures in `man/figures/` are now included in the package; a
+  `.Rbuildignore` pattern for `.png` files had excluded them, so the
+  README showed broken images on CRAN.
+
 ## snakeplot 0.3.2
 
 - Documentation revision: corrected stale defaults

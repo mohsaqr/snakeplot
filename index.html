@@ -4,26 +4,24 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>snakeplot — Serpentine Plots for R • snakeplot</title>
+<title>Serpentine Plots for Long Timeline, Sequential and Survey Data • snakeplot</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="snakeplot — Serpentine Plots for R">
-<meta name="description" content="Visualize long timelines, extended sequences, and survey data using intuitive serpentine (snake) plots.
-">
-<meta property="og:description" content="Visualize long timelines, extended sequences, and survey data using intuitive serpentine (snake) plots.
-">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Serpentine Plots for Long Timeline, Sequential and Survey Data">
+<meta name="description" content="Visualize long timelines, extended sequences and temporally chained survey responses and experience sampling data using intuitive serpentine (snake) plots. Supports distribution bars, tick-mark plots, inter-item correlation arcs, faceted multi-construct panels, and daily time-of-day positioning for ecological momentary assessment data. Further plot types fold categorical state sequences, career timelines and daily activity logs into the same serpentine layout. All plots are drawn with base R graphics.">
+<meta property="og:description" content="Visualize long timelines, extended sequences and temporally chained survey responses and experience sampling data using intuitive serpentine (snake) plots. Supports distribution bars, tick-mark plots, inter-item correlation arcs, faceted multi-construct panels, and daily time-of-day positioning for ecological momentary assessment data. Further plot types fold categorical state sequences, career timelines and daily activity logs into the same serpentine layout. All plots are drawn with base R graphics.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="index.html">snakeplot</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,11 +30,32 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
+<li class="nav-item"><a class="nav-link" href="articles/snakeplot.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
-<li class="nav-item"><a class="nav-link" href="articles/index.html">Articles</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Vignettes</h6></li>
+    <li><a class="dropdown-item" href="articles/survey-responses.html">Survey and experience sampling responses</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Guides</h6></li>
+    <li><a class="dropdown-item" href="articles/sequences.html">Categorical sequences and timelines</a></li>
+    <li><a class="dropdown-item" href="articles/activity.html">Daily activity and continuous signals</a></li>
+    <li><a class="dropdown-item" href="articles/palettes-and-layout.html">Palettes, reading order and layout</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Case studies</h6></li>
+    <li><a class="dropdown-item" href="articles/case-daily-emotions.html">Case study: daily emotions over fourteen days</a></li>
+    <li><a class="dropdown-item" href="articles/case-student-survey.html">Case study: a multi-construct student survey</a></li>
+  </ul>
+</li>
+<li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/mohsaqr/snakeplot"><span class="fa fab fa-github"></span></a></li>
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
+</form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/mohsaqr/snakeplot/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -47,350 +66,111 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="snakeplot">snakeplot<a class="anchor" aria-label="anchor" href="#snakeplot"></a>
 </h1></div>
-<p><a href="https://opensource.org/licenses/MIT" class="external-link"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a> <a href="https://github.com/mohsaqr/snakeplot/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/mohsaqr/snakeplot/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a> <a href="https://app.codecov.io/gh/mohsaqr/snakeplot" class="external-link"><img src="https://codecov.io/gh/mohsaqr/snakeplot/branch/main/graph/badge.svg" alt="Codecov"></a> <a href="https://CRAN.R-project.org/package=snakeplot" class="external-link"><img src="https://www.r-pkg.org/badges/version/snakeplot" alt="CRAN status"></a> <a href="https://CRAN.R-project.org/package=snakeplot" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/snakeplot" alt="CRAN downloads"></a> <a href="https://github.com/mohsaqr/snakeplot" class="external-link"><img src="https://img.shields.io/badge/dependencies-0-brightgreen.svg" alt="Dependencies"></a></p>
-<p>Serpentine (snake) plots for survey responses, experience sampling (EMA/ESM) data, state sequences and activity timelines using base R graphics. No dependencies beyond the packages that ship with R.</p>
+<!-- badges: start -->
+
 <div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+<h2 id="vignettes-and-guides">Vignettes and guides<a class="anchor" aria-label="anchor" href="#vignettes-and-guides"></a>
 </h2>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># From CRAN</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"snakeplot"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Development version from GitHub</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"mohsaqr/snakeplot"</span><span class="op">)</span></span></code></pre></div>
+<p><strong>Vignettes</strong></p>
+<ul>
+<li><a href="https://pak.dynasite.org/Snakeplot/articles/snakeplot.html">Serpentine plots</a></li>
+<li><a href="https://pak.dynasite.org/Snakeplot/articles/survey-responses.html">Survey and experience sampling responses</a></li>
+</ul>
+<p><strong>Guides</strong></p>
+<ul>
+<li><a href="https://pak.dynasite.org/Snakeplot/articles/sequences.html">Categorical sequences and timelines</a></li>
+<li><a href="https://pak.dynasite.org/Snakeplot/articles/activity.html">Daily activity and continuous signals</a></li>
+<li><a href="https://pak.dynasite.org/Snakeplot/articles/palettes-and-layout.html">Palettes, reading order and layout</a></li>
+</ul>
+<p><strong>Case studies</strong></p>
+<ul>
+<li><a href="https://pak.dynasite.org/Snakeplot/articles/case-daily-emotions.html">Daily emotions over fourteen days</a></li>
+<li><a href="https://pak.dynasite.org/Snakeplot/articles/case-student-survey.html">A multi-construct student survey</a></li>
+</ul>
 </div>
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>Snake plots arrange data as horizontal bands in a serpentine layout — each row reverses direction and connects to the next through a U-turn arc. The package provides nine plotting functions and 10 built-in color palettes:</p>
-<table class="table">
-<colgroup>
-<col width="52%">
-<col width="47%">
-</colgroup>
-<thead><tr>
-<th>Function</th>
-<th>Purpose</th>
-</tr></thead>
-<tbody>
-<tr>
-<td><code><a href="reference/survey_snake.html">survey_snake()</a></code></td>
-<td>Survey/EMA responses with ticks, bars, correlations, faceting</td>
-</tr>
-<tr>
-<td><code><a href="reference/activity_snake.html">activity_snake()</a></code></td>
-<td>Daily activity timelines with event blocks or rug ticks</td>
-</tr>
-<tr>
-<td><code><a href="reference/sequence_snake.html">sequence_snake()</a></code></td>
-<td>State sequence as colored blocks flowing through serpentine layout</td>
-</tr>
-<tr>
-<td><code><a href="reference/multi_snake.html">multi_snake()</a></code></td>
-<td>Many sequences at once: per-sequence ticks (index) or state proportions (distribution)</td>
-</tr>
-<tr>
-<td><code><a href="reference/timeline_snake.html">timeline_snake()</a></code></td>
-<td>Career/life-event timeline from a 3-column data.frame (role, start, end)</td>
-</tr>
-<tr>
-<td><code><a href="reference/survey_sequence.html">survey_sequence()</a></code></td>
-<td>Stacked 100% horizontal bars in serpentine layout</td>
-</tr>
-<tr>
-<td><code><a href="reference/sequential_dist.html">sequential_dist()</a></code></td>
-<td>Sequential (monochrome) variant of <code><a href="reference/survey_sequence.html">survey_sequence()</a></code>
-</td>
-</tr>
-<tr>
-<td><code><a href="reference/line_snake.html">line_snake()</a></code></td>
-<td>Continuous intensity line plot (experimental)</td>
-</tr>
-<tr>
-<td><code><a href="reference/facet_snake.html">facet_snake()</a></code></td>
-<td>Generic multi-panel wrapper for any snake function</td>
-</tr>
-</tbody>
-</table>
+<p>The <code>snakeplot</code> R package draws serpentine plots of long ordered data: survey responses item by item, experience sampling ratings day by day, categorical state sequences, timelines of phases, and time-stamped daily activity. The ordered axis is divided into segments drawn as horizontal bands, and consecutive bands are joined by U-turn arcs, so a long record fits one panel while its order is kept. Survey displays show the response distribution of each item as ticks, dots or stacked bars, with the item mean, optional median, and the correlation between adjacent items. Experience sampling data can be drawn with one band per study day and each prompt placed at its time of day. All plots use base R graphics and the package has no dependencies beyond those that ship with R.</p>
 </div>
 <div class="section level2">
-<h2 id="bundled-datasets">Bundled datasets<a class="anchor" aria-label="anchor" href="#bundled-datasets"></a>
+<h2 id="the-serpentine-layout">The serpentine layout<a class="anchor" aria-label="anchor" href="#the-serpentine-layout"></a>
 </h2>
-<p>Three datasets from Neubauer &amp; Schmiedek (2024) are included:</p>
-<table class="table">
-<colgroup>
-<col width="32%">
-<col width="21%">
-<col width="46%">
-</colgroup>
-<thead><tr>
-<th>Dataset</th>
-<th>Rows</th>
-<th>Description</th>
-</tr></thead>
-<tbody>
-<tr>
-<td><code>ema_emotions</code></td>
-<td>280</td>
-<td>Person-level means for 10 emotions (1-5 scale)</td>
-</tr>
-<tr>
-<td><code>student_survey</code></td>
-<td>280</td>
-<td>34 items across 4 constructs (1-5 scale), prefixed for faceting</td>
-</tr>
-<tr>
-<td><code>ema_beeps</code></td>
-<td>11 474</td>
-<td>Beep-level timestamps + anger/happiness ratings (1-5 scale, 14 days)</td>
-</tr>
-</tbody>
-</table>
+<p>An ordered axis, whether of items, days or positions in a sequence, is cut into bands of equal length that share one scale. With <code>flow = "snake"</code> the reading direction alternates from band to band, as in boustrophedon writing, so the end of each band is adjacent to the start of the next. With <code>flow = "natural"</code> every band reads in the same direction, so a position within a band, such as a time of day, has the same horizontal location on every band. The first arrangement keeps the sequence continuous across the U-turns; the second aligns a shared axis down the page. Each band is a unit of comparison (an item, a day, a segment of a sequence), and the band shading, the U-turn arcs and the legend encode summaries of the units they join.</p>
 </div>
 <div class="section level2">
-<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"snakeplot"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># development version</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"mohsaqr/snakeplot"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="example-data">Example data<a class="anchor" aria-label="anchor" href="#example-data"></a>
+</h2>
+<p>The package includes three datasets from a 14-day experience sampling study of university students (Neubauer &amp; Schmiedek, 2024), rescaled to a 1–5 scale: <code>ema_emotions</code> (280 students by 10 emotion items, each a student’s mean rating over the study), <code>student_survey</code> (the same students by 34 items in four constructs) and <code>ema_beeps</code> (11,474 answered prompts from 321 students, with day, time and two ratings).</p>
+</div>
+<div class="section level2">
+<h2 id="survey-responses">Survey responses<a class="anchor" aria-label="anchor" href="#survey-responses"></a>
+</h2>
+<p>Each item is a band. The widths of the colored zones are the shares of the response levels, the ticks are the individual responses, and the diamond marks the item mean. Sorting by the mean orders the items from the least to the most endorsed.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mohsaqr/snakeplot" class="external-link">snakeplot</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">labs5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span> <span class="op">=</span> <span class="st">"Not at all"</span>, <span class="st">"2"</span> <span class="op">=</span> <span class="st">"Slightly"</span>, <span class="st">"3"</span> <span class="op">=</span> <span class="st">"Moderate"</span>,</span>
-<span>           <span class="st">"4"</span> <span class="op">=</span> <span class="st">"Quite"</span>,      <span class="st">"5"</span> <span class="op">=</span> <span class="st">"Extremely"</span><span class="op">)</span></span></code></pre></div>
-<div class="section level3">
-<h3 id="survey_snake--daily-value-distribution-ticks">
-<code>survey_snake()</code> — daily value distribution ticks<a class="anchor" aria-label="anchor" href="#survey_snake--daily-value-distribution-ticks"></a>
-</h3>
+<span><span class="fu"><a href="reference/survey_snake.html">survey_snake</a></span><span class="op">(</span><span class="va">ema_emotions</span>, sort_by <span class="op">=</span> <span class="st">"mean"</span>,</span>
+<span>             colors <span class="op">=</span> <span class="fu"><a href="reference/snake_palette.html">snake_palette</a></span><span class="op">(</span><span class="st">"ocean"</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,</span>
+<span>             level_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span> <span class="op">=</span> <span class="st">"Not at all"</span>, <span class="st">"2"</span> <span class="op">=</span> <span class="st">"Slightly"</span>,</span>
+<span>                              <span class="st">"3"</span> <span class="op">=</span> <span class="st">"Moderate"</span>, <span class="st">"4"</span> <span class="op">=</span> <span class="st">"Quite"</span>,</span>
+<span>                              <span class="st">"5"</span> <span class="op">=</span> <span class="st">"Extremely"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<img src="reference/figures/README-survey-1.png" alt="plot of chunk survey" width="100%"><p class="caption">
+plot of chunk survey
+</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="experience-sampling-by-day">Experience sampling by day<a class="anchor" aria-label="anchor" href="#experience-sampling-by-day"></a>
+</h2>
+<p>With <code>var</code> and <code>day</code>, beep-level data are drawn as one band per study day for one rating; <code>timestamp</code> places each answered prompt at its time of day.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/survey_snake.html">survey_snake</a></span><span class="op">(</span><span class="va">ema_beeps</span>, var <span class="op">=</span> <span class="st">"angry"</span>, day <span class="op">=</span> <span class="st">"day"</span>,</span>
-<span>             colors <span class="op">=</span> <span class="fu"><a href="reference/snake_palette.html">snake_palette</a></span><span class="op">(</span><span class="st">"ocean"</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>, level_labels <span class="op">=</span> <span class="va">labs5</span>,</span>
-<span>             title <span class="op">=</span> <span class="st">"Anger — 14 days, value distribution"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/survey_snake_daily.png" width="100%"></p>
-</div>
-<div class="section level3">
-<h3 id="survey_snake--correlation-arcs">
-<code>survey_snake()</code> — correlation arcs<a class="anchor" aria-label="anchor" href="#survey_snake--correlation-arcs"></a>
-</h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/survey_snake.html">survey_snake</a></span><span class="op">(</span><span class="va">ema_emotions</span>, tick_shape <span class="op">=</span> <span class="st">"line"</span>,</span>
-<span>             arc_fill <span class="op">=</span> <span class="st">"correlation"</span>, sort_by <span class="op">=</span> <span class="st">"mean"</span>,</span>
-<span>             colors <span class="op">=</span> <span class="fu"><a href="reference/snake_palette.html">snake_palette</a></span><span class="op">(</span><span class="st">"ocean"</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>, level_labels <span class="op">=</span> <span class="va">labs5</span>,</span>
-<span>             title <span class="op">=</span> <span class="st">"Emotions — correlations at U-turns"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/survey_snake_corr.png" width="100%"></p>
-</div>
-<div class="section level3">
-<h3 id="survey_snake--dot-plot-with-dark-bands">
-<code>survey_snake()</code> — dot plot with dark bands<a class="anchor" aria-label="anchor" href="#survey_snake--dot-plot-with-dark-bands"></a>
-</h3>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/survey_snake.html">survey_snake</a></span><span class="op">(</span><span class="va">ema_emotions</span>, tick_shape <span class="op">=</span> <span class="st">"dot"</span>, sort_by <span class="op">=</span> <span class="st">"mean"</span>,</span>
-<span>             colors <span class="op">=</span> <span class="fu"><a href="reference/snake_palette.html">snake_palette</a></span><span class="op">(</span><span class="st">"ocean"</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>, level_labels <span class="op">=</span> <span class="va">labs5</span>,</span>
-<span>             band_palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#1a1228"</span>, <span class="st">"#1a2a42"</span><span class="op">)</span>,</span>
-<span>             title <span class="op">=</span> <span class="st">"Emotions — dots on dark bands"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/survey_snake_dots.png" width="100%"></p>
-</div>
-<div class="section level3">
-<h3 id="survey_snake--faceted-multi-construct">
-<code>survey_snake()</code> — faceted multi-construct<a class="anchor" aria-label="anchor" href="#survey_snake--faceted-multi-construct"></a>
-</h3>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/survey_snake.html">survey_snake</a></span><span class="op">(</span><span class="va">student_survey</span>, facet <span class="op">=</span> <span class="cn">TRUE</span>, facet_ncol <span class="op">=</span> <span class="fl">2L</span>,</span>
-<span>             tick_shape <span class="op">=</span> <span class="st">"bar"</span>, sort_by <span class="op">=</span> <span class="st">"mean"</span>,</span>
-<span>             colors <span class="op">=</span> <span class="fu"><a href="reference/snake_palette.html">snake_palette</a></span><span class="op">(</span><span class="st">"ocean"</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>, level_labels <span class="op">=</span> <span class="va">labs5</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/survey_snake_facet.png" width="100%"></p>
-</div>
-<div class="section level3">
-<h3 id="survey_snake--daily-distribution-bars">
-<code>survey_snake()</code> — daily distribution bars<a class="anchor" aria-label="anchor" href="#survey_snake--daily-distribution-bars"></a>
-</h3>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/survey_snake.html">survey_snake</a></span><span class="op">(</span><span class="va">ema_beeps</span>, var <span class="op">=</span> <span class="st">"happy"</span>, day <span class="op">=</span> <span class="st">"day"</span>,</span>
-<span>             tick_shape <span class="op">=</span> <span class="st">"bar"</span>, bar_reverse <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>             colors <span class="op">=</span> <span class="fu"><a href="reference/snake_palette.html">snake_palette</a></span><span class="op">(</span><span class="st">"ocean"</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>, level_labels <span class="op">=</span> <span class="va">labs5</span>,</span>
-<span>             title <span class="op">=</span> <span class="st">"Happiness — 14 days, distribution bars"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/survey_snake_daily_bars.png" width="100%"></p>
+<span>             timestamp <span class="op">=</span> <span class="st">"start_time"</span>,</span>
+<span>             colors <span class="op">=</span> <span class="fu"><a href="reference/snake_palette.html">snake_palette</a></span><span class="op">(</span><span class="st">"ocean"</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,</span>
+<span>             title <span class="op">=</span> <span class="st">"Happiness, by time of day"</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<img src="reference/figures/README-daily-1.png" alt="plot of chunk daily" width="100%"><p class="caption">
+plot of chunk daily
+</p>
 </div>
-<div class="section level3">
-<h3 id="activity_snake--rug-ticks">
-<code>activity_snake()</code> — rug ticks<a class="anchor" aria-label="anchor" href="#activity_snake--rug-ticks"></a>
-</h3>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
-<span><span class="va">days</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Mon"</span>, <span class="st">"Tue"</span>, <span class="st">"Wed"</span>, <span class="st">"Thu"</span>, <span class="st">"Fri"</span>, <span class="st">"Sat"</span>, <span class="st">"Sun"</span><span class="op">)</span></span>
-<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  day      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">days</span>, each <span class="op">=</span> <span class="fl">40</span><span class="op">)</span>,</span>
-<span>  start    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">280</span>, <span class="fl">360</span>, <span class="fl">1400</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  duration <span class="op">=</span> <span class="fl">0</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/activity_snake.html">activity_snake</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/activity_snake.png" width="100%"></p>
 </div>
-<div class="section level3">
-<h3 id="activity_snake--duration-blocks">
-<code>activity_snake()</code> — duration blocks<a class="anchor" aria-label="anchor" href="#activity_snake--duration-blocks"></a>
-</h3>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">d2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  day      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">days</span>, each <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>,</span>
-<span>  start    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">56</span>, <span class="fl">360</span>, <span class="fl">1200</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  duration <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">56</span>, <span class="fl">15</span>, <span class="fl">120</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/activity_snake.html">activity_snake</a></span><span class="op">(</span><span class="va">d2</span>, event_color <span class="op">=</span> <span class="st">"#e09480"</span>, band_color <span class="op">=</span> <span class="st">"#3d2518"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/activity_snake_blocks.png" width="100%"></p>
-</div>
-<div class="section level3">
-<h3 id="sequence_snake--state-sequence">
-<code>sequence_snake()</code> — state sequence<a class="anchor" aria-label="anchor" href="#sequence_snake--state-sequence"></a>
-</h3>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
-<span><span class="va">verbs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Read"</span>, <span class="st">"Write"</span>, <span class="st">"Discuss"</span>, <span class="st">"Listen"</span>,</span>
-<span>           <span class="st">"Search"</span>, <span class="st">"Plan"</span>, <span class="st">"Code"</span>, <span class="st">"Review"</span><span class="op">)</span></span>
-<span><span class="co"># 40 runs of 1-4 repeats each, cut to the first 75 steps</span></span>
-<span><span class="va">runs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">40</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">verbs</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>, simplify <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">seq75</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">runs</span><span class="op">)</span>, <span class="fl">75</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/sequence_snake.html">sequence_snake</a></span><span class="op">(</span><span class="va">seq75</span>, title <span class="op">=</span> <span class="st">"75-step learning sequence"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/sequence_snake.png" width="100%"></p>
-</div>
-<div class="section level3">
-<h3 id="timeline_snake--careerevent-timeline">
-<code>timeline_snake()</code> — career/event timeline<a class="anchor" aria-label="anchor" href="#timeline_snake--careerevent-timeline"></a>
-</h3>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="section level2">
+<h2 id="sequences-and-timelines">Sequences and timelines<a class="anchor" aria-label="anchor" href="#sequences-and-timelines"></a>
+</h2>
+<p><code><a href="reference/sequence_snake.html">sequence_snake()</a></code> folds an ordered categorical sequence into bands of blocks colored by state; <code><a href="reference/timeline_snake.html">timeline_snake()</a></code> draws phases with start and end dates as monthly blocks with labelled transitions.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">career</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  role  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Intern"</span>, <span class="st">"Junior Dev"</span>, <span class="st">"Mid Dev"</span>,</span>
-<span>            <span class="st">"Senior Dev"</span>, <span class="st">"Tech Lead"</span>, <span class="st">"Architect"</span><span class="op">)</span>,</span>
-<span>  start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2015-01"</span>, <span class="st">"2015-07"</span>, <span class="st">"2017-01"</span>,</span>
-<span>            <span class="st">"2019-07"</span>, <span class="st">"2022-07"</span>, <span class="st">"2024-01"</span><span class="op">)</span>,</span>
-<span>  end   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2015-06"</span>, <span class="st">"2016-12"</span>, <span class="st">"2019-06"</span>,</span>
-<span>            <span class="st">"2022-06"</span>, <span class="st">"2023-12"</span>, <span class="st">"2024-12"</span><span class="op">)</span></span>
+<span>  role  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Intern"</span>, <span class="st">"Junior developer"</span>, <span class="st">"Developer"</span>,</span>
+<span>            <span class="st">"Senior developer"</span>, <span class="st">"Lead"</span>, <span class="st">"Architect"</span><span class="op">)</span>,</span>
+<span>  start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2015-01"</span>, <span class="st">"2015-07"</span>, <span class="st">"2017-01"</span>, <span class="st">"2019-07"</span>, <span class="st">"2022-07"</span>,</span>
+<span>            <span class="st">"2024-01"</span><span class="op">)</span>,</span>
+<span>  end   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2015-06"</span>, <span class="st">"2016-12"</span>, <span class="st">"2019-06"</span>, <span class="st">"2022-06"</span>, <span class="st">"2023-12"</span>,</span>
+<span>            <span class="st">"2024-12"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/timeline_snake.html">timeline_snake</a></span><span class="op">(</span><span class="va">career</span>,</span>
-<span>               title <span class="op">=</span> <span class="st">"Software Engineer — Career Path (2015-2024)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/timeline_snake.png" width="100%"></p>
-</div>
-<div class="section level3">
-<h3 id="survey_sequence--stacked-bars">
-<code>survey_sequence()</code> — stacked bars<a class="anchor" aria-label="anchor" href="#survey_sequence--stacked-bars"></a>
-</h3>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/survey_sequence.html">survey_sequence</a></span><span class="op">(</span><span class="va">ema_emotions</span>, colors <span class="op">=</span> <span class="fu"><a href="reference/snake_palette.html">snake_palette</a></span><span class="op">(</span><span class="st">"ocean"</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/survey_sequence.png" width="100%"></p>
-</div>
-<div class="section level3">
-<h3 id="line_snake--continuous-intensity">
-<code>line_snake()</code> — continuous intensity<a class="anchor" aria-label="anchor" href="#line_snake--continuous-intensity"></a>
-</h3>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
-<span><span class="va">hours</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1440</span>, by <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
-<span><span class="va">d_line</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  day   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Mon"</span>, <span class="st">"Tue"</span>, <span class="st">"Wed"</span>, <span class="st">"Thu"</span>, <span class="st">"Fri"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">hours</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  time  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">hours</span>, <span class="fl">5</span><span class="op">)</span>,</span>
-<span>  value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">sin</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">hours</span>, <span class="fl">5</span><span class="op">)</span> <span class="op">/</span> <span class="fl">1440</span> <span class="op">*</span> <span class="fl">4</span> <span class="op">*</span> <span class="va">pi</span><span class="op">)</span> <span class="op">*</span> <span class="fl">50</span> <span class="op">+</span> <span class="fl">50</span> <span class="op">+</span></span>
-<span>          <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">5</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">hours</span><span class="op">)</span>, <span class="fl">0</span>, <span class="fl">8</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/line_snake.html">line_snake</a></span><span class="op">(</span><span class="va">d_line</span>, fill_color <span class="op">=</span> <span class="st">"#e74c3c"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/line_snake.png" width="100%"></p>
+<span><span class="fu"><a href="reference/timeline_snake.html">timeline_snake</a></span><span class="op">(</span><span class="va">career</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<img src="reference/figures/README-timeline-1.png" alt="plot of chunk timeline" width="100%"><p class="caption">
+plot of chunk timeline
+</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="built-in-palettes">Built-in palettes<a class="anchor" aria-label="anchor" href="#built-in-palettes"></a>
+<h2 id="authors-and-citation">Authors and citation<a class="anchor" aria-label="anchor" href="#authors-and-citation"></a>
 </h2>
-<p>10 palettes ship with the package — 5 diverging, 5 sequential:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">snake_palettes</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] "classic" "earth"   "ocean"   "sunset"  "berry"   "blues"   "greens" </span></span>
-<span><span class="co">#&gt;  [8] "grays"   "warm"    "viridis"</span></span>
-<span></span>
-<span><span class="co"># Interpolate to the number of response levels (5 for the bundled data)</span></span>
-<span><span class="fu"><a href="reference/snake_palette.html">snake_palette</a></span><span class="op">(</span><span class="st">"sunset"</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/survey_snake.html">survey_snake</a></span><span class="op">(</span><span class="va">ema_emotions</span>, colors <span class="op">=</span> <span class="fu"><a href="reference/snake_palette.html">snake_palette</a></span><span class="op">(</span><span class="st">"earth"</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,</span>
-<span>             tick_shape <span class="op">=</span> <span class="st">"bar"</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="key-parameters-for-survey_snake">Key parameters for <code>survey_snake()</code>
-<a class="anchor" aria-label="anchor" href="#key-parameters-for-survey_snake"></a>
-</h2>
-<table class="table">
-<colgroup>
-<col width="45%">
-<col width="54%">
-</colgroup>
-<thead><tr>
-<th>Parameter</th>
-<th>Description</th>
-</tr></thead>
-<tbody>
-<tr>
-<td><code>tick_shape</code></td>
-<td>
-<code>"line"</code> (default), <code>"dot"</code>, or <code>"bar"</code> (stacked proportional)</td>
-</tr>
-<tr>
-<td><code>sort_by</code></td>
-<td>
-<code>"none"</code>, <code>"mean"</code>, or <code>"net"</code>
-</td>
-</tr>
-<tr>
-<td><code>arc_fill</code></td>
-<td>
-<code>"none"</code> (two-tone), <code>"correlation"</code>, <code>"mean_prev"</code>, <code>"blend"</code>
-</td>
-</tr>
-<tr>
-<td><code>colors</code></td>
-<td>One color per response level, e.g. <code>snake_palette("earth", n = 5)</code>
-</td>
-</tr>
-<tr>
-<td><code>band_palette</code></td>
-<td>2+ anchor colors for band shading (default: brown-to-slate)</td>
-</tr>
-<tr>
-<td><code>bar_reverse</code></td>
-<td>
-<code>TRUE</code> to draw bars from highest level first</td>
-</tr>
-<tr>
-<td><code>level_labels</code></td>
-<td>Named vector mapping levels to display labels</td>
-</tr>
-<tr>
-<td><code>facet</code></td>
-<td>
-<code>TRUE</code> (auto-group by prefix) or named list of column groups</td>
-</tr>
-<tr>
-<td>
-<code>var</code>, <code>day</code>, <code>timestamp</code>
-</td>
-<td>Auto-pivot EMA data into daily bands</td>
-</tr>
-<tr>
-<td>
-<code>show_mean</code>, <code>show_median</code>
-</td>
-<td>Toggle diamond/dashed-line markers</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section level2">
-<h2 id="data-source">Data source<a class="anchor" aria-label="anchor" href="#data-source"></a>
-</h2>
-<p>The bundled datasets are derived from:</p>
-<p>Neubauer, A. B., &amp; Schmiedek, F. (2024). Approaching academic adjustment on multiple time scales. <em>Zeitschrift fuer Erziehungswissenschaft</em>, <em>27</em>(1), 147-168. <a href="https://doi.org/10.1007/s11618-023-01182-8" class="external-link uri">https://doi.org/10.1007/s11618-023-01182-8</a></p>
-<ul>
-<li><a href="https://osf.io/bhq3p" class="external-link">Original data</a></li>
-<li><a href="https://osf.io/csfwg" class="external-link">Codebook</a></li>
-<li><a href="https://osf.io/84kdr/files" class="external-link">Code</a></li>
-<li>License: CC-BY 4.0</li>
-</ul>
-</div>
-<div class="section level2">
-<h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
-</h2>
-<p>MIT</p>
+<p><code>snakeplot</code> is written by <a href="https://saqr.me" class="external-link">Mohammed Saqr</a> and <a href="https://sonsoles.me" class="external-link">Sonsoles López-Pernas</a>. Mohammed Saqr maintains the package. Questions and bug reports can be submitted through the <a href="https://github.com/mohsaqr/snakeplot/issues" class="external-link">repository issue tracker</a>. The package citation is available through <code>citation("snakeplot")</code>.</p>
+<p>The bundled data are derived from Neubauer, A. B., &amp; Schmiedek, F. (2024). Approaching academic adjustment on multiple time scales. <em>Zeitschrift für Erziehungswissenschaft</em>, <em>27</em>(1), 147–168. <a href="https://doi.org/10.1007/s11618-023-01182-8" class="external-link uri">https://doi.org/10.1007/s11618-023-01182-8</a> (<a href="https://osf.io/bhq3p" class="external-link">data</a>, <a href="https://osf.io/csfwg" class="external-link">codebook</a>, CC-BY 4.0).</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -422,19 +202,27 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Mohammed Saqr <br><small class="roles"> Author, maintainer, copyright holder </small>   </li>
-<li>Sonsoles Lopez-Pernas <br><small class="roles"> Author </small>   </li>
+<li>
+<a href="https://saqr.me" class="external-link">Mohammed Saqr</a> <br><small class="roles"> Author, maintainer, copyright holder </small>   </li>
+<li>
+<a href="https://sonsoles.me" class="external-link">Sonsoles Lopez-Pernas</a> <br><small class="roles"> Author </small>   </li>
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://CRAN.R-project.org/package=snakeplot" class="external-link"><img src="https://www.r-pkg.org/badges/version/snakeplot" alt="CRAN status"></a></li>
+<li><a href="https://github.com/mohsaqr/snakeplot/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/mohsaqr/snakeplot/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+</ul>
+</div>
 
   </aside>
 </div>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Mohammed Saqr, Sonsoles Lopez-Pernas.</p>
+  <p>Developed by <a href="https://saqr.me" class="external-link">Mohammed Saqr</a>, <a href="https://sonsoles.me" class="external-link">Sonsoles Lopez-Pernas</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">

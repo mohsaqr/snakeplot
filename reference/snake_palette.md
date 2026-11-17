@@ -1,6 +1,17 @@
-# Get a Snake Plot Palette
+# Get a built-in palette for snake plots
 
-Returns a color palette interpolated to `n` colors.
+`snake_palette()` returns one of the palettes in
+[snake_palettes](https://pak.dynasite.org/Snakeplot/reference/snake_palettes.md),
+interpolated to `n` colors. The survey plots match colors to response
+levels by position and use only the first `length(levels)` colors, so
+`n` should equal the number of response levels for a palette to span the
+whole scale; a diverging palette then has its midpoint at the middle
+level.
+
+Diverging palettes (`classic`, `earth`, `ocean`, `sunset`, `berry`) suit
+bipolar scales; sequential palettes (`blues`, `greens`, `grays`, `warm`,
+`viridis`) suit unipolar scales and
+[`sequential_dist()`](https://pak.dynasite.org/Snakeplot/reference/sequential_dist.md).
 
 ## Usage
 
@@ -12,31 +23,37 @@ snake_palette(name = "classic", n = 7L)
 
 - name:
 
-  Character, palette name: one of `names(snake_palettes)` (default
-  `"classic"`). An unknown name is an error that lists the available
-  palettes.
+  Palette name, one of `names(snake_palettes)` (default `"classic"`). An
+  unknown name is an error that lists the available names.
 
 - n:
 
-  Integer, number of colors to return (default 7). With `n = 7` the
-  anchor colors are returned unchanged; other values interpolate between
-  them with
+  Number of colors (default 7). With 7 the anchor colors are returned
+  unchanged; other values interpolate between them with
   [`grDevices::colorRampPalette()`](https://rdrr.io/r/grDevices/colorRamp.html).
-  Pass the number of response levels so a diverging palette spans the
-  whole scale.
 
 ## Value
 
-Character vector of `n` hex color strings, ordered from the first (low)
-to the last (high) anchor color.
+A character vector of `n` hex colors, ordered from the low to the high
+end of the scale.
+
+## See also
+
+[snake_palettes](https://pak.dynasite.org/Snakeplot/reference/snake_palettes.md)
+for the anchor colors;
+[`survey_snake()`](https://pak.dynasite.org/Snakeplot/reference/survey_snake.md),
+[`survey_sequence()`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md)
+and
+[`sequential_dist()`](https://pak.dynasite.org/Snakeplot/reference/sequential_dist.md),
+which take the colors through their `colors` argument.
 
 ## Examples
 
 ``` r
-snake_palette("ocean", 5)
+snake_palette("ocean", n = 5)
 #> [1] "#D73027" "#F88D52" "#E0E0E0" "#8FC3DC" "#4575B4"
-snake_palette("earth", 7)
-#> [1] "#8C510A" "#BF812D" "#DFC27D" "#C7C7C7" "#80CDC1" "#35978F" "#01665E"
-snake_palette("blues", 3)
+snake_palette("blues", n = 3)
 #> [1] "#EFF3FF" "#6BAED6" "#084594"
+survey_sequence(ema_emotions, colors = snake_palette("berry", n = 5))
+
 ```

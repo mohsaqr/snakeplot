@@ -1,10 +1,24 @@
-# Timeline Snake Plot
+# Plot a timeline of phases as a serpentine of monthly blocks
 
-Displays a career or life-event timeline as a serpentine sequence of
-colored phases. With data.frame input each block represents one month,
-colored by the current state/role; with vector input each element is one
-block. State names are overlaid inside runs of consecutive blocks, and
-transition dates are shown at juncture points where the state changes.
+A timeline snake shows a succession of phases, such as the positions
+held in a career or the stages of a project, as colored blocks folded
+into bands joined by U-turns. With dated input each block is one month,
+so the length of a phase is proportional to its duration and a span of
+many years fits in one panel while its order is kept.
+
+`timeline_snake()` takes a data frame with one row per phase (state,
+start date, end date) and builds the monthly sequence. It labels each
+change of phase with its start month, labels each band with the year at
+its middle, and prints the state names inside the phases. A vector of
+states, one per time unit, is drawn as given. Colors default to a
+light-to-dark blue ramp in phase order. The drawing is done by
+[`sequence_snake()`](https://pak.dynasite.org/Snakeplot/reference/sequence_snake.md),
+and its display options can be passed here.
+
+For an undated sequence of many short events use
+[`sequence_snake()`](https://pak.dynasite.org/Snakeplot/reference/sequence_snake.md);
+for many sequences use
+[`multi_snake()`](https://pak.dynasite.org/Snakeplot/reference/multi_snake.md).
 
 ## Usage
 
@@ -48,135 +62,137 @@ timeline_snake(
 
 - sequence:
 
-  Either a character/factor vector of states (one per time unit), or a
-  **data.frame with 3 columns**: state/role, start date (`"YYYY-MM"` or
-  Date), end date. When a data.frame is given, the function
-  auto-generates monthly blocks, transition labels, and band labels.
+  Phases as a data frame whose first three columns are the state, the
+  start date and the end date, one row per phase. Dates may be
+  `"YYYY-MM"`, `"YYYY-MM-DD"`, other common date formats, or `Date`
+  values; start and end months are both included. Alternatively a vector
+  of states, one per time unit.
 
 - states:
 
-  Character vector of unique states in desired order. If `NULL`, derived
-  from `unique(sequence)`.
+  State labels in legend order. `NULL` (default) takes them in order of
+  first appearance. Every state in `sequence` must be listed.
 
 - colors:
 
-  Named character vector of colors keyed by state, or an unnamed vector
-  recycled to match `states`. If `NULL`, a built-in qualitative palette
-  is used.
+  State colors: a vector named by state, or an unnamed vector recycled
+  over the states. `NULL` (default) uses a light-to-dark blue ramp over
+  the states in order.
 
 - rows:
 
-  Integer, number of serpentine rows. If `NULL`, chosen automatically
-  (about 20 monthly blocks per band, at least 2 rows, for data.frame
-  input; about 10 blocks per band for vector input).
+  Number of bands. `NULL` (default) uses about 20 months per band and at
+  least two bands for data frame input, and one band per 11 positions
+  for vector input.
 
 - band_height:
 
-  Numeric, height of each band (default 28).
+  Height of each band in plot units (default 28).
 
 - band_gap:
 
-  Numeric, gap between bands (default 30, wider than in
-  [`sequence_snake`](https://pak.dynasite.org/Snakeplot/reference/sequence_snake.md)
-  to leave room for the year labels).
+  Gap between bands in plot units (default 30, which leaves room for the
+  year labels).
 
 - plot_width:
 
-  Numeric, width of each band (default 500).
+  Length of each band in plot units (default 500).
 
 - margin:
 
-  Named numeric vector with top, right, bottom, left margins (default
+  Named numeric vector of `top`, `right`, `bottom` and `left` margins in
+  plot units (default
   `c(top = 35, right = 10, bottom = 65, left = 20)`).
 
 - orientation:
 
-  Character, `"horizontal"` (default) or `"vertical"`.
+  `"horizontal"` (default). `"vertical"` turns the bands into columns
+  but places the blocks across each column rather than along it, so the
+  horizontal layout is recommended.
 
 - start_from:
 
-  Character, `"left"` (default) or `"right"`.
+  Side on which the first band starts: `"left"` (default) or `"right"`.
 
 - flow:
 
-  Character, `"natural"` (default) or `"snake"`. `"natural"` reads all
-  bands left-to-right; `"snake"` uses alternating boustrophedon
-  direction.
+  `"natural"` (default): every band reads in the same direction, like
+  lines of text. `"snake"`: bands alternate direction, so the sequence
+  runs on through each U-turn.
 
 - show_labels:
 
-  Logical, show position range labels (default `FALSE`).
+  Label each band with the range of positions it holds (default
+  `FALSE`).
 
 - show_legend:
 
-  Logical, draw color legend (default `TRUE`).
+  Draw the state legend (default `TRUE`).
 
 - show_numbers:
 
-  Logical, print small position numbers inside blocks (default `FALSE`).
+  Print each block's position inside it (default `FALSE`).
 
 - show_state:
 
-  Logical, show state names inside blocks (default `TRUE`).
+  Print the state name inside each phase (default `TRUE`).
 
 - state_size:
 
-  Numeric, state label size (default 1).
+  Text size of the state names (default 1).
 
 - show_ticks:
 
-  Logical, draw ruler-style tick marks at block boundaries outside the
-  bands (default `FALSE`).
+  Draw ruler ticks at block boundaries, outside the bands (default
+  `FALSE`).
 
 - tick_labels:
 
-  Character vector of labels for evenly spaced ruler marks within each
-  band (e.g., `month.abb` for monthly ticks). Implies
-  `show_ticks = TRUE`.
+  Labels for evenly spaced ruler marks on every band, such as
+  `month.abb`. Setting them turns on `show_ticks`.
 
 - transition_labels:
 
-  Character vector of date labels for state transition points (e.g.,
-  `c("Oct 2017", "Apr 2019")`). One label per transition (length =
-  number of state changes).
+  Labels for the points where the state changes, in order. `NULL`
+  (default) uses, for data frame input, the start month of each phase
+  after the first, such as `"Jun 2020"`.
 
 - transition_pos:
 
-  Numeric vector of fractional block positions for transition labels
-  (e.g., `c(6.5, 24.3)`). When provided, labels are placed at exact
-  interpolated positions along the serpentine path rather than at
-  state-change boundaries.
+  Positions of `transition_labels` along the sequence, in blocks;
+  fractions such as `6.5` are allowed. `NULL` (default) places the
+  labels at the changes of state.
 
 - tick_color:
 
-  Color for tick marks and band labels (default `"#444444"`).
+  Color of ticks and of band and transition labels (default
+  `"#444444"`).
 
 - tick_length:
 
-  Numeric, length of tick marks in plot units (default 6).
+  Length of ticks in plot units (default 6).
 
 - tick_size:
 
-  Numeric, text size for band and transition labels (default 0.8).
+  Text size of tick, band and transition labels (default 0.8).
 
 - border_color:
 
-  Color for thin borders between blocks, or `NA` for no borders (default
-  `NA`).
+  Color of block outlines, or `NA` (default) for none.
 
 - block_labels:
 
-  Optional character vector of labels to display inside each block (same
-  length as `sequence`). Overrides `show_numbers`.
+  Labels for the blocks, one per position. They replace the position
+  numbers, and are drawn below the blocks when ruler ticks are shown.
 
 - band_labels:
 
-  Character vector of labels to display centered below each band (e.g.,
-  year labels). Length must equal `rows`.
+  One label per band (length `rows`). `NULL` (default) uses, for data
+  frame input, the year at the middle of each band.
 
 - title:
 
-  Optional character string for plot title.
+  Plot title, or `NULL` (default) for none.
 
 - background:
 
@@ -184,29 +200,45 @@ timeline_snake(
 
 - shadow:
 
-  Logical, draw drop shadows (default `TRUE`).
+  Draw drop shadows (default `TRUE`).
 
 - text_size:
 
-  Numeric, text size multiplier for block labels (default 0.5).
+  Text size of block numbers and block labels (default 0.5).
 
 - legend_text_size:
 
-  Numeric, legend text size (default 1.2).
+  Size of the legend text (default 1.2).
 
 ## Value
 
-Invisible `NULL`. Called for its side effect of producing a plot.
+The plot is drawn on the current device; the function returns `NULL`
+invisibly.
+
+## See also
+
+[`sequence_snake()`](https://pak.dynasite.org/Snakeplot/reference/sequence_snake.md),
+which draws the plot;
+[`multi_snake()`](https://pak.dynasite.org/Snakeplot/reference/multi_snake.md)
+for many sequences;
+[`activity_snake()`](https://pak.dynasite.org/Snakeplot/reference/activity_snake.md)
+for events within days.
 
 ## Examples
 
 ``` r
-# Data.frame input (easiest)
+# An academic career, one row per position
 career <- data.frame(
-  role  = c("Junior", "Senior", "Lead"),
-  start = c("2018-01", "2020-06", "2023-01"),
-  end   = c("2020-05", "2022-12", "2024-12")
+  role  = c("PhD student", "Postdoc", "Lecturer", "Senior lecturer"),
+  start = c("2012-09", "2016-10", "2019-01", "2023-08"),
+  end   = c("2016-09", "2018-12", "2023-07", "2025-12")
 )
-timeline_snake(career, title = "Career Timeline")
+timeline_snake(career)
+
+
+# The same kind of display from a vector, one element per year
+schooling <- rep(c("School", "Bachelor", "Master", "Work"),
+                 times = c(12, 3, 2, 8))
+timeline_snake(schooling, rows = 3)
 
 ```

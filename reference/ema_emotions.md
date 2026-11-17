@@ -1,10 +1,25 @@
-# EMA Emotion Ratings (Person-Level)
+# Person-level emotion ratings from an experience-sampling study
 
-Person-level mean emotion ratings (rounded to integers) from a 14-day
-experience sampling study of 280 university students. Ten emotion items
-rescaled to a 1–5 Likert scale (original study used 1–7; rescaled via
-linear transformation for simplicity). Ready to pass directly to
-[`survey_snake`](https://pak.dynasite.org/Snakeplot/reference/survey_snake.md).
+Mean ratings of ten emotions for 280 university students who took part
+in a 14-day experience-sampling study (Neubauer & Schmiedek, 2024). Each
+value is a student's mean rating of one emotion over all prompts,
+rounded to a whole number and rescaled from the original 1-7 scale to
+1-5 by `round(1 + (x - 1) * 4 / 6)`. Students without a mean on every
+item of
+[student_survey](https://pak.dynasite.org/Snakeplot/reference/student_survey.md)
+were excluded.
+
+The data have one row per student and one column per emotion, the raw
+response format read by
+[`survey_snake()`](https://pak.dynasite.org/Snakeplot/reference/survey_snake.md),
+[`survey_sequence()`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md)
+and
+[`sequential_dist()`](https://pak.dynasite.org/Snakeplot/reference/sequential_dist.md).
+Because the rows keep each student's answers together, correlations
+between items can be shown with
+`survey_snake(arc_fill = "correlation")`. The same values form the
+`Emo_` columns of
+[student_survey](https://pak.dynasite.org/Snakeplot/reference/student_survey.md).
 
 ## Usage
 
@@ -14,8 +29,9 @@ ema_emotions
 
 ## Format
 
-A data.frame with 280 rows and 10 columns (integers 1–5): Happy, Afraid,
-Sad, Balanced, Exhausted, Cheerful, Worried, Lively, Angry, Relaxed.
+A data frame with 280 rows (students) and 10 integer columns with values
+1-5: `Happy`, `Afraid`, `Sad`, `Balanced`, `Exhausted`, `Cheerful`,
+`Worried`, `Lively`, `Angry`, `Relaxed`.
 
 ## Source
 
@@ -27,8 +43,18 @@ on multiple time scales. *Zeitschrift fuer Erziehungswissenschaft*,
 Data: <https://osf.io/bhq3p> \| Codebook: <https://osf.io/csfwg> \|
 Code: <https://osf.io/84kdr/files> \| License: CC-BY 4.0
 
+## See also
+
+[student_survey](https://pak.dynasite.org/Snakeplot/reference/student_survey.md)
+for all 34 items;
+[ema_beeps](https://pak.dynasite.org/Snakeplot/reference/ema_beeps.md)
+for the prompt-level data;
+[`survey_snake()`](https://pak.dynasite.org/Snakeplot/reference/survey_snake.md).
+
 ## Examples
 
 ``` r
 survey_snake(ema_emotions, tick_shape = "bar", sort_by = "mean")
+
+survey_snake(ema_emotions, arc_fill = "correlation")
 ```

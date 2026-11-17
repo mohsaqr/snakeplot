@@ -1,8 +1,27 @@
-# Multi-Sequence Snake Plot
+# Plot many state sequences as a serpentine index or distribution plot
 
-Displays many sequences simultaneously in a serpentine layout. Time
-points are packed as blocks within each band (like `sequence_snake`),
-with multiple time points flowing through bands and arcs.
+A multi-sequence snake displays a set of categorical sequences, such as
+the weekly activity states of a class of students, with their common
+time axis folded into bands joined by U-turns. Each time point is a
+block along the serpentine path, so long sequences fit in one panel
+while the order of time points is kept.
+
+Two displays are available. With `type = "index"` each block holds one
+thin tick per sequence, colored by that sequence's state at the time
+point, as in a sequence index plot; every sequence keeps the same
+position in all blocks, and sequences can be ordered with `sort_by`.
+With `type = "distribution"` each block is a stacked bar of the share of
+sequences in each state at that time point, as in a state distribution
+plot (Gabadinho et al., 2011). The U-turns are neutral connectors: time
+points that fall on a U-turn are not drawn, and the label of each band
+gives the range of time points it shows.
+
+For a single long sequence use
+[`sequence_snake()`](https://pak.dynasite.org/Snakeplot/reference/sequence_snake.md);
+for phases with start and end dates use
+[`timeline_snake()`](https://pak.dynasite.org/Snakeplot/reference/timeline_snake.md).
+Distributions of ordinal survey responses are shown by
+[`survey_sequence()`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md).
 
 ## Usage
 
@@ -35,78 +54,79 @@ multi_snake(
 
 - sequences:
 
-  Matrix or data.frame where rows are sequences and columns are time
-  points. Each cell contains a state label.
+  A matrix or data frame with one row per sequence and one column per
+  time point; cells hold state labels. Column names, if any, label the
+  time points.
 
 - type:
 
-  Character, `"index"` (default) or `"distribution"`.
+  `"index"` (default) or `"distribution"`.
 
 - states:
 
-  Character vector of unique states in desired legend order. If `NULL`,
-  derived from the data.
+  State labels in the order used for the legend and for sorting. `NULL`
+  (default) takes them in order of first appearance.
 
 - colors:
 
-  Named or unnamed character vector of colors. If `NULL`, a built-in
-  qualitative palette is used.
+  State colors: a vector named by state, or an unnamed vector recycled
+  over `states`. States missing from a named vector are drawn in grey.
+  `NULL` (default) uses a built-in qualitative palette.
 
 - sort_by:
 
-  Character controlling sequence order in index mode: `"none"`
-  (default), `"first"` (sort by first state), `"last"` (sort by last
-  state), `"freq"` (sort by most frequent state), or `"entropy"` (sort
-  by Shannon entropy).
+  Order of the sequences in the index display: `"none"` (default, input
+  order), `"first"` or `"last"` (by the state at the first or last time
+  point), `"freq"` (by each sequence's most frequent state) or
+  `"entropy"` (by increasing Shannon entropy of its states). Ignored for
+  `type = "distribution"`.
 
 - rows:
 
-  Integer, number of serpentine rows. If `NULL`, auto-calculated (~10
-  blocks per band).
+  Number of bands. `NULL` (default) uses one band per 11 time points,
+  rounded up.
 
-- band_height:
+- band_height, band_gap:
 
-  Numeric, height of each band in plot units (default 28).
-
-- band_gap:
-
-  Numeric, gap between bands (default 18).
+  Height of each band and gap between bands, in plot units (defaults 28
+  and 18).
 
 - plot_width:
 
-  Numeric, width of each band (default 500).
+  Length of each band in plot units (default 500).
 
 - margin:
 
-  Named numeric vector with top, right, bottom, left margins.
+  Named numeric vector of `top`, `right`, `bottom` and `left` margins in
+  plot units (default
+  `c(top = 30, right = 10, bottom = 50, left = 80)`).
 
 - flow:
 
-  Character, `"snake"` (default) or `"natural"`. `"snake"` uses
-  alternating boustrophedon direction; `"natural"` reads all bands in
-  the same direction.
+  `"snake"` (default): bands alternate direction. `"natural"`: every
+  band reads in the same direction.
 
 - show_labels:
 
-  Logical, show time-point range per row (default TRUE).
+  Label each band with the range of time points it shows (default
+  `TRUE`).
 
 - show_legend:
 
-  Logical, draw color legend (default TRUE).
+  Draw the state legend and the number of sequences (default `TRUE`).
 
 - show_percent:
 
-  Logical, show percentage labels inside distribution bars (default
-  TRUE). Only used when `type = "distribution"`.
+  Print percentages inside distribution segments wide enough to hold
+  them (default `TRUE`).
 
 - border_color:
 
-  Color for thin borders between blocks, or `NA` for no borders (default
-  `NA`).
+  Color of block outlines, or `NA` (default) for none.
 
 - title:
 
-  Optional character string for plot title.
+  Plot title, or `NULL` (default) for none.
 
 - background:
 
@@ -114,44 +134,52 @@ multi_snake(
 
 - shadow:
 
-  Logical, draw drop shadows (default TRUE).
+  Draw drop shadows (default `TRUE`).
 
 - legend_text_size:
 
-  Numeric, legend text size (default 0.8).
+  Size of the legend text (default 0.8).
 
 - tick_opacity:
 
-  Numeric 0-1, opacity of ticks in index mode (default 0.85).
+  Opacity of the ticks in the index display, between 0 and 1 (default
+  0.85).
 
 ## Value
 
-Invisible `NULL`. Called for its side effect of producing a plot.
+The plot is drawn on the current device; the function returns `NULL`
+invisibly.
 
-## Details
+## References
 
-Two display modes are supported:
+Gabadinho, A., Ritschard, G., Müller, N. S., & Studer, M. (2011).
+Analyzing and visualizing state sequences in R with TraMineR. *Journal
+of Statistical Software*, 40(4), 1-37.
+[doi:10.18637/jss.v040.i04](https://doi.org/10.18637/jss.v040.i04)
 
-- `"index"`:
+## See also
 
-  Each block contains thin colored ticks stacked side by side, one tick
-  per sequence, colored by state at that time point. Like TraMineR's
-  `seqiplot()` folded into a serpentine.
-
-- `"distribution"`:
-
-  Each block is a stacked proportional bar showing what fraction of
-  sequences is in each state at that time point. Like TraMineR's
-  `seqdplot()`.
+[`sequence_snake()`](https://pak.dynasite.org/Snakeplot/reference/sequence_snake.md)
+for one sequence;
+[`timeline_snake()`](https://pak.dynasite.org/Snakeplot/reference/timeline_snake.md)
+for dated phases;
+[`survey_sequence()`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md)
+for ordinal survey responses.
 
 ## Examples
 
 ``` r
+# 50 students observed over 33 weeks
 set.seed(42)
-states <- c("Active", "Passive", "Absent")
-seqs <- matrix(sample(states, 500, replace = TRUE), nrow = 50, ncol = 10)
-multi_snake(seqs, type = "index")
+weeks <- matrix(
+  sample(c("Active", "Passive", "Absent"), 50 * 33, replace = TRUE,
+         prob = c(0.5, 0.3, 0.2)),
+  nrow = 50
+)
+multi_snake(weeks, sort_by = "freq",
+            colors = c(Active = "#009E73", Passive = "#E69F00",
+                       Absent = "#999999"))
 
-multi_snake(seqs, type = "distribution")
+multi_snake(weeks, type = "distribution")
 
 ```

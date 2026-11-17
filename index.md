@@ -1,260 +1,155 @@
 # snakeplot
 
-[![License:
-MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![R-CMD-check](https://github.com/mohsaqr/snakeplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mohsaqr/snakeplot/actions/workflows/R-CMD-check.yaml)
-[![Codecov](https://codecov.io/gh/mohsaqr/snakeplot/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mohsaqr/snakeplot)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/snakeplot)](https://CRAN.R-project.org/package=snakeplot)
-[![CRAN
-downloads](https://cranlogs.r-pkg.org/badges/grand-total/snakeplot)](https://CRAN.R-project.org/package=snakeplot)
-[![Dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](https://github.com/mohsaqr/snakeplot)
+## Vignettes and guides
 
-Serpentine (snake) plots for survey responses, experience sampling
-(EMA/ESM) data, state sequences and activity timelines using base R
-graphics. No dependencies beyond the packages that ship with R.
+**Vignettes**
+
+- [Serpentine
+  plots](https://pak.dynasite.org/Snakeplot/articles/snakeplot.html)
+- [Survey and experience sampling
+  responses](https://pak.dynasite.org/Snakeplot/articles/survey-responses.html)
+
+**Guides**
+
+- [Categorical sequences and
+  timelines](https://pak.dynasite.org/Snakeplot/articles/sequences.html)
+- [Daily activity and continuous
+  signals](https://pak.dynasite.org/Snakeplot/articles/activity.html)
+- [Palettes, reading order and
+  layout](https://pak.dynasite.org/Snakeplot/articles/palettes-and-layout.html)
+
+**Case studies**
+
+- [Daily emotions over fourteen
+  days](https://pak.dynasite.org/Snakeplot/articles/case-daily-emotions.html)
+- [A multi-construct student
+  survey](https://pak.dynasite.org/Snakeplot/articles/case-student-survey.html)
+
+## Overview
+
+The `snakeplot` R package draws serpentine plots of long ordered data:
+survey responses item by item, experience sampling ratings day by day,
+categorical state sequences, timelines of phases, and time-stamped daily
+activity. The ordered axis is divided into segments drawn as horizontal
+bands, and consecutive bands are joined by U-turn arcs, so a long record
+fits one panel while its order is kept. Survey displays show the
+response distribution of each item as ticks, dots or stacked bars, with
+the item mean, optional median, and the correlation between adjacent
+items. Experience sampling data can be drawn with one band per study day
+and each prompt placed at its time of day. All plots use base R graphics
+and the package has no dependencies beyond those that ship with R.
+
+## The serpentine layout
+
+An ordered axis, whether of items, days or positions in a sequence, is
+cut into bands of equal length that share one scale. With
+`flow = "snake"` the reading direction alternates from band to band, as
+in boustrophedon writing, so the end of each band is adjacent to the
+start of the next. With `flow = "natural"` every band reads in the same
+direction, so a position within a band, such as a time of day, has the
+same horizontal location on every band. The first arrangement keeps the
+sequence continuous across the U-turns; the second aligns a shared axis
+down the page. Each band is a unit of comparison (an item, a day, a
+segment of a sequence), and the band shading, the U-turn arcs and the
+legend encode summaries of the units they join.
 
 ## Installation
 
 ``` r
 
-# From CRAN
 install.packages("snakeplot")
 
-# Development version from GitHub
-devtools::install_github("mohsaqr/snakeplot")
+# development version
+install.packages("remotes")
+remotes::install_github("mohsaqr/snakeplot")
 ```
 
-## Overview
+## Example data
 
-Snake plots arrange data as horizontal bands in a serpentine layout —
-each row reverses direction and connects to the next through a U-turn
-arc. The package provides nine plotting functions and 10 built-in color
-palettes:
+The package includes three datasets from a 14-day experience sampling
+study of university students (Neubauer & Schmiedek, 2024), rescaled to a
+1–5 scale: `ema_emotions` (280 students by 10 emotion items, each a
+student’s mean rating over the study), `student_survey` (the same
+students by 34 items in four constructs) and `ema_beeps` (11,474
+answered prompts from 321 students, with day, time and two ratings).
 
-| Function | Purpose |
-|----|----|
-| [`survey_snake()`](https://pak.dynasite.org/Snakeplot/reference/survey_snake.md) | Survey/EMA responses with ticks, bars, correlations, faceting |
-| [`activity_snake()`](https://pak.dynasite.org/Snakeplot/reference/activity_snake.md) | Daily activity timelines with event blocks or rug ticks |
-| [`sequence_snake()`](https://pak.dynasite.org/Snakeplot/reference/sequence_snake.md) | State sequence as colored blocks flowing through serpentine layout |
-| [`multi_snake()`](https://pak.dynasite.org/Snakeplot/reference/multi_snake.md) | Many sequences at once: per-sequence ticks (index) or state proportions (distribution) |
-| [`timeline_snake()`](https://pak.dynasite.org/Snakeplot/reference/timeline_snake.md) | Career/life-event timeline from a 3-column data.frame (role, start, end) |
-| [`survey_sequence()`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md) | Stacked 100% horizontal bars in serpentine layout |
-| [`sequential_dist()`](https://pak.dynasite.org/Snakeplot/reference/sequential_dist.md) | Sequential (monochrome) variant of [`survey_sequence()`](https://pak.dynasite.org/Snakeplot/reference/survey_sequence.md) |
-| [`line_snake()`](https://pak.dynasite.org/Snakeplot/reference/line_snake.md) | Continuous intensity line plot (experimental) |
-| [`facet_snake()`](https://pak.dynasite.org/Snakeplot/reference/facet_snake.md) | Generic multi-panel wrapper for any snake function |
+## Survey responses
 
-## Bundled datasets
-
-Three datasets from Neubauer & Schmiedek (2024) are included:
-
-| Dataset | Rows | Description |
-|----|----|----|
-| `ema_emotions` | 280 | Person-level means for 10 emotions (1-5 scale) |
-| `student_survey` | 280 | 34 items across 4 constructs (1-5 scale), prefixed for faceting |
-| `ema_beeps` | 11 474 | Beep-level timestamps + anger/happiness ratings (1-5 scale, 14 days) |
-
-## Examples
+Each item is a band. The widths of the colored zones are the shares of
+the response levels, the ticks are the individual responses, and the
+diamond marks the item mean. Sorting by the mean orders the items from
+the least to the most endorsed.
 
 ``` r
 
 library(snakeplot)
 
-labs5 <- c("1" = "Not at all", "2" = "Slightly", "3" = "Moderate",
-           "4" = "Quite",      "5" = "Extremely")
+survey_snake(ema_emotions, sort_by = "mean",
+             colors = snake_palette("ocean", n = 5),
+             level_labels = c("1" = "Not at all", "2" = "Slightly",
+                              "3" = "Moderate", "4" = "Quite",
+                              "5" = "Extremely"))
 ```
 
-### `survey_snake()` — daily value distribution ticks
+![plot of chunk survey](reference/figures/README-survey-1.png)
 
-``` r
+plot of chunk survey
 
-survey_snake(ema_beeps, var = "angry", day = "day",
-             colors = snake_palette("ocean", n = 5), level_labels = labs5,
-             title = "Anger — 14 days, value distribution")
-```
+## Experience sampling by day
 
-![](reference/figures/survey_snake_daily.png)
-
-### `survey_snake()` — correlation arcs
-
-``` r
-
-survey_snake(ema_emotions, tick_shape = "line",
-             arc_fill = "correlation", sort_by = "mean",
-             colors = snake_palette("ocean", n = 5), level_labels = labs5,
-             title = "Emotions — correlations at U-turns")
-```
-
-![](reference/figures/survey_snake_corr.png)
-
-### `survey_snake()` — dot plot with dark bands
-
-``` r
-
-survey_snake(ema_emotions, tick_shape = "dot", sort_by = "mean",
-             colors = snake_palette("ocean", n = 5), level_labels = labs5,
-             band_palette = c("#1a1228", "#1a2a42"),
-             title = "Emotions — dots on dark bands")
-```
-
-![](reference/figures/survey_snake_dots.png)
-
-### `survey_snake()` — faceted multi-construct
-
-``` r
-
-survey_snake(student_survey, facet = TRUE, facet_ncol = 2L,
-             tick_shape = "bar", sort_by = "mean",
-             colors = snake_palette("ocean", n = 5), level_labels = labs5)
-```
-
-![](reference/figures/survey_snake_facet.png)
-
-### `survey_snake()` — daily distribution bars
+With `var` and `day`, beep-level data are drawn as one band per study
+day for one rating; `timestamp` places each answered prompt at its time
+of day.
 
 ``` r
 
 survey_snake(ema_beeps, var = "happy", day = "day",
-             tick_shape = "bar", bar_reverse = TRUE,
-             colors = snake_palette("ocean", n = 5), level_labels = labs5,
-             title = "Happiness — 14 days, distribution bars")
+             timestamp = "start_time",
+             colors = snake_palette("ocean", n = 5),
+             title = "Happiness, by time of day")
 ```
 
-![](reference/figures/survey_snake_daily_bars.png)
+![plot of chunk daily](reference/figures/README-daily-1.png)
 
-### `activity_snake()` — rug ticks
+plot of chunk daily
 
-``` r
+## Sequences and timelines
 
-set.seed(42)
-days <- c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
-d <- data.frame(
-  day      = rep(days, each = 40),
-  start    = round(runif(280, 360, 1400)),
-  duration = 0
-)
-activity_snake(d)
-```
-
-![](reference/figures/activity_snake.png)
-
-### `activity_snake()` — duration blocks
-
-``` r
-
-d2 <- data.frame(
-  day      = rep(days, each = 8),
-  start    = round(runif(56, 360, 1200)),
-  duration = round(runif(56, 15, 120))
-)
-activity_snake(d2, event_color = "#e09480", band_color = "#3d2518")
-```
-
-![](reference/figures/activity_snake_blocks.png)
-
-### `sequence_snake()` — state sequence
-
-``` r
-
-set.seed(42)
-verbs <- c("Read", "Write", "Discuss", "Listen",
-           "Search", "Plan", "Code", "Review")
-# 40 runs of 1-4 repeats each, cut to the first 75 steps
-runs <- replicate(40, rep(sample(verbs, 1), sample(4, 1)), simplify = FALSE)
-seq75 <- head(unlist(runs), 75)
-sequence_snake(seq75, title = "75-step learning sequence")
-```
-
-![](reference/figures/sequence_snake.png)
-
-### `timeline_snake()` — career/event timeline
+[`sequence_snake()`](https://pak.dynasite.org/Snakeplot/reference/sequence_snake.md)
+folds an ordered categorical sequence into bands of blocks colored by
+state;
+[`timeline_snake()`](https://pak.dynasite.org/Snakeplot/reference/timeline_snake.md)
+draws phases with start and end dates as monthly blocks with labelled
+transitions.
 
 ``` r
 
 career <- data.frame(
-  role  = c("Intern", "Junior Dev", "Mid Dev",
-            "Senior Dev", "Tech Lead", "Architect"),
-  start = c("2015-01", "2015-07", "2017-01",
-            "2019-07", "2022-07", "2024-01"),
-  end   = c("2015-06", "2016-12", "2019-06",
-            "2022-06", "2023-12", "2024-12")
+  role  = c("Intern", "Junior developer", "Developer",
+            "Senior developer", "Lead", "Architect"),
+  start = c("2015-01", "2015-07", "2017-01", "2019-07", "2022-07",
+            "2024-01"),
+  end   = c("2015-06", "2016-12", "2019-06", "2022-06", "2023-12",
+            "2024-12")
 )
-timeline_snake(career,
-               title = "Software Engineer — Career Path (2015-2024)")
+timeline_snake(career)
 ```
 
-![](reference/figures/timeline_snake.png)
+![plot of chunk timeline](reference/figures/README-timeline-1.png)
 
-### `survey_sequence()` — stacked bars
+plot of chunk timeline
 
-``` r
+## Authors and citation
 
-survey_sequence(ema_emotions, colors = snake_palette("ocean", n = 5))
-```
+`snakeplot` is written by [Mohammed Saqr](https://saqr.me) and [Sonsoles
+López-Pernas](https://sonsoles.me). Mohammed Saqr maintains the package.
+Questions and bug reports can be submitted through the [repository issue
+tracker](https://github.com/mohsaqr/snakeplot/issues). The package
+citation is available through `citation("snakeplot")`.
 
-![](reference/figures/survey_sequence.png)
-
-### `line_snake()` — continuous intensity
-
-``` r
-
-set.seed(42)
-hours <- seq(0, 1440, by = 10)
-d_line <- data.frame(
-  day   = rep(c("Mon", "Tue", "Wed", "Thu", "Fri"), each = length(hours)),
-  time  = rep(hours, 5),
-  value = sin(rep(hours, 5) / 1440 * 4 * pi) * 50 + 50 +
-          rnorm(5 * length(hours), 0, 8)
-)
-line_snake(d_line, fill_color = "#e74c3c")
-```
-
-![](reference/figures/line_snake.png)
-
-## Built-in palettes
-
-10 palettes ship with the package — 5 diverging, 5 sequential:
-
-``` r
-
-names(snake_palettes)
-#>  [1] "classic" "earth"   "ocean"   "sunset"  "berry"   "blues"   "greens" 
-#>  [8] "grays"   "warm"    "viridis"
-
-# Interpolate to the number of response levels (5 for the bundled data)
-snake_palette("sunset", n = 5)
-survey_snake(ema_emotions, colors = snake_palette("earth", n = 5),
-             tick_shape = "bar")
-```
-
-## Key parameters for `survey_snake()`
-
-| Parameter | Description |
-|----|----|
-| `tick_shape` | `"line"` (default), `"dot"`, or `"bar"` (stacked proportional) |
-| `sort_by` | `"none"`, `"mean"`, or `"net"` |
-| `arc_fill` | `"none"` (two-tone), `"correlation"`, `"mean_prev"`, `"blend"` |
-| `colors` | One color per response level, e.g. `snake_palette("earth", n = 5)` |
-| `band_palette` | 2+ anchor colors for band shading (default: brown-to-slate) |
-| `bar_reverse` | `TRUE` to draw bars from highest level first |
-| `level_labels` | Named vector mapping levels to display labels |
-| `facet` | `TRUE` (auto-group by prefix) or named list of column groups |
-| `var`, `day`, `timestamp` | Auto-pivot EMA data into daily bands |
-| `show_mean`, `show_median` | Toggle diamond/dashed-line markers |
-
-## Data source
-
-The bundled datasets are derived from:
-
-Neubauer, A. B., & Schmiedek, F. (2024). Approaching academic adjustment
-on multiple time scales. *Zeitschrift fuer Erziehungswissenschaft*,
-*27*(1), 147-168. <https://doi.org/10.1007/s11618-023-01182-8>
-
-- [Original data](https://osf.io/bhq3p)
-- [Codebook](https://osf.io/csfwg)
-- [Code](https://osf.io/84kdr/files)
-- License: CC-BY 4.0
-
-## License
-
-MIT
+The bundled data are derived from Neubauer, A. B., & Schmiedek, F.
+(2024). Approaching academic adjustment on multiple time scales.
+*Zeitschrift für Erziehungswissenschaft*, *27*(1), 147–168.
+<https://doi.org/10.1007/s11618-023-01182-8>
+([data](https://osf.io/bhq3p), [codebook](https://osf.io/csfwg), CC-BY
+4.0).
