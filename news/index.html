@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">snakeplot</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,9 +49,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.3.6" id="snakeplot-036">snakeplot 0.3.6<a class="anchor" aria-label="anchor" href="#snakeplot-036"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.4.0" id="snakeplot-040">snakeplot 0.4.0<a class="anchor" aria-label="anchor" href="#snakeplot-040"></a></h2>
 <div class="section level3">
-<h3 id="changes-0-3-6">Changes<a class="anchor" aria-label="anchor" href="#changes-0-3-6"></a></h3>
+<h3 id="changes-0-4-0">Changes<a class="anchor" aria-label="anchor" href="#changes-0-4-0"></a></h3>
 <ul><li>The correlation arcs of <code>survey_snake(arc_fill = "correlation")</code> are now computed from respondent-level rows: Pearson r between adjacent items across the respondents who answered both (pairwise-complete), <code>NA</code> when fewer than three did or either item is constant among them. Previously they were computed from the response counts.</li>
 <li>
 <code>arc_fill = "correlation"</code> now requires raw responses (one row per respondent, one column per item). Counts input and the <code>var</code>/<code>day</code> (ESM) mode, which do not identify respondents, raise an error of class <code>snakeplot_no_respondent_data</code>.</li>
@@ -62,20 +62,10 @@
 <code><a href="../reference/survey_snake.html">survey_snake()</a></code> restores the session’s random number state on exit. It still seeds its tick jitter with <code>seed</code> (default 42), so plots are unchanged, but it no longer resets the caller’s random number stream.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="documentation-0-3-6">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-3-6"></a></h3>
-<ul><li>Help pages rewritten: each opens with what the display represents and when to use it, with cross-references, references and examples on the bundled data.</li>
-<li>New vignettes “Serpentine plots” and “Survey and experience sampling responses”; guides on sequences and timelines, daily activity, and palettes and layout; case studies on the bundled experience sampling data. The README is generated from <code>README.Rmd</code>.</li>
-</ul></div>
-<div class="section level3">
-<h3 id="packaging-0-3-6">Packaging<a class="anchor" aria-label="anchor" href="#packaging-0-3-6"></a></h3>
-<ul><li>README figures in <code>man/figures/</code> are now included in the package; a <code>.Rbuildignore</code> pattern for <code>.png</code> files had excluded them, so the README showed broken images on CRAN.</li>
+<h3 id="documentation-0-4-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-4-0"></a></h3>
+<ul><li>New vignettes “Serpentine plots” and “Survey and experience sampling responses”; guides on sequences and timelines, daily activity, and palettes and layout; case studies on the bundled experience sampling data.</li>
 </ul></div>
 </div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.3.2" id="snakeplot-032">snakeplot 0.3.2<a class="anchor" aria-label="anchor" href="#snakeplot-032"></a></h2>
-<ul><li>Documentation revision: corrected stale defaults (<code><a href="../reference/survey_snake.html">survey_snake()</a></code> <code>tick_opacity</code>, <code><a href="../reference/timeline_snake.html">timeline_snake()</a></code> <code>band_gap</code>, <code>tick_color</code>, <code>tick_length</code>, <code>rows</code>), described the structure of every returned object, documented that <code>colors</code> uses only the first <code>length(levels)</code> colors and that <code>show_correlation</code> only acts with <code>arc_fill = "correlation"</code>, and fixed the <code><a href="../reference/sequence_snake.html">sequence_snake()</a></code> rug-style description (light gray band; <code>band_color</code> is currently unused).</li>
-<li>Examples, README and vignette use <code>snake_palette(name, n = 5)</code> instead of <code>snake_palettes$name</code>, so diverging palettes span the bundled 1-5 scales; the README uses 5-point level labels to match the data and lists <code><a href="../reference/multi_snake.html">multi_snake()</a></code>. The vignette explains why to use each plot.</li>
-</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.0" id="snakeplot-030">snakeplot 0.3.0<a class="anchor" aria-label="anchor" href="#snakeplot-030"></a></h2><p class="text-muted">CRAN release: 2026-03-16</p>
 <ul><li>New <code>flow</code> parameter on all snake functions: <code>"snake"</code> (boustrophedon, default for most functions) or <code>"natural"</code> (all rows read left-to-right, default for <code><a href="../reference/timeline_snake.html">timeline_snake()</a></code> and <code><a href="../reference/sequence_snake.html">sequence_snake()</a></code>).</li>
