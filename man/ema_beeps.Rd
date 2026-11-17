@@ -3,9 +3,17 @@
 \docType{data}
 \name{ema_beeps}
 \alias{ema_beeps}
-\title{EMA Beep-Level Data (Daily Emotions)}
+\title{Prompt-level happiness and anger ratings from an experience-sampling study}
 \format{
-A data.frame with 11 474 rows and 5 columns.
+A data frame with 11,474 rows (prompts) and 5 columns:
+\describe{
+\item{\code{id}}{Character. Anonymised participant identifier.}
+\item{\code{day}}{Integer 1-14. Study day.}
+\item{\code{start_time}}{POSIXct (UTC). Time of the prompt, between April
+and July 2021.}
+\item{\code{happy}}{Integer 1-5. Rated happiness.}
+\item{\code{angry}}{Integer 1-5. Rated anger.}
+}
 }
 \source{
 Neubauer, A. B., & Schmiedek, F. (2024). Approaching academic adjustment
@@ -21,29 +29,33 @@ License: CC-BY 4.0
 ema_beeps
 }
 \description{
-All 11 474 experience-sampling beeps from a 14-day study of 321
-university students. Each row is one beep with the participant's emotion
-ratings and a timestamp. Use with the \code{var}/\code{day}/\code{timestamp}
-interface of \code{\link{survey_snake}} for daily snake plots.
-}
-\details{
-\describe{
-\item{\code{id}}{Character. Anonymised participant identifier.}
-\item{\code{day}}{Integer 1--14. Study day.}
-\item{\code{start_time}}{POSIXct. Timestamp of the beep.}
-\item{\code{happy}}{Integer 1--5. Self-reported happiness (rescaled from
-original 1--7).}
-\item{\code{angry}}{Integer 1--5. Self-reported anger (rescaled from
-original 1--7).}
-}
+All 11,474 answered prompts ("beeps") from a 14-day experience-sampling
+study of 321 university students (Neubauer & Schmiedek, 2024). Each row is
+one prompt with the participant, the study day, the time of the prompt and
+the ratings of happiness and anger, rescaled from 1-7 to 1-5 by
+\code{round(1 + (x - 1) * 4 / 6)}. Participants answered between 1 and 69
+prompts; the 14 study days of one participant need not be consecutive
+calendar days.
+
+The data are in long format. With the \code{var}, \code{day} and \code{timestamp}
+arguments of \code{\link[=survey_snake]{survey_snake()}} each study day becomes a band and each
+rating is placed at its time of day; the prompt times of one participant
+can be shown with \code{\link[=activity_snake]{activity_snake()}}.
 }
 \examples{
-# Anger over 14 days, ticks by time-of-day
+# Anger over the 14 study days, each rating at its time of day
 survey_snake(ema_beeps, var = "angry", day = "day",
              timestamp = "start_time")
 
-# Happiness over 14 days, distribution bars
-survey_snake(ema_beeps, var = "happy", day = "day",
-             tick_shape = "bar")
+# Happiness per study day as stacked bars
+survey_snake(ema_beeps, var = "happy", day = "day", tick_shape = "bar")
+
+# When one participant answered the prompts
+activity_snake(subset(ema_beeps, id == "xcVDLRQOwn", select = start_time),
+               show_total = FALSE, show_count = TRUE)
+}
+\seealso{
+\link{ema_emotions} and \link{student_survey} for person-level ratings;
+\code{\link[=survey_snake]{survey_snake()}}; \code{\link[=activity_snake]{activity_snake()}}.
 }
 \keyword{datasets}

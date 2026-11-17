@@ -1,70 +1,97 @@
-#' Survey Sequence Plot
+#' Plot survey responses as a serpentine of stacked bars
 #'
-#' Each survey item is a 100\% stacked horizontal bar in a serpentine layout.
-#' Color segments represent response levels; percentages are shown inside
-#' segments when wide enough. Arcs blend adjacent end-colors.
+#' @description
+#' A survey sequence shows the distribution of responses to a set of rating
+#' items as one 100% stacked bar per item. The bars are the bands of a
+#' serpentine joined by U-turns, so a long instrument fits in one panel in
+#' its item order and the share of each response level can be compared
+#' between items. Heiberger and Robbins (2014) discuss the design of stacked
+#' bar charts for rating scales.
 #'
-#' @param counts Response data in one of three formats: a numeric matrix of
-#'   counts (rows = items, columns = response levels), a data.frame of counts
-#'   (coerced to a matrix), or a data.frame of raw responses (one column per
-#'   item, one row per respondent), which is tabulated automatically.
-#' @param labels Character vector of item labels. \code{NULL} (default)
-#'   infers them from row or column names.
-#' @param levels Character vector of level labels. \code{NULL} (default)
-#'   infers them from column names or the unique response values.
-#' @param band_height Numeric (default 28).
-#' @param band_gap Numeric (default 14).
-#' @param plot_width Numeric (default 500).
-#' @param colors Character vector of segment colors, one per response level in
-#'   level order (only the first \code{length(levels)} are used). Default
-#'   \code{NULL} uses a diverging palette.
-#' @param show_percent Logical. Show percentages inside segments (default TRUE).
-#' @param min_segment Numeric. Hide label if segment narrower than this
-#'   (default 34).
-#' @param arc_style Character: "gradient" or "neutral" (default "gradient").
-#' @param arc_opacity Numeric 0-1 (default 0.5).
-#' @param sort_by Character: "none" (input order, default), "mean" (ascending
-#'   item mean), or "net" (ascending net score: share of responses above the
-#'   scale midpoint minus share below; falls back to the mean for scales with
-#'   fewer than four levels).
-#' @param shadow Logical (default TRUE).
-#' @param show_legend Logical (default TRUE).
-#' @param label_color Character (default "#333333").
-#' @param label_size Numeric (default 0.85).
-#' @param label_align Character. Label alignment: "left" (default), "right",
-#'   or "direction" (follows band reading direction).
-#' @param reverse_rtl Logical. Reverse segment order on right-to-left bands
-#'   so the visual reading direction mirrors the data order (default FALSE).
-#' @param start_from Character: "left" (default) or "right". Which side the
-#'   first band starts from.
-#' @param flow Character, \code{"snake"} (default) or \code{"natural"}.
-#'   \code{"snake"} uses alternating boustrophedon direction;
-#'   \code{"natural"} reads all bands in the same direction.
-#' @param title Optional title.
-#' @param margin Named numeric vector with top, right, bottom, left margins.
-#' @param background Background color (default "white").
+#' `survey_sequence()` accepts raw responses or a table of counts. Segments
+#' are colored by response level, with a diverging palette by default, and
+#' carry their percentage when wide enough. Items can be sorted by mean or by
+#' net agreement. Each U-turn takes the color midway between the levels at
+#' the two ends it joins, or a neutral grey.
 #'
-#' @return Called for its side effect of drawing a plot. Invisibly returns a
-#'   list of class \code{snake_layout} holding the computed geometry: \code{bands}
-#'   (a data.frame with one row per band giving its position and its
-#'   \code{direction} and \code{read_direction}), \code{arcs} (a list with one
-#'   element per U-turn), \code{canvas}, \code{plot_area}, \code{orientation},
-#'   \code{flow} and \code{params}.
+#' [sequential_dist()] draws the same display with a single-hue palette for
+#' scales without a neutral midpoint. [survey_snake()] shows each response as
+#' a tick and can show correlations between adjacent items.
+#'
+#' @param counts Responses: a data frame of raw responses (one row per
+#'   respondent, one column per item), a numeric matrix of counts (items in
+#'   rows, response levels in columns), or a data frame of counts. A data
+#'   frame is read as raw responses when its columns hold few distinct
+#'   whole-number or categorical values relative to its number of rows.
+#' @param labels Item labels, one per item. `NULL` (default) uses the row
+#'   names of a count table, or, for raw responses, the column names with the
+#'   number of responses.
+#' @param levels Response levels in scale order. `NULL` (default) uses the
+#'   column names of a count table, or, for raw responses, the factor levels
+#'   or the sorted distinct values. For raw responses the levels must match
+#'   the values in the data.
+#' @param band_height Height of each band in plot units (default 28).
+#' @param band_gap Gap between bands in plot units (default 14).
+#' @param plot_width Length of each band in plot units (default 500).
+#' @param colors One color per response level, in scale order. Only the first
+#'   `length(levels)` colors are used, so pass
+#'   `snake_palette(name, n = <number of levels>)`. `NULL` (default) uses a
+#'   red-to-blue diverging palette.
+#' @param show_percent Print percentages inside the segments
+#'   (default `TRUE`).
+#' @param min_segment Minimum segment width, in plot units, for a percentage
+#'   to be printed (default 34).
+#' @param arc_style `"gradient"` (default) colors each U-turn midway between
+#'   the levels at its two ends; `"neutral"` draws it grey.
+#' @param arc_opacity Opacity of the U-turns, between 0 and 1 (default 0.5).
+#' @param sort_by Order of the items: `"none"` (default, input order),
+#'   `"mean"` (increasing item mean) or `"net"` (increasing share of
+#'   responses above the middle level minus share below; the mean for scales
+#'   with fewer than four levels).
+#' @param shadow Draw drop shadows (default `TRUE`).
+#' @param show_legend Draw the legend (default `TRUE`).
+#' @param label_color,label_size Color and size multiplier of the item labels
+#'   (defaults `"#333333"` and 0.85).
+#' @param label_align Alignment of the item labels: `"left"` (default),
+#'   `"right"`, or `"direction"` to follow each band's reading direction.
+#' @param reverse_rtl Reverse the order of levels on bands that read right
+#'   to left, so every band starts with the lowest level in its reading
+#'   direction (default `FALSE`: lowest level on the left of every band).
+#' @param start_from Side on which the first band starts: `"left"` (default)
+#'   or `"right"`.
+#' @param flow `"snake"` (default): bands alternate direction. `"natural"`:
+#'   every band reads in the same direction.
+#' @param title Plot title, or `NULL` (default) for none.
+#' @param margin Named numeric vector of `top`, `right`, `bottom` and `left`
+#'   margins in plot units (default
+#'   `c(top = 30, right = 10, bottom = 55, left = 100)`).
+#' @param background Background color (default `"white"`).
+#'
+#' @return The plot is drawn on the current device. The function returns,
+#'   invisibly, an object of class `snake_layout`: a list describing the drawn
+#'   geometry, with `bands` (a data frame with one row per item band giving
+#'   its index, position, and drawing and reading direction), `arcs` (a list
+#'   with one element per U-turn), `canvas` and `plot_area` (dimensions in
+#'   plot units), `orientation`, `flow` and `params` (the sizes used).
+#'
+#' @references
+#' Heiberger, R. M., & Robbins, N. B. (2014). Design of diverging stacked bar
+#' charts for Likert scales and other applications. *Journal of Statistical
+#' Software*, 57(5), 1-32. \doi{10.18637/jss.v057.i05}
+#'
+#' @seealso [sequential_dist()] for single-hue bars; [survey_snake()] for
+#'   individual responses and item correlations; [snake_palette()] for level
+#'   colors.
 #'
 #' @examples
-#' counts <- matrix(c(
-#'   110, 210, 79, 84, 42,
-#'   126, 205, 68, 100, 26,
-#'   184, 226, 47, 58, 10,
-#'   200, 205, 52, 47, 21,
-#'   205, 210, 42, 53, 15,
-#'   197, 214, 53, 47, 14,
-#'   194, 242, 47, 31, 11
-#' ), nrow = 7, byrow = TRUE)
-#' labels <- c("LOC1", "LOC2", "LOC3", "CCA1", "LOC5", "LOC5", "LOC4")
-#' labels <- paste0(labels, " (n=525)")
-#' levs <- as.character(1:5)
-#' survey_sequence(counts, labels, levs)
+#' # Ten emotion items, sorted by net score
+#' survey_sequence(ema_emotions, sort_by = "net")
+#'
+#' # Study motivation items with another diverging palette
+#' motivation <- subset(student_survey,
+#'                      select = Mot_Disappointed:Mot_Enjoyment)
+#' survey_sequence(motivation, sort_by = "mean",
+#'                 colors = snake_palette("ocean", n = 5))
 #'
 #' @export
 survey_sequence <- function(counts, labels = NULL, levels = NULL,
@@ -255,28 +282,53 @@ survey_sequence <- function(counts, labels = NULL, levels = NULL,
 }
 
 
-#' Sequential Distribution Plot
+#' Plot unipolar survey responses as a serpentine of single-hue stacked bars
 #'
-#' Like \code{\link{survey_sequence}} but uses a sequential (monochrome)
-#' palette instead of diverging colors. Suitable for ordinal scales without
-#' a natural midpoint (e.g., "Never" to "Always").
+#' @description
+#' Some rating scales have no neutral midpoint: frequency scales from "Never"
+#' to "Always", or intensity scales from "Not at all" to "Extremely". For
+#' such scales a diverging palette suggests a midpoint the scale does not
+#' have. `sequential_dist()` draws the display of [survey_sequence()], one
+#' 100% stacked bar per item along a serpentine, with a light-to-dark palette
+#' of a single hue, so that darker segments stand for higher levels.
+#'
+#' Input, sorting, labels and layout options are those of
+#' [survey_sequence()]; `hue` sets the color of the palette. For bipolar
+#' (agree-disagree) scales use [survey_sequence()]; to show individual
+#' responses use [survey_snake()].
 #'
 #' @inheritParams survey_sequence
-#' @param hue Numeric 0-360. Base hue for the sequential palette
-#'   (default 210 = blue).
+#' @param hue Hue of the palette in degrees, 0-360 (default 210, blue).
+#' @param colors One color per response level, in scale order. `NULL`
+#'   (default) uses a light-to-dark palette of `hue`.
+#' @param arc_opacity Opacity of the U-turns, between 0 and 1 (default 0.85).
 #'
-#' @return Called for its side effect of drawing a plot. Invisibly returns
-#'   the \code{snake_layout} list described in \code{\link{survey_sequence}}.
+#' @return The value of [survey_sequence()]: the plot is drawn on the current
+#'   device and an object of class `snake_layout` is returned invisibly.
+#'
+#' @references
+#' Heiberger, R. M., & Robbins, N. B. (2014). Design of diverging stacked bar
+#' charts for Likert scales and other applications. *Journal of Statistical
+#' Software*, 57(5), 1-32. \doi{10.18637/jss.v057.i05}
+#'
+#' @seealso [survey_sequence()] for diverging colors; [survey_snake()] for
+#'   individual responses; [snake_palette()] for the sequential palettes
+#'   `"blues"`, `"greens"`, `"grays"`, `"warm"` and `"viridis"`.
 #'
 #' @examples
-#' counts <- matrix(c(
-#'   15, 25, 60, 80, 45,
-#'   10, 20, 50, 90, 55,
-#'   20, 30, 65, 70, 40
-#' ), nrow = 3, byrow = TRUE)
-#' labels <- c("Behavior A", "Behavior B", "Behavior C")
-#' levs <- c("Never", "Rarely", "Sometimes", "Often", "Always")
-#' sequential_dist(counts, labels, levs, hue = 160)
+#' # Emotion intensity rated 1-5, a unipolar scale
+#' sequential_dist(ema_emotions, sort_by = "mean", hue = 160)
+#'
+#' # A table of counts on a frequency scale
+#' counts <- matrix(c(15, 25, 60, 80, 45,
+#'                    10, 20, 50, 90, 55,
+#'                    20, 30, 65, 70, 40),
+#'                  nrow = 3, byrow = TRUE)
+#' sequential_dist(counts,
+#'                 labels = c("Plans study time", "Reviews notes",
+#'                            "Asks for help"),
+#'                 levels = c("Never", "Rarely", "Sometimes", "Often",
+#'                            "Always"))
 #'
 #' @export
 sequential_dist <- function(counts, labels = NULL, levels = NULL,

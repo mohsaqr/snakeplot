@@ -3,9 +3,10 @@
 \docType{data}
 \name{student_survey}
 \alias{student_survey}
-\title{Student Survey (Cross-Sectional, Multi-Construct)}
+\title{Person-level ratings of emotion, motivation, regulation and engagement}
 \format{
-A data.frame with 280 rows and 34 integer columns (values 1--5).
+A data frame with 280 rows (students) and 34 integer columns with
+values 1-5, named \verb{<prefix>_<item>} as listed above.
 }
 \source{
 Neubauer, A. B., & Schmiedek, F. (2024). Approaching academic adjustment
@@ -21,27 +22,33 @@ License: CC-BY 4.0
 student_survey
 }
 \description{
-Person-level mean scores (rounded to integers) from a 14-day experience
-sampling study of 280 university students. Contains 34 items across four
-construct groups, rescaled to a 1--5 Likert scale (original 1--7). Column
-name prefixes enable automatic faceting with
-\code{survey_snake(student_survey, facet = TRUE)}.
-}
-\details{
-\describe{
-\item{\code{Emo_}}{10 emotion items: Happy, Afraid, Sad, Balanced,
-Exhausted, Cheerful, Worried, Lively, Angry, Relaxed.}
-\item{\code{Mot_}}{8 study motivation items: Disappointed, FeltBad,
-Important, Interesting, Compulsory, Proving, Understanding, Enjoyment.}
-\item{\code{Reg_}}{5 emotion regulation items: SeeGood, FocusGood,
-Suppression, ChangedFeeling, Rumination.}
-\item{\code{Eng_}}{11 study engagement items: Enjoy, WearingDown,
-Satisfied, DifficultReconcile, Interesting, Exhausted, OnlyNecessary,
-Energy, Identification, Expectations, ConsiderQuitting.}
+Mean ratings of 34 items for the 280 university students of
+\link{ema_emotions}, from the same 14-day experience-sampling study (Neubauer &
+Schmiedek, 2024). Each value is a student's mean rating of one item over
+all prompts, rounded to a whole number and rescaled from 1-7 to 1-5 by
+\code{round(1 + (x - 1) * 4 / 6)}.
+
+The items belong to four constructs, marked by a column-name prefix, so
+that \code{survey_snake(student_survey, facet = TRUE)} draws one panel per
+construct:
+\itemize{
+\item \code{Emo_}: 10 emotion items: Happy, Afraid, Sad, Balanced, Exhausted,
+Cheerful, Worried, Lively, Angry, Relaxed.
+\item \code{Mot_}: 8 study motivation items: Disappointed, FeltBad, Important,
+Interesting, Compulsory, Proving, Understanding, Enjoyment.
+\item \code{Reg_}: 5 emotion regulation items: SeeGood, FocusGood, Suppression,
+ChangedFeeling, Rumination.
+\item \code{Eng_}: 11 study engagement items: Enjoy, WearingDown, Satisfied,
+DifficultReconcile, Interesting, Exhausted, OnlyNecessary, Energy,
+Identification, Expectations, ConsiderQuitting.
 }
 }
 \examples{
 survey_snake(student_survey, facet = TRUE, tick_shape = "bar",
              sort_by = "mean", facet_ncol = 2L)
+}
+\seealso{
+\link{ema_emotions} for the emotion items alone; \link{ema_beeps} for the
+prompt-level data; \code{\link[=survey_snake]{survey_snake()}} and its \code{facet} argument.
 }
 \keyword{datasets}

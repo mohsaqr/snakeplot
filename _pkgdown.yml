@@ -2,46 +2,86 @@ url: https://pak.dynasite.org/Snakeplot
 
 template:
   bootstrap: 5
-  bootswatch: flatly
 
-home:
-  title: "snakeplot — Serpentine Plots for R"
-  description: >
-    Visualize long timelines, extended sequences, and survey data
-    using intuitive serpentine (snake) plots.
+authors:
+  Mohammed Saqr:
+    href: https://saqr.me
+  Sonsoles Lopez-Pernas:
+    href: https://sonsoles.me
 
 navbar:
   structure:
-    left: [intro, reference, articles]
-    right: [github]
-  components:
-    github:
-      icon: fab fa-github
-      href: https://github.com/mohsaqr/snakeplot
+    left:  [intro, reference, articles, news]
+    right: [search, github]
 
 reference:
-  - title: "Core plot functions"
-    contents:
-      - activity_snake
-      - line_snake
-      - multi_snake
-      - sequence_snake
-      - facet_snake
-      - survey_snake
-      - timeline_snake
-      - survey_sequence
-      - sequential_dist
-  - title: "Palettes"
-    contents:
-      - snake_palette
-      - snake_palettes
-  - title: "Datasets"
-    contents:
-      - ema_beeps
-      - ema_emotions
-      - student_survey
+- title: Overview
+  contents:
+  - snakeplot-package
+
+- title: Survey and experience sampling responses
+  desc: One band per item, or one band per study day for beep-level ratings;
+    responses as ticks, dots or stacked bars.
+  contents:
+  - survey_snake
+  - survey_sequence
+  - sequential_dist
+
+- title: Sequences and timelines
+  desc: Ordered categorical states, several sequences at once, and phases
+    with start and end dates.
+  contents:
+  - sequence_snake
+  - multi_snake
+  - timeline_snake
+
+- title: Daily activity
+  desc: Time-stamped events and continuous signals on a daily clock, one band
+    per day.
+  contents:
+  - activity_snake
+  - line_snake
+
+- title: Panels
+  desc: One serpentine plot per group.
+  contents:
+  - facet_snake
+
+- title: Results
+  desc: The tables of a drawn plot's layout.
+  contents:
+  - as.data.frame.snake_layout
+
+- title: Palettes
+  desc: Diverging and sequential colors, interpolated to the number of
+    levels.
+  contents:
+  - snake_palette
+  - snake_palettes
+
+- title: Data
+  desc: A 14-day experience sampling study of university students.
+  contents:
+  - ema_emotions
+  - student_survey
+  - ema_beeps
 
 articles:
-  - title: "Vignettes"
-    contents:
-      - survey-snake-plots
+- title: Vignettes
+  navbar: Vignettes
+  contents:
+  - snakeplot
+  - survey-responses
+
+- title: Guides
+  navbar: Guides
+  contents:
+  - articles/sequences
+  - articles/activity
+  - articles/palettes-and-layout
+
+- title: Case studies
+  navbar: Case studies
+  contents:
+  - articles/case-daily-emotions
+  - articles/case-student-survey

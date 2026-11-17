@@ -2,7 +2,7 @@
 % Please edit documentation in R/sequence_snake.R
 \name{sequence_snake}
 \alias{sequence_snake}
-\title{Sequence Index Snake Plot}
+\title{Plot a long state sequence as blocks along a serpentine path}
 \usage{
 sequence_snake(
   sequence,
@@ -43,136 +43,158 @@ sequence_snake(
 )
 }
 \arguments{
-\item{sequence}{Input in flexible formats:
-\itemize{
-\item \strong{Vector}: character, integer, or factor vector of states.
-\item \strong{Data.frame}: first character/factor column is used.
-\item \strong{Comma-separated string}: \code{"A,B,C,A"} is split automatically.
-\item \strong{List}: unlisted to a vector.
-}
-NA values are dropped with a warning.}
+\item{sequence}{The states in order: a character, factor or integer
+vector; a single comma-separated string such as \code{"A,B,C"}; a list; or a
+data frame, whose first character or factor column is used. Missing
+values are dropped with a warning.}
 
-\item{states}{Character vector of unique states in desired order.
-If \code{NULL}, derived from \code{unique(sequence)}.}
+\item{states}{State labels in legend order. \code{NULL} (default) takes them in
+order of first appearance. Every state in \code{sequence} must be listed.}
 
-\item{colors}{Named character vector of colors keyed by state, or an
-unnamed vector recycled to match \code{states}. If \code{NULL},
-a built-in qualitative palette is used.}
+\item{colors}{State colors: a vector named by state, or an unnamed vector
+recycled over \code{states}. States missing from a named vector are drawn in
+grey. \code{NULL} (default) uses a built-in qualitative palette.}
 
-\item{rows}{Integer, number of serpentine rows. If \code{NULL},
-auto-calculated targeting approximately 10 blocks per band.}
+\item{rows}{Number of bands. \code{NULL} (default) uses one band per 11
+positions, rounded up.}
 
-\item{band_height}{Numeric, height of each band in plot units (default 28).}
+\item{band_height}{Height of each band in plot units (default 28).}
 
-\item{band_gap}{Numeric, gap between bands (default 18).}
+\item{band_gap}{Gap between bands in plot units (default 18).}
 
-\item{plot_width}{Numeric, width of each band (default 500).}
+\item{plot_width}{Length of each band in plot units (default 500).}
 
-\item{margin}{Named numeric vector with top, right, bottom, left margins.}
+\item{margin}{Named numeric vector of \code{top}, \code{right}, \code{bottom} and \code{left}
+margins in plot units (default
+\code{c(top = 30, right = 10, bottom = 50, left = 80)}).}
 
-\item{orientation}{Character, \code{"horizontal"} (default) or
-\code{"vertical"}.}
+\item{orientation}{\code{"horizontal"} (default). \code{"vertical"} turns the bands
+into columns but places the blocks across each column rather than along
+it, so the horizontal layout is recommended.}
 
-\item{start_from}{Character, \code{"left"} (default) or \code{"right"}.}
+\item{start_from}{Side on which the first band starts: \code{"left"} (default)
+or \code{"right"}.}
 
-\item{flow}{Character, \code{"natural"} (default) or \code{"snake"}.
-\code{"natural"} reads all bands left-to-right; \code{"snake"} uses
-alternating boustrophedon direction. Default \code{"natural"}.}
+\item{flow}{\code{"natural"} (default): every band reads in the same direction,
+like lines of text. \code{"snake"}: bands alternate direction, so the sequence
+runs on through each U-turn.}
 
-\item{show_labels}{Logical, show position range labels per row
+\item{show_labels}{Label each band with the range of positions it holds
 (default \code{TRUE}).}
 
-\item{show_legend}{Logical, draw color legend (default \code{TRUE}).}
+\item{show_legend}{Draw the state legend (default \code{TRUE}).}
 
-\item{show_numbers}{Logical, print small position numbers inside blocks
+\item{show_numbers}{Print each block's position inside it
 (default \code{FALSE}).}
 
-\item{show_state}{Logical, print the state name inside each block
+\item{show_state}{Print the state name inside each block
 (default \code{FALSE}).}
 
-\item{state_size}{Numeric, text size for state labels (default 0.35).}
+\item{state_size}{Text size of the state names (default 0.35).}
 
-\item{show_ticks}{Logical, draw ruler-style tick marks at block
-boundaries outside the bands (default \code{FALSE}).}
+\item{show_ticks}{Draw ruler ticks at block boundaries, outside the bands
+(default \code{FALSE}).}
 
-\item{tick_labels}{Character vector of labels for evenly spaced ruler
-marks within each band (e.g., \code{month.abb} for monthly ticks).
-Implies \code{show_ticks = TRUE}.}
+\item{tick_labels}{Labels for evenly spaced ruler marks on every band,
+such as \code{month.abb}. Setting them turns on \code{show_ticks}.}
 
-\item{transition_labels}{Character vector of date labels for state
-transition points (e.g., \code{c("Oct 2017", "Apr 2019")}). One
-label per transition (length = number of state changes).}
+\item{transition_labels}{Labels for the points where the state changes, in
+order; the first \code{length(transition_labels)} changes are labelled.}
 
-\item{transition_pos}{Numeric vector of fractional block positions for
-transition labels (e.g., \code{c(6.5, 24.3)}). When provided, labels
-are placed at exact interpolated positions along the serpentine path
-rather than at state-change boundaries.}
+\item{transition_pos}{Positions of \code{transition_labels} along the sequence,
+in blocks; fractions such as \code{6.5} are allowed. \code{NULL} (default) places
+the labels at the changes of state.}
 
-\item{tick_color}{Color for tick marks (default \code{"#333333"}).}
+\item{tick_color}{Color of ticks and of band and transition labels
+(default \code{"#333333"}).}
 
-\item{tick_length}{Numeric, length of tick marks in plot units (default 5).}
+\item{tick_length}{Length of ticks in plot units (default 5).}
 
-\item{tick_size}{Numeric, text size for tick labels (default 0.4).}
+\item{tick_size}{Text size of tick, band and transition labels
+(default 0.4).}
 
-\item{style}{Character, \code{"block"} (default) or \code{"rug"}.
-\code{"block"} fills the full band height with colored blocks.
-\code{"rug"} draws thin colored tick marks on a light gray
-(\code{"#F5F5F5"}) band with neutral arcs, which keeps individual
-events legible when a sequence has many time points.}
+\item{style}{\code{"block"} (default) fills each band with blocks; \code{"rug"}
+draws thin ticks on a light band, suited to sequences with many
+positions.}
 
-\item{band_color}{Character, intended band color for rug mode
-(default \code{"#3d3d4a"}). Currently not used: rug bands are always
-drawn in light gray (\code{"#F5F5F5"}).}
+\item{band_color}{Not used at present; rug bands are drawn light grey.}
 
-\item{rug_opacity}{Numeric 0-1, opacity of rug tick marks
+\item{rug_opacity}{Opacity of the rug ticks, between 0 and 1
 (default 0.9).}
 
-\item{jitter}{Numeric 0-1, vertical jitter as fraction of band
-height (default 0). When \code{> 0}, tick marks scatter vertically
-across the band instead of sitting at a fixed position. Only used when
-\code{style = "rug"}; the jitter is random, so call \code{set.seed()}
-first for a reproducible plot.}
+\item{jitter}{For \code{style = "rug"}, vertical scatter of the ticks as a
+fraction of the band height (default 0, none). The scatter is random;
+call \code{\link[=set.seed]{set.seed()}} first for a reproducible plot.}
 
-\item{border_color}{Color for thin borders between blocks, or \code{NA}
-for no borders (default \code{NA}).}
+\item{border_color}{Color of block outlines, or \code{NA} (default) for none.}
 
-\item{block_labels}{Optional character vector of labels to display inside
-each block (same length as \code{sequence}). Overrides \code{show_numbers}.}
+\item{block_labels}{Labels for the blocks, one per position. They replace
+the position numbers, and are drawn below the blocks when ruler ticks
+are shown.}
 
-\item{band_labels}{Character vector of labels to display centered below
-each band (e.g., year labels). Length must equal \code{rows}.}
+\item{band_labels}{One label per band (length \code{rows}), printed below the
+band, for example a year.}
 
-\item{title}{Optional character string for plot title.}
+\item{title}{Plot title, or \code{NULL} (default) for none.}
 
 \item{background}{Background color (default \code{"white"}).}
 
-\item{shadow}{Logical, draw drop shadows (default \code{TRUE}).}
+\item{shadow}{Draw drop shadows (default \code{TRUE}).}
 
-\item{text_size}{Numeric, text size multiplier for block labels (default 0.5).}
+\item{text_size}{Text size of block numbers and block labels
+(default 0.5).}
 
-\item{legend_text_size}{Numeric, legend text size (default 0.8).}
+\item{legend_text_size}{Size of the legend text (default 0.8).}
 }
 \value{
-Invisible \code{NULL}. Called for its side effect of producing
-a plot.
+The plot is drawn on the current device; the function returns
+\code{NULL} invisibly.
 }
 \description{
-Displays a state sequence as colored blocks flowing through a serpentine
-(boustrophedon) layout. Each block represents one time point colored by
-its state. Blocks flow continuously through both bands AND arcs, wrapping
-a long sequence into a compact multi-row display.
+A sequence snake shows one long categorical sequence, such as the actions
+in a learning session or a person's daily states over months, as a row of
+colored blocks, one per position. The row is folded into bands joined by
+U-turns, and the blocks continue through the U-turns, so a sequence of
+several hundred positions fits in one panel while the order of positions
+is kept. Runs, recurrences and changes of state can be followed along the
+path, as in a sequence index plot of a single sequence (Gabadinho et al.,
+2011).
+
+\code{sequence_snake()} accepts the sequence as a vector, a comma-separated
+string, a list, or a data frame whose first character or factor column
+holds the states. Blocks can carry position numbers, state names or other
+labels, and the path can be annotated with ruler ticks, a label for each
+band and labels at changes of state. With \code{style = "rug"} blocks become
+thin ticks on a light band, which keeps many positions legible.
+
+For many sequences at once use \code{\link[=multi_snake]{multi_snake()}}. For phases defined by start
+and end dates use \code{\link[=timeline_snake]{timeline_snake()}}, which builds the monthly sequence and
+its labels from the dates.
 }
 \examples{
+# 75 actions in a learning session
 set.seed(42)
-verbs <- c("Read", "Write", "Discuss", "Listen",
-           "Search", "Plan", "Code", "Review")
-seq75 <- sample(verbs, 75, replace = TRUE)
-sequence_snake(seq75)
+actions <- sample(c("Read", "Write", "Discuss", "Plan", "Review"), 75,
+                  replace = TRUE)
+sequence_snake(actions)
+sequence_snake(actions, rows = 5, flow = "snake", show_state = TRUE,
+               colors = c(Read = "#56B4E9", Write = "#E69F00",
+                          Discuss = "#009E73", Plan = "#CC79A7",
+                          Review = "#999999"))
 
-# Custom colors
-cols <- c(Read = "#E41A1C", Write = "#377EB8", Discuss = "#4DAF4A",
-          Listen = "#984EA3", Search = "#FF7F00", Plan = "#A6D854",
-          Code = "#A65628", Review = "#F781BF")
-sequence_snake(seq75, colors = cols, rows = 5)
+# 400 observations of on- and off-task behaviour as a rug
+on_task <- sample(c("On task", "Off task"), 400, replace = TRUE,
+                  prob = c(0.8, 0.2))
+sequence_snake(on_task, style = "rug", rows = 8)
 
+}
+\references{
+Gabadinho, A., Ritschard, G., \enc{Müller}{Muller}, N. S., & Studer, M. (2011).
+Analyzing and visualizing state sequences in R with TraMineR.
+\emph{Journal of Statistical Software}, 40(4), 1-37.
+\doi{10.18637/jss.v040.i04}
+}
+\seealso{
+\code{\link[=timeline_snake]{timeline_snake()}} for dated phases; \code{\link[=multi_snake]{multi_snake()}} for many
+sequences; \code{\link[=activity_snake]{activity_snake()}} for event times within days.
 }

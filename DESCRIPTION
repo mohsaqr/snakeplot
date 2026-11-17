@@ -1,6 +1,6 @@
 Package: snakeplot
 Title: Serpentine Plots for Long Timeline, Sequential and Survey Data
-Version: 0.3.3
+Version: 0.3.4
 Authors@R: c(
     person("Mohammed", "Saqr", email = "saqr@saqr.me",
            role = c("aut", "cre", "cph")),
@@ -22,10 +22,10 @@ URL: https://github.com/mohsaqr/snakeplot, https://pak.dynasite.org/Snakeplot/
 BugReports: https://github.com/mohsaqr/snakeplot/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Config/testthat/edition: 3
 Suggests:
     testthat (>= 3.0.0),
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+Config/roxygen2/version: 8.1.1

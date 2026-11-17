@@ -1,33 +1,43 @@
-#' Faceted Snake Plot
+#' Draw one snake plot per group in a grid of panels
 #'
-#' Splits data by a grouping variable and draws side-by-side snake panels.
-#' Works with \code{activity_snake}, \code{survey_snake}, \code{survey_sequence},
-#' \code{sequential_dist}, or \code{line_snake}.
+#' @description
+#' `facet_snake()` splits a data frame by a grouping column and draws one
+#' snake plot per group in a grid of panels, so that groups such as
+#' participants, classes or conditions can be compared in the same display.
+#' Each panel is drawn by `FUN`, by default [activity_snake()], with the
+#' group value as its title.
 #'
-#' @param data A data.frame to plot. It is split by \code{facet_var}; each
-#'   subset, with the facet column removed, is passed to \code{FUN}.
-#' @param facet_var Character. Column name in \code{data} to facet by.
-#' @param FUN Function to call for each panel. Default \code{activity_snake}.
-#'   It must accept a \code{title} argument, which receives the facet level.
-#' @param ncol Integer. Number of columns in the facet grid. Default: number
-#'   of facet levels (all in one row).
-#' @param ... Additional arguments passed to \code{FUN}.
+#' The panels are independent plots: each is scaled to its own data. The
+#' grid is set with `par(mfrow)` and the previous graphical parameters are
+#' restored afterwards.
 #'
-#' @return Called for its side effect of drawing one panel per facet level.
-#'   Invisibly returns an unnamed list with one element per facet level, in
-#'   order of first appearance, each holding the value returned by \code{FUN}
-#'   for that panel (a \code{snake_layout} list for \code{activity_snake}).
+#' To draw groups of items (columns) rather than groups of rows, use the
+#' `facet` argument of [survey_snake()].
+#'
+#' @param data A data frame. It is split by `facet_var`, and each part,
+#'   without the grouping column, is passed to `FUN` as its first argument.
+#' @param facet_var Name of the grouping column. Panels follow the order in
+#'   which its values first appear.
+#' @param FUN Plotting function for each panel (default [activity_snake()]).
+#'   It must take the data as its first argument and accept a `title`
+#'   argument; [line_snake()], [survey_snake()], [survey_sequence()] and
+#'   [sequential_dist()] qualify.
+#' @param ncol Number of panel columns. `NULL` (default) places all panels in
+#'   one row.
+#' @param ... Further arguments passed to `FUN`.
+#'
+#' @return The panels are drawn on the current device. The function returns,
+#'   invisibly, an unnamed list with one element per group, in order of first
+#'   appearance, holding the value `FUN` returned for that panel (a
+#'   `snake_layout` object for [activity_snake()]).
+#'
+#' @seealso [activity_snake()], [survey_snake()] and its `facet` argument.
 #'
 #' @examples
-#' set.seed(42)
-#' d <- data.frame(
-#'   group    = rep(c("A", "B"), each = 70),
-#'   day      = rep(rep(c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"),
-#'                  each = 10), 2),
-#'   start    = round(runif(140, 360, 1400)),
-#'   duration = 0
-#' )
-#' facet_snake(d, "group")
+#' # Two participants' prompts, one panel each
+#' two <- subset(ema_beeps, id %in% c("xcVDLRQOwn", "6pig43CFyl"),
+#'               select = c(id, start_time))
+#' facet_snake(two, facet_var = "id", ncol = 1, show_total = FALSE)
 #'
 #' @export
 facet_snake <- function(data, facet_var, FUN = activity_snake,

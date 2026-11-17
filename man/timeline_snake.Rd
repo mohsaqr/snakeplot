@@ -2,7 +2,7 @@
 % Please edit documentation in R/timeline_snake.R
 \name{timeline_snake}
 \alias{timeline_snake}
-\title{Timeline Snake Plot}
+\title{Plot a timeline of phases as a serpentine of monthly blocks}
 \usage{
 timeline_snake(
   sequence,
@@ -39,116 +39,138 @@ timeline_snake(
 )
 }
 \arguments{
-\item{sequence}{Either a character/factor vector of states (one per time
-unit), or a \strong{data.frame with 3 columns}: state/role, start date
-(\code{"YYYY-MM"} or Date), end date. When a data.frame is given, the
-function auto-generates monthly blocks, transition labels, and band
-labels.}
+\item{sequence}{Phases as a data frame whose first three columns are the
+state, the start date and the end date, one row per phase. Dates may be
+\code{"YYYY-MM"}, \code{"YYYY-MM-DD"}, other common date formats, or \code{Date}
+values; start and end months are both included. Alternatively a vector of
+states, one per time unit.}
 
-\item{states}{Character vector of unique states in desired order.
-If \code{NULL}, derived from \code{unique(sequence)}.}
+\item{states}{State labels in legend order. \code{NULL} (default) takes them in
+order of first appearance. Every state in \code{sequence} must be listed.}
 
-\item{colors}{Named character vector of colors keyed by state, or an
-unnamed vector recycled to match \code{states}. If \code{NULL},
-a built-in qualitative palette is used.}
+\item{colors}{State colors: a vector named by state, or an unnamed vector
+recycled over the states. \code{NULL} (default) uses a light-to-dark blue ramp
+over the states in order.}
 
-\item{rows}{Integer, number of serpentine rows. If \code{NULL}, chosen
-automatically (about 20 monthly blocks per band, at least 2 rows, for
-data.frame input; about 10 blocks per band for vector input).}
+\item{rows}{Number of bands. \code{NULL} (default) uses about 20 months per
+band and at least two bands for data frame input, and one band per 11
+positions for vector input.}
 
-\item{band_height}{Numeric, height of each band (default 28).}
+\item{band_height}{Height of each band in plot units (default 28).}
 
-\item{band_gap}{Numeric, gap between bands (default 30, wider than in
-\code{\link{sequence_snake}} to leave room for the year labels).}
+\item{band_gap}{Gap between bands in plot units (default 30, which leaves
+room for the year labels).}
 
-\item{plot_width}{Numeric, width of each band (default 500).}
+\item{plot_width}{Length of each band in plot units (default 500).}
 
-\item{margin}{Named numeric vector with top, right, bottom, left margins
-(default \code{c(top = 35, right = 10, bottom = 65, left = 20)}).}
+\item{margin}{Named numeric vector of \code{top}, \code{right}, \code{bottom} and \code{left}
+margins in plot units (default
+\code{c(top = 35, right = 10, bottom = 65, left = 20)}).}
 
-\item{orientation}{Character, \code{"horizontal"} (default) or
-\code{"vertical"}.}
+\item{orientation}{\code{"horizontal"} (default). \code{"vertical"} turns the bands
+into columns but places the blocks across each column rather than along
+it, so the horizontal layout is recommended.}
 
-\item{start_from}{Character, \code{"left"} (default) or \code{"right"}.}
+\item{start_from}{Side on which the first band starts: \code{"left"} (default)
+or \code{"right"}.}
 
-\item{flow}{Character, \code{"natural"} (default) or \code{"snake"}.
-\code{"natural"} reads all bands left-to-right; \code{"snake"} uses
-alternating boustrophedon direction.}
+\item{flow}{\code{"natural"} (default): every band reads in the same direction,
+like lines of text. \code{"snake"}: bands alternate direction, so the sequence
+runs on through each U-turn.}
 
-\item{show_labels}{Logical, show position range labels (default
-\code{FALSE}).}
-
-\item{show_legend}{Logical, draw color legend (default \code{TRUE}).}
-
-\item{show_numbers}{Logical, print small position numbers inside blocks
+\item{show_labels}{Label each band with the range of positions it holds
 (default \code{FALSE}).}
 
-\item{show_state}{Logical, show state names inside blocks (default
-\code{TRUE}).}
+\item{show_legend}{Draw the state legend (default \code{TRUE}).}
 
-\item{state_size}{Numeric, state label size (default 1).}
+\item{show_numbers}{Print each block's position inside it
+(default \code{FALSE}).}
 
-\item{show_ticks}{Logical, draw ruler-style tick marks at block
-boundaries outside the bands (default \code{FALSE}).}
+\item{show_state}{Print the state name inside each phase
+(default \code{TRUE}).}
 
-\item{tick_labels}{Character vector of labels for evenly spaced ruler
-marks within each band (e.g., \code{month.abb} for monthly ticks).
-Implies \code{show_ticks = TRUE}.}
+\item{state_size}{Text size of the state names (default 1).}
 
-\item{transition_labels}{Character vector of date labels for state
-transition points (e.g., \code{c("Oct 2017", "Apr 2019")}). One
-label per transition (length = number of state changes).}
+\item{show_ticks}{Draw ruler ticks at block boundaries, outside the bands
+(default \code{FALSE}).}
 
-\item{transition_pos}{Numeric vector of fractional block positions for
-transition labels (e.g., \code{c(6.5, 24.3)}). When provided, labels
-are placed at exact interpolated positions along the serpentine path
-rather than at state-change boundaries.}
+\item{tick_labels}{Labels for evenly spaced ruler marks on every band,
+such as \code{month.abb}. Setting them turns on \code{show_ticks}.}
 
-\item{tick_color}{Color for tick marks and band labels
+\item{transition_labels}{Labels for the points where the state changes, in
+order. \code{NULL} (default) uses, for data frame input, the start month of
+each phase after the first, such as \code{"Jun 2020"}.}
+
+\item{transition_pos}{Positions of \code{transition_labels} along the sequence,
+in blocks; fractions such as \code{6.5} are allowed. \code{NULL} (default) places
+the labels at the changes of state.}
+
+\item{tick_color}{Color of ticks and of band and transition labels
 (default \code{"#444444"}).}
 
-\item{tick_length}{Numeric, length of tick marks in plot units (default 6).}
+\item{tick_length}{Length of ticks in plot units (default 6).}
 
-\item{tick_size}{Numeric, text size for band and transition labels
+\item{tick_size}{Text size of tick, band and transition labels
 (default 0.8).}
 
-\item{border_color}{Color for thin borders between blocks, or \code{NA}
-for no borders (default \code{NA}).}
+\item{border_color}{Color of block outlines, or \code{NA} (default) for none.}
 
-\item{block_labels}{Optional character vector of labels to display inside
-each block (same length as \code{sequence}). Overrides \code{show_numbers}.}
+\item{block_labels}{Labels for the blocks, one per position. They replace
+the position numbers, and are drawn below the blocks when ruler ticks
+are shown.}
 
-\item{band_labels}{Character vector of labels to display centered below
-each band (e.g., year labels). Length must equal \code{rows}.}
+\item{band_labels}{One label per band (length \code{rows}). \code{NULL} (default)
+uses, for data frame input, the year at the middle of each band.}
 
-\item{title}{Optional character string for plot title.}
+\item{title}{Plot title, or \code{NULL} (default) for none.}
 
 \item{background}{Background color (default \code{"white"}).}
 
-\item{shadow}{Logical, draw drop shadows (default \code{TRUE}).}
+\item{shadow}{Draw drop shadows (default \code{TRUE}).}
 
-\item{text_size}{Numeric, text size multiplier for block labels (default 0.5).}
+\item{text_size}{Text size of block numbers and block labels
+(default 0.5).}
 
-\item{legend_text_size}{Numeric, legend text size (default 1.2).}
+\item{legend_text_size}{Size of the legend text (default 1.2).}
 }
 \value{
-Invisible \code{NULL}. Called for its side effect of producing
-a plot.
+The plot is drawn on the current device; the function returns
+\code{NULL} invisibly.
 }
 \description{
-Displays a career or life-event timeline as a serpentine sequence of
-colored phases. With data.frame input each block represents one month,
-colored by the current state/role; with vector input each element is one
-block. State names are overlaid inside runs of consecutive blocks,
-and transition dates are shown at juncture points where the state changes.
+A timeline snake shows a succession of phases, such as the positions held
+in a career or the stages of a project, as colored blocks folded into
+bands joined by U-turns. With dated input each block is one month, so the
+length of a phase is proportional to its duration and a span of many years
+fits in one panel while its order is kept.
+
+\code{timeline_snake()} takes a data frame with one row per phase (state, start
+date, end date) and builds the monthly sequence. It labels each change of
+phase with its start month, labels each band with the year at its middle,
+and prints the state names inside the phases. A vector of states, one per
+time unit, is drawn as given. Colors default to a light-to-dark blue ramp
+in phase order. The drawing is done by \code{\link[=sequence_snake]{sequence_snake()}}, and its display
+options can be passed here.
+
+For an undated sequence of many short events use \code{\link[=sequence_snake]{sequence_snake()}}; for
+many sequences use \code{\link[=multi_snake]{multi_snake()}}.
 }
 \examples{
-# Data.frame input (easiest)
+# An academic career, one row per position
 career <- data.frame(
-  role  = c("Junior", "Senior", "Lead"),
-  start = c("2018-01", "2020-06", "2023-01"),
-  end   = c("2020-05", "2022-12", "2024-12")
+  role  = c("PhD student", "Postdoc", "Lecturer", "Senior lecturer"),
+  start = c("2012-09", "2016-10", "2019-01", "2023-08"),
+  end   = c("2016-09", "2018-12", "2023-07", "2025-12")
 )
-timeline_snake(career, title = "Career Timeline")
+timeline_snake(career)
 
+# The same kind of display from a vector, one element per year
+schooling <- rep(c("School", "Bachelor", "Master", "Work"),
+                 times = c(12, 3, 2, 8))
+timeline_snake(schooling, rows = 3)
+
+}
+\seealso{
+\code{\link[=sequence_snake]{sequence_snake()}}, which draws the plot; \code{\link[=multi_snake]{multi_snake()}} for
+many sequences; \code{\link[=activity_snake]{activity_snake()}} for events within days.
 }

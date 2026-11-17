@@ -2,7 +2,7 @@
 % Please edit documentation in R/survey_sequence.R
 \name{sequential_dist}
 \alias{sequential_dist}
-\title{Sequential Distribution Plot}
+\title{Plot unipolar survey responses as a serpentine of single-hue stacked bars}
 \usage{
 sequential_dist(
   counts,
@@ -32,88 +32,116 @@ sequential_dist(
 )
 }
 \arguments{
-\item{counts}{Response data in one of three formats: a numeric matrix of
-counts (rows = items, columns = response levels), a data.frame of counts
-(coerced to a matrix), or a data.frame of raw responses (one column per
-item, one row per respondent), which is tabulated automatically.}
+\item{counts}{Responses: a data frame of raw responses (one row per
+respondent, one column per item), a numeric matrix of counts (items in
+rows, response levels in columns), or a data frame of counts. A data
+frame is read as raw responses when its columns hold few distinct
+whole-number or categorical values relative to its number of rows.}
 
-\item{labels}{Character vector of item labels. \code{NULL} (default)
-infers them from row or column names.}
+\item{labels}{Item labels, one per item. \code{NULL} (default) uses the row
+names of a count table, or, for raw responses, the column names with the
+number of responses.}
 
-\item{levels}{Character vector of level labels. \code{NULL} (default)
-infers them from column names or the unique response values.}
+\item{levels}{Response levels in scale order. \code{NULL} (default) uses the
+column names of a count table, or, for raw responses, the factor levels
+or the sorted distinct values. For raw responses the levels must match
+the values in the data.}
 
-\item{hue}{Numeric 0-360. Base hue for the sequential palette
-(default 210 = blue).}
+\item{hue}{Hue of the palette in degrees, 0-360 (default 210, blue).}
 
-\item{band_height}{Numeric (default 28).}
+\item{band_height}{Height of each band in plot units (default 28).}
 
-\item{band_gap}{Numeric (default 14).}
+\item{band_gap}{Gap between bands in plot units (default 14).}
 
-\item{plot_width}{Numeric (default 500).}
+\item{plot_width}{Length of each band in plot units (default 500).}
 
-\item{colors}{Character vector of segment colors, one per response level in
-level order (only the first \code{length(levels)} are used). Default
-\code{NULL} uses a diverging palette.}
+\item{colors}{One color per response level, in scale order. \code{NULL}
+(default) uses a light-to-dark palette of \code{hue}.}
 
-\item{show_percent}{Logical. Show percentages inside segments (default TRUE).}
+\item{show_percent}{Print percentages inside the segments
+(default \code{TRUE}).}
 
-\item{min_segment}{Numeric. Hide label if segment narrower than this
-(default 34).}
+\item{min_segment}{Minimum segment width, in plot units, for a percentage
+to be printed (default 34).}
 
-\item{arc_style}{Character: "gradient" or "neutral" (default "gradient").}
+\item{arc_style}{\code{"gradient"} (default) colors each U-turn midway between
+the levels at its two ends; \code{"neutral"} draws it grey.}
 
-\item{arc_opacity}{Numeric 0-1 (default 0.5).}
+\item{arc_opacity}{Opacity of the U-turns, between 0 and 1 (default 0.85).}
 
-\item{sort_by}{Character: "none" (input order, default), "mean" (ascending
-item mean), or "net" (ascending net score: share of responses above the
-scale midpoint minus share below; falls back to the mean for scales with
-fewer than four levels).}
+\item{sort_by}{Order of the items: \code{"none"} (default, input order),
+\code{"mean"} (increasing item mean) or \code{"net"} (increasing share of
+responses above the middle level minus share below; the mean for scales
+with fewer than four levels).}
 
-\item{shadow}{Logical (default TRUE).}
+\item{shadow}{Draw drop shadows (default \code{TRUE}).}
 
-\item{show_legend}{Logical (default TRUE).}
+\item{show_legend}{Draw the legend (default \code{TRUE}).}
 
-\item{label_color}{Character (default "#333333").}
+\item{label_color, label_size}{Color and size multiplier of the item labels
+(defaults \code{"#333333"} and 0.85).}
 
-\item{label_size}{Numeric (default 0.85).}
+\item{label_align}{Alignment of the item labels: \code{"left"} (default),
+\code{"right"}, or \code{"direction"} to follow each band's reading direction.}
 
-\item{label_align}{Character. Label alignment: "left" (default), "right",
-or "direction" (follows band reading direction).}
+\item{reverse_rtl}{Reverse the order of levels on bands that read right
+to left, so every band starts with the lowest level in its reading
+direction (default \code{FALSE}: lowest level on the left of every band).}
 
-\item{reverse_rtl}{Logical. Reverse segment order on right-to-left bands
-so the visual reading direction mirrors the data order (default FALSE).}
+\item{start_from}{Side on which the first band starts: \code{"left"} (default)
+or \code{"right"}.}
 
-\item{start_from}{Character: "left" (default) or "right". Which side the
-first band starts from.}
+\item{flow}{\code{"snake"} (default): bands alternate direction. \code{"natural"}:
+every band reads in the same direction.}
 
-\item{flow}{Character, \code{"snake"} (default) or \code{"natural"}.
-\code{"snake"} uses alternating boustrophedon direction;
-\code{"natural"} reads all bands in the same direction.}
+\item{title}{Plot title, or \code{NULL} (default) for none.}
 
-\item{title}{Optional title.}
+\item{margin}{Named numeric vector of \code{top}, \code{right}, \code{bottom} and \code{left}
+margins in plot units (default
+\code{c(top = 30, right = 10, bottom = 55, left = 100)}).}
 
-\item{margin}{Named numeric vector with top, right, bottom, left margins.}
-
-\item{background}{Background color (default "white").}
+\item{background}{Background color (default \code{"white"}).}
 }
 \value{
-Called for its side effect of drawing a plot. Invisibly returns
-the \code{snake_layout} list described in \code{\link{survey_sequence}}.
+The value of \code{\link[=survey_sequence]{survey_sequence()}}: the plot is drawn on the current
+device and an object of class \code{snake_layout} is returned invisibly.
 }
 \description{
-Like \code{\link{survey_sequence}} but uses a sequential (monochrome)
-palette instead of diverging colors. Suitable for ordinal scales without
-a natural midpoint (e.g., "Never" to "Always").
+Some rating scales have no neutral midpoint: frequency scales from "Never"
+to "Always", or intensity scales from "Not at all" to "Extremely". For
+such scales a diverging palette suggests a midpoint the scale does not
+have. \code{sequential_dist()} draws the display of \code{\link[=survey_sequence]{survey_sequence()}}, one
+100\% stacked bar per item along a serpentine, with a light-to-dark palette
+of a single hue, so that darker segments stand for higher levels.
+
+Input, sorting, labels and layout options are those of
+\code{\link[=survey_sequence]{survey_sequence()}}; \code{hue} sets the color of the palette. For bipolar
+(agree-disagree) scales use \code{\link[=survey_sequence]{survey_sequence()}}; to show individual
+responses use \code{\link[=survey_snake]{survey_snake()}}.
 }
 \examples{
-counts <- matrix(c(
-  15, 25, 60, 80, 45,
-  10, 20, 50, 90, 55,
-  20, 30, 65, 70, 40
-), nrow = 3, byrow = TRUE)
-labels <- c("Behavior A", "Behavior B", "Behavior C")
-levs <- c("Never", "Rarely", "Sometimes", "Often", "Always")
-sequential_dist(counts, labels, levs, hue = 160)
+# Emotion intensity rated 1-5, a unipolar scale
+sequential_dist(ema_emotions, sort_by = "mean", hue = 160)
 
+# A table of counts on a frequency scale
+counts <- matrix(c(15, 25, 60, 80, 45,
+                   10, 20, 50, 90, 55,
+                   20, 30, 65, 70, 40),
+                 nrow = 3, byrow = TRUE)
+sequential_dist(counts,
+                labels = c("Plans study time", "Reviews notes",
+                           "Asks for help"),
+                levels = c("Never", "Rarely", "Sometimes", "Often",
+                           "Always"))
+
+}
+\references{
+Heiberger, R. M., & Robbins, N. B. (2014). Design of diverging stacked bar
+charts for Likert scales and other applications. \emph{Journal of Statistical
+Software}, 57(5), 1-32. \doi{10.18637/jss.v057.i05}
+}
+\seealso{
+\code{\link[=survey_sequence]{survey_sequence()}} for diverging colors; \code{\link[=survey_snake]{survey_snake()}} for
+individual responses; \code{\link[=snake_palette]{snake_palette()}} for the sequential palettes
+\code{"blues"}, \code{"greens"}, \code{"grays"}, \code{"warm"} and \code{"viridis"}.
 }

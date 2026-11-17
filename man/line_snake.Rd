@@ -2,7 +2,7 @@
 % Please edit documentation in R/line_snake.R
 \name{line_snake}
 \alias{line_snake}
-\title{Line Snake Plot (Experimental)}
+\title{Plot a continuous series as a line through a serpentine of days}
 \usage{
 line_snake(
   data,
@@ -32,86 +32,97 @@ line_snake(
 )
 }
 \arguments{
-\item{data}{A data.frame with columns:
-\describe{
-\item{time}{Numeric (minutes from midnight) or POSIXct timestamps.}
-\item{value}{Numeric intensity value.}
-\item{day}{(Optional) Day labels. Auto-detected from timestamps if absent.}
-}
-Alternatively, a numeric vector (interpreted as evenly-spaced values
-for a single band).}
+\item{data}{A data frame with columns \code{time} (minutes after midnight, or
+POSIXct), \code{value} (numeric) and optionally \code{day} (band label). With
+POSIXct times the band label is the abbreviated weekday, so times more
+than a week apart share a band. A numeric vector is drawn as a single
+band.}
 
-\item{band_height}{Numeric (default 40).}
+\item{band_height, band_gap}{Height of each band and gap between bands, in
+plot units (defaults 40 and 18).}
 
-\item{band_gap}{Numeric (default 18).}
+\item{day_start, day_end}{Time window of each band, in minutes after
+midnight (defaults 0 and 1440).}
 
-\item{day_start}{Numeric, minutes from midnight (default 0).}
+\item{plot_width}{Length of each band in plot units (default 500).}
 
-\item{day_end}{Numeric, minutes from midnight (default 1440).}
+\item{line_color, line_width}{Color and width of the line (defaults
+\code{"#e74c3c"} and 1.5).}
 
-\item{plot_width}{Numeric (default 500).}
+\item{fill_color, fill_opacity}{Color of the area under the line, \code{NULL}
+(default) for no fill, and its opacity (default 0.3).}
 
-\item{line_color}{Character (default "#e74c3c").}
+\item{band_color, arc_color}{Colors of the bands and U-turns (defaults
+\code{"#2d2d3d"} and \code{"#1a1a2e"}).}
 
-\item{line_width}{Numeric (default 1.5).}
+\item{band_opacity, arc_opacity}{Opacities between 0 and 1 (defaults 0.90
+and 0.85).}
 
-\item{fill_color}{Optional fill color below the line (default NULL = no fill).}
+\item{show_grid}{Draw hourly gridlines (default \code{TRUE}).}
 
-\item{fill_opacity}{Numeric 0-1 (default 0.3).}
+\item{shadow}{Draw drop shadows (default \code{TRUE}).}
 
-\item{band_color}{Character (default "#2d2d3d").}
+\item{label_color, label_size}{Color and size multiplier of the band labels
+(defaults \code{"#cccccc"} and 0.85).}
 
-\item{arc_color}{Character (default "#1a1a2e").}
+\item{orientation}{Only \code{"horizontal"} (default) is supported at present;
+\code{"vertical"} gives an error.}
 
-\item{band_opacity}{Numeric (default 0.90).}
+\item{start_from}{Side on which the first band starts: \code{"left"} (default)
+or \code{"right"}.}
 
-\item{arc_opacity}{Numeric (default 0.85).}
+\item{flow}{\code{"snake"} (default): bands alternate direction, so time runs
+on through each U-turn. \code{"natural"}: every band reads in the same
+direction.}
 
-\item{show_grid}{Logical (default TRUE).}
+\item{title}{Plot title, or \code{NULL} (default) for none.}
 
-\item{shadow}{Logical (default TRUE).}
+\item{margin}{Named numeric vector of \code{top}, \code{right}, \code{bottom} and \code{left}
+margins in plot units (default
+\code{c(top = 30, right = 10, bottom = 50, left = 80)}).}
 
-\item{label_color}{Character (default "#cccccc").}
-
-\item{label_size}{Numeric (default 0.85).}
-
-\item{orientation}{Character, "horizontal" or "vertical" (default "horizontal").}
-
-\item{start_from}{Character, "left" or "right" (default "left").}
-
-\item{flow}{Character, \code{"snake"} (default) or \code{"natural"}.
-\code{"snake"} uses alternating boustrophedon direction;
-\code{"natural"} reads all bands in the same direction.}
-
-\item{title}{Optional title.}
-
-\item{margin}{Named numeric vector with top, right, bottom, left margins.}
-
-\item{background}{Background color (default "white").}
+\item{background}{Background color (default \code{"white"}).}
 }
 \value{
-Called for its side effect of drawing a plot. Invisibly returns a
-list of class \code{snake_layout} holding the computed geometry: \code{bands}
-(a data.frame with one row per band giving its position and its
-\code{direction} and \code{read_direction}), \code{arcs} (a list with one
-element per U-turn), \code{canvas}, \code{plot_area}, \code{orientation},
-\code{flow} and \code{params}.
+The plot is drawn on the current device. The function returns,
+invisibly, an object of class \code{snake_layout}: a list describing the drawn
+geometry, with \code{bands} (a data frame with one row per band giving its
+index, position, and drawing and reading direction), \code{arcs} (a list with
+one element per U-turn), \code{canvas} and \code{plot_area} (dimensions in plot
+units), \code{orientation}, \code{flow} and \code{params} (the sizes used).
 }
 \description{
-A continuous intensity line winding through a serpentine layout. Each band
-represents a time segment (e.g., a day); the line's vertical position within
-the band encodes a continuous value (e.g., foot traffic, CPU usage).
-The line smoothly curves through U-turn arcs between bands.
+A line snake shows a continuous measurement, such as foot traffic or a
+sensor reading, over many days. Each day is a band covering the same
+time-of-day window; within a band the height of the line encodes the
+value, and the line continues through the U-turn into the next day. The
+series stays unbroken while each day can be compared with the days above
+and below it.
+
+\code{line_snake()} takes a data frame of times and values, optionally with a
+day column, or a numeric vector drawn as one band of evenly spaced values.
+The value axis is shared by all bands and runs from the overall minimum to
+the overall maximum. An optional fill shades the area under the line. The
+interface of this function is experimental and may change in a later
+release.
+
+For the timing of discrete events use \code{\link[=activity_snake]{activity_snake()}}; for categorical
+states use \code{\link[=sequence_snake]{sequence_snake()}}.
 }
 \examples{
+# Four days of a value measured every 10 minutes
 set.seed(42)
-hours <- seq(0, 1440, by = 10)
-d <- data.frame(
-  day = rep(c("Mon", "Tue", "Wed"), each = length(hours)),
-  time = rep(hours, 3),
-  value = sin(rep(hours, 3) / 1440 * 4 * pi) * 50 + 50 +
-          rnorm(3 * length(hours), 0, 8)
+minutes <- seq(0, 1440, by = 10)
+traffic <- data.frame(
+  day   = rep(c("Mon", "Tue", "Wed", "Thu"), each = length(minutes)),
+  time  = rep(minutes, 4),
+  value = 50 + 50 * sin(rep(minutes, 4) / 1440 * 4 * pi) +
+    rnorm(4 * length(minutes), 0, 8)
 )
-line_snake(d, fill_color = "#e74c3c")
+line_snake(traffic, line_color = "#D55E00", fill_color = "#D55E00")
 
+}
+\seealso{
+\code{\link[=activity_snake]{activity_snake()}} for event times; \code{\link[=sequence_snake]{sequence_snake()}} for
+categorical states; \code{\link[=facet_snake]{facet_snake()}} for one panel per group.
 }

@@ -1,52 +1,76 @@
-#' Timeline Snake Plot
+#' Plot a timeline of phases as a serpentine of monthly blocks
 #'
-#' Displays a career or life-event timeline as a serpentine sequence of
-#' colored phases. With data.frame input each block represents one month,
-#' colored by the current state/role; with vector input each element is one
-#' block. State names are overlaid inside runs of consecutive blocks,
-#' and transition dates are shown at juncture points where the state changes.
+#' @description
+#' A timeline snake shows a succession of phases, such as the positions held
+#' in a career or the stages of a project, as colored blocks folded into
+#' bands joined by U-turns. With dated input each block is one month, so the
+#' length of a phase is proportional to its duration and a span of many years
+#' fits in one panel while its order is kept.
 #'
-#' @param sequence Either a character/factor vector of states (one per time
-#'   unit), or a \strong{data.frame with 3 columns}: state/role, start date
-#'   (\code{"YYYY-MM"} or Date), end date. When a data.frame is given, the
-#'   function auto-generates monthly blocks, transition labels, and band
-#'   labels.
+#' `timeline_snake()` takes a data frame with one row per phase (state, start
+#' date, end date) and builds the monthly sequence. It labels each change of
+#' phase with its start month, labels each band with the year at its middle,
+#' and prints the state names inside the phases. A vector of states, one per
+#' time unit, is drawn as given. Colors default to a light-to-dark blue ramp
+#' in phase order. The drawing is done by [sequence_snake()], and its display
+#' options can be passed here.
+#'
+#' For an undated sequence of many short events use [sequence_snake()]; for
+#' many sequences use [multi_snake()].
+#'
+#' @param sequence Phases as a data frame whose first three columns are the
+#'   state, the start date and the end date, one row per phase. Dates may be
+#'   `"YYYY-MM"`, `"YYYY-MM-DD"`, other common date formats, or `Date`
+#'   values; start and end months are both included. Alternatively a vector of
+#'   states, one per time unit.
 #' @inheritParams sequence_snake
-#' @param flow Character, \code{"natural"} (default) or \code{"snake"}.
-#'   \code{"natural"} reads all bands left-to-right; \code{"snake"} uses
-#'   alternating boustrophedon direction.
-#' @param band_height Numeric, height of each band (default 28).
-#' @param rows Integer, number of serpentine rows. If \code{NULL}, chosen
-#'   automatically (about 20 monthly blocks per band, at least 2 rows, for
-#'   data.frame input; about 10 blocks per band for vector input).
-#' @param band_gap Numeric, gap between bands (default 30, wider than in
-#'   \code{\link{sequence_snake}} to leave room for the year labels).
-#' @param plot_width Numeric, width of each band (default 500).
-#' @param margin Named numeric vector with top, right, bottom, left margins
-#'   (default \code{c(top = 35, right = 10, bottom = 65, left = 20)}).
-#' @param show_labels Logical, show position range labels (default
-#'   \code{FALSE}).
-#' @param show_state Logical, show state names inside blocks (default
-#'   \code{TRUE}).
-#' @param state_size Numeric, state label size (default 1).
-#' @param tick_color Color for tick marks and band labels
-#'   (default \code{"#444444"}).
-#' @param tick_length Numeric, length of tick marks in plot units (default 6).
-#' @param tick_size Numeric, text size for band and transition labels
+#' @param colors State colors: a vector named by state, or an unnamed vector
+#'   recycled over the states. `NULL` (default) uses a light-to-dark blue ramp
+#'   over the states in order.
+#' @param rows Number of bands. `NULL` (default) uses about 20 months per
+#'   band and at least two bands for data frame input, and one band per 11
+#'   positions for vector input.
+#' @param band_gap Gap between bands in plot units (default 30, which leaves
+#'   room for the year labels).
+#' @param margin Named numeric vector of `top`, `right`, `bottom` and `left`
+#'   margins in plot units (default
+#'   `c(top = 35, right = 10, bottom = 65, left = 20)`).
+#' @param show_labels Label each band with the range of positions it holds
+#'   (default `FALSE`).
+#' @param show_state Print the state name inside each phase
+#'   (default `TRUE`).
+#' @param state_size Text size of the state names (default 1).
+#' @param transition_labels Labels for the points where the state changes, in
+#'   order. `NULL` (default) uses, for data frame input, the start month of
+#'   each phase after the first, such as `"Jun 2020"`.
+#' @param band_labels One label per band (length `rows`). `NULL` (default)
+#'   uses, for data frame input, the year at the middle of each band.
+#' @param tick_color Color of ticks and of band and transition labels
+#'   (default `"#444444"`).
+#' @param tick_length Length of ticks in plot units (default 6).
+#' @param tick_size Text size of tick, band and transition labels
 #'   (default 0.8).
-#' @param legend_text_size Numeric, legend text size (default 1.2).
+#' @param legend_text_size Size of the legend text (default 1.2).
 #'
-#' @return Invisible \code{NULL}. Called for its side effect of producing
-#'   a plot.
+#' @return The plot is drawn on the current device; the function returns
+#'   `NULL` invisibly.
+#'
+#' @seealso [sequence_snake()], which draws the plot; [multi_snake()] for
+#'   many sequences; [activity_snake()] for events within days.
 #'
 #' @examples
-#' # Data.frame input (easiest)
+#' # An academic career, one row per position
 #' career <- data.frame(
-#'   role  = c("Junior", "Senior", "Lead"),
-#'   start = c("2018-01", "2020-06", "2023-01"),
-#'   end   = c("2020-05", "2022-12", "2024-12")
+#'   role  = c("PhD student", "Postdoc", "Lecturer", "Senior lecturer"),
+#'   start = c("2012-09", "2016-10", "2019-01", "2023-08"),
+#'   end   = c("2016-09", "2018-12", "2023-07", "2025-12")
 #' )
-#' timeline_snake(career, title = "Career Timeline")
+#' timeline_snake(career)
+#'
+#' # The same kind of display from a vector, one element per year
+#' schooling <- rep(c("School", "Bachelor", "Master", "Work"),
+#'                  times = c(12, 3, 2, 8))
+#' timeline_snake(schooling, rows = 3)
 #'
 #' @export
 timeline_snake <- function(sequence,
@@ -108,13 +132,13 @@ timeline_snake <- function(sequence,
     # DD/MM/YYYY, month names, Unix timestamps, POSIXt, etc.
     to_date <- function(x) {
       if (inherits(x, "Date")) return(x) # nocov
-      if (inherits(x, "POSIXt")) return(as.Date(x)) # nocov
+      if (inherits(x, "POSIXt")) return(.local_date(x)) # nocov
       x <- trimws(as.character(x))
       # YYYY-MM shorthand → YYYY-MM-01 (parse_time handles the rest)
       x <- ifelse(nchar(x) == 7L & grepl("^\\d{4}-\\d{2}$", x),
                    paste0(x, "-01"), x)
       parsed <- parse_time(x)
-      if (!is.null(parsed)) return(as.Date(parsed))
+      if (!is.null(parsed)) return(.local_date(parsed))
       as.Date(x) # nocov
     }
     starts <- to_date(start_str)

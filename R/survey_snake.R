@@ -1,149 +1,174 @@
-#' Survey Snake Plot
+#' Plot survey responses as a serpentine band per item
 #'
-#' Each survey item is a horizontal band in a serpentine layout. The band body
-#' is shaded by item mean (warm = low, cool = high). Individual responses are
-#' shown as colored tick marks. With \code{arc_fill = "correlation"}, the
-#' Pearson correlation between adjacent items is printed at each U-turn, so
-#' items that move together can be read off the arcs. The correlation is
-#' computed across respondents, so it requires raw responses (one row per
-#' respondent); a counts table does not record which respondent gave which
-#' answer.
+#' @description
+#' A survey snake shows the distribution of responses to a set of rating
+#' items, one band per item, with consecutive items joined by U-turns so that
+#' a long instrument fits in one panel in its item order. Each band shows
+#' every response as a tick placed in the zone of its response level, the
+#' item mean as a diamond, and a shade running from warm (low mean) to cool
+#' (high mean). The display shows how responses are spread on each item and
+#' how the items compare.
 #'
-#' @param counts Input in one of four formats:
+#' `survey_snake()` accepts raw responses (one row per respondent, one column
+#' per item), a table of counts (one row per item, one column per response
+#' level), or experience-sampling data in long format, where `var` and `day`
+#' make each day a band and `timestamp` places each response at its time of
+#' day. Responses can be drawn as lines, jittered dots, or a stacked bar with
+#' percentages. The U-turns can carry the Pearson correlation between the two
+#' items they join (`arc_fill = "correlation"`); this needs raw responses,
+#' because a table of counts does not record which respondent gave which
+#' answer. With `facet`, groups of items are drawn as separate panels.
 #'
-#'   **Raw responses** (data.frame): each column is a survey item, each row
-#'   is a respondent. Responses are auto-tabulated into counts.
-#'   \code{labels} and \code{levels} are inferred from column names and
-#'   unique values. Simplest usage:
-#'   \code{survey_snake(survey_df)}.
+#' For a compact 100% stacked bar per item use [survey_sequence()], or
+#' [sequential_dist()] for scales without a neutral midpoint. Palettes for
+#' the response levels are given by [snake_palette()].
 #'
-#'   **Counts matrix**: rows = items, columns = response levels.
+#' @param counts Responses, in one of four forms:
+#'   * a data frame of raw responses, one row per respondent and one column
+#'     per item;
+#'   * a numeric matrix of counts, items in rows and response levels in
+#'     columns;
+#'   * a data frame of counts, converted to a matrix;
+#'   * a long data frame of experience-sampling responses, used with `var`
+#'     and `day`.
 #'
-#'   **Counts data.frame**: coerced to matrix.
+#'   A data frame is read as raw responses when its columns hold few distinct
+#'   whole-number or categorical values relative to its number of rows, and
+#'   as counts otherwise.
+#' @param labels Item labels, one per item. `NULL` (default) uses the row
+#'   names of a count table, or, for raw responses, the column names with the
+#'   number of responses.
+#' @param levels Response levels in scale order. `NULL` (default) uses the
+#'   column names of a count table, or, for raw responses, the factor levels
+#'   or the sorted distinct values. For raw responses the levels must match
+#'   the values in the data; use `level_labels` to relabel them.
+#' @param var,day,timestamp Column names for experience-sampling data in long
+#'   format: the response variable, the day (or other period) that defines
+#'   each band, and optionally a POSIXct timestamp that places each response
+#'   at its time of day. Bands are labelled `"Day 1"`, `"Day 2"`, and so on,
+#'   and `title` defaults to `var`.
+#' @param level_labels Display labels for the response levels: a vector named
+#'   by level, such as `c("1" = "Never", "5" = "Always")`, or an unnamed
+#'   vector with one label per level.
+#' @param band_height,band_gap Height of each band and gap between bands, in
+#'   plot units (defaults 28 and 18).
+#' @param plot_width Length of each band in plot units (default 500).
+#' @param tick_shape `"line"` (default), `"dot"` (jittered points) or
+#'   `"bar"` (a stacked bar with percentages).
+#' @param bar_reverse For `tick_shape = "bar"`, draw the highest level first
+#'   (default `FALSE`).
+#' @param tick_opacity Opacity of the ticks, between 0 and 1 (default 0.75).
+#' @param level_gap Gap, in plot units, between the zones of adjacent
+#'   response levels (default 15; 0 for none).
+#' @param color_mode `"level"` (default) colors each tick by its response
+#'   level; `"individual"` gives every tick its own hue.
+#' @param colors One color per response level, in scale order. Only the first
+#'   `length(levels)` colors are used, so pass
+#'   `snake_palette(name, n = <number of levels>)`. `NULL` (default) uses a
+#'   red-to-blue diverging palette.
+#' @param shade_band Has no effect at present: the band is always shaded by
+#'   the item mean.
+#' @param show_mean Draw a diamond at the item mean (default `TRUE`).
+#' @param show_median Draw a dashed line at the item median
+#'   (default `FALSE`).
+#' @param show_correlation With `arc_fill = "correlation"`, print the
+#'   correlation at each U-turn (default `TRUE`).
+#' @param jitter_range For `tick_shape = "dot"`, vertical scatter of the
+#'   points as a fraction of half the band height (default 0.22).
+#' @param sort_by Order of the items: `"none"` (default, input order),
+#'   `"mean"` (increasing item mean) or `"net"` (increasing share of
+#'   responses above the middle level minus share below; the mean for scales
+#'   with fewer than four levels).
+#' @param shadow Draw drop shadows (default `TRUE`).
+#' @param label_color,label_size Color and size multiplier of the item labels
+#'   (defaults `"#333333"` and 0.85).
+#' @param label_align Alignment of the item labels: `"left"` (default),
+#'   `"right"`, or `"direction"` to follow each band's reading direction.
+#' @param show_legend Draw the legend (default `TRUE`).
+#' @param legend_text_size Size of the legend text (default 0.65).
+#' @param arc_color Color of the U-turns for a positive correlation when
+#'   `arc_fill = "correlation"`; a negative correlation uses its complement
+#'   (default `"#2c3e6b"`).
+#' @param arc_opacity Opacity of the U-turns for `arc_fill = "mean_prev"` and
+#'   `"blend"`, and of U-turns without a correlation (default 0.80).
+#' @param arc_fill Fill of the U-turns: `"none"` (default) continues the
+#'   shades of the two bands it joins; `"correlation"` tints it by the
+#'   Pearson correlation between the two items, darker for a larger absolute
+#'   value; `"mean_prev"` uses the shade of the preceding item; `"blend"`
+#'   mixes the two shades.
+#' @param band_palette Two or more colors for the band shade, from low to
+#'   high item mean. `NULL` (default) uses a dark brown-to-slate ramp.
+#' @param start_from Side on which the first band starts: `"left"` (default)
+#'   or `"right"`.
+#' @param flow `"snake"` (default): bands alternate direction. `"natural"`:
+#'   every band reads in the same direction.
+#' @param facet `FALSE` (default) for one panel. `TRUE` groups the columns of
+#'   raw responses by name prefix (`LOC1`, `LOC2` become `LOC`; `Emo_Happy`
+#'   becomes `Emo`) and draws one panel per group, with the prefix removed
+#'   from the item labels and one shared legend in a spare panel. A named list
+#'   of column-name vectors gives the groups explicitly.
+#' @param facet_ncol Number of panel columns for `facet` (default 2).
+#' @param title Plot title, or `NULL` (default) for none.
+#' @param margin Named numeric vector of `top`, `right`, `bottom` and `left`
+#'   margins in plot units (default
+#'   `c(top = 30, right = 10, bottom = 55, left = 100)`).
+#' @param background Background color (default `"white"`).
+#' @param seed Seed for the random placement of ticks within their zones
+#'   (default 42). It is set with [set.seed()], which changes the random
+#'   number stream of the session.
 #'
-#'   **ESM / longitudinal data.frame**: when \code{var} and \code{day} are
-#'   provided, data is automatically pivoted by day and each band becomes
-#'   one day. If \code{timestamp} is also given, ticks are positioned by
-#'   time of day.
-#' @param var Character, column name of the response variable for ESM mode.
-#'   When provided with \code{day}, data is auto-pivoted by period.
-#' @param day Character, column name for the day/period grouping variable
-#'   (e.g. \code{"day"}). Each unique value becomes one band.
-#' @param timestamp Character, column name of a POSIXct timestamp for ESM
-#'   mode. When provided alongside \code{var} and \code{day}, ticks are
-#'   positioned by time-of-day within each band.
-#' @param labels Character vector of item labels (length = nrow(counts)).
-#'   \code{NULL} (default) infers them from row or column names.
-#' @param levels Character vector of level labels (length = ncol(counts)).
-#'   \code{NULL} (default) infers them from column names or the unique
-#'   response values.
-#' @param level_labels Optional named character vector mapping raw level
-#'   values to display labels (e.g.
-#'   \code{c("1"="Str. Disagree", "5"="Str. Agree")}). Applied to legend
-#'   and any level-based text. If unnamed and same length as levels, used
-#'   positionally. Names that match no level are ignored.
-#' @param band_height Numeric (default 28).
-#' @param band_gap Numeric (default 18).
-#' @param plot_width Numeric (default 500).
-#' @param tick_shape Character: "line" (default), "dot", or "bar"
-#'   (stacked proportional bars with percentage labels).
-#' @param bar_reverse Logical. When \code{TRUE} and \code{tick_shape = "bar"},
-#'   draw segments from the highest level (left) to the lowest (right).
-#'   Default \code{FALSE}.
-#' @param tick_opacity Numeric 0-1 (default 0.75).
-#' @param level_gap Numeric. Gap between response-level zones in plot units
-#'   (default 15). Set to 0 for no separation.
-#' @param color_mode Character, "level" (color by response level) or
-#'   "individual" (unique hue per respondent). Default "level".
-#' @param colors Character vector of colors, one per response level in level
-#'   order. Only the first \code{length(levels)} colors are used, so pass
-#'   \code{snake_palette(name, n = <number of levels>)} to spread a full
-#'   palette over the scale. Default \code{NULL} uses a diverging palette.
-#' @param shade_band Logical. Shade band body by item mean (default TRUE).
-#' @param show_mean Logical. Diamond marker at mean (default TRUE).
-#' @param show_median Logical. Vertical line at median (default FALSE).
-#' @param show_correlation Logical. Print the Pearson r between adjacent items
-#'   at each U-turn (default TRUE). Only has an effect when
-#'   \code{arc_fill = "correlation"}.
-#' @param jitter_range Numeric. Vertical jitter fraction (default 0.22).
-#' @param sort_by Character: "none" (input order, default), "mean" (ascending
-#'   item mean), or "net" (ascending net score: share of responses above the
-#'   scale midpoint minus share below; falls back to the mean for scales with
-#'   fewer than four levels).
-#' @param shadow Logical (default TRUE).
-#' @param label_color Character (default "#333333").
-#' @param label_size Numeric (default 0.85).
-#' @param label_align Character. Label alignment: "left" (default), "right",
-#'   or "direction" (follows band reading direction).
-#' @param show_legend Logical (default TRUE).
-#' @param legend_text_size Numeric, legend text size (default 0.65).
-#' @param arc_color Character. Arc tint used when
-#'   \code{arc_fill = "correlation"} (default "#2c3e6b").
-#' @param arc_opacity Numeric 0-1. Arc opacity for the "correlation",
-#'   "mean_prev" and "blend" fills (default 0.80).
-#' @param arc_fill Character controlling arc fill style:
-#'   \describe{
-#'     \item{"none"}{(default) Two-tone split: upper half colored by the upper
-#'       band's mean shade, lower half by the lower band's mean shade.}
-#'     \item{"correlation"}{Tint by correlation sign (\code{arc_color} for
-#'       positive r, its complement for negative r), darker for larger |r|.
-#'       r is the Pearson correlation between the two items across the
-#'       respondents who answered both. Requires raw responses; counts input
-#'       and the \code{var}/\code{day} (ESM) mode raise an error of class
-#'       \code{snakeplot_no_respondent_data}.}
-#'     \item{"mean_prev"}{Solid fill using the upper (preceding) band's mean
-#'       shade.}
-#'     \item{"blend"}{Solid fill: 50/50 RGB average of adjacent band shades.}
-#'   }
-#' @param band_palette Character vector of 2+ anchor colors for the band
-#'   shading gradient. Low item means map to the first color, high means to
-#'   the last. Default \code{NULL} uses the built-in brown-to-slate ramp.
-#'   For darker plots try \code{c("#1a1228", "#1a2a42")}.
-#' @param flow Character, \code{"snake"} (default) or \code{"natural"}.
-#'   \code{"snake"} uses alternating boustrophedon direction;
-#'   \code{"natural"} reads all bands in the same direction.
-#' @param start_from Character: "left" (default) or "right". Which side the
-#'   first band starts from.
-#' @param facet Logical or named list. When \code{TRUE}, columns are
-#'   auto-grouped by their name prefix (e.g. LOC1-LOC5 become "LOC", or
-#'   Emo_Happy becomes "Emo" when the prefix ends in an underscore) and each
-#'   group is drawn as a facet panel. A named list of column-name vectors
-#'   gives explicit grouping. Default \code{FALSE}.
-#' @param facet_ncol Integer, number of columns in the facet grid
-#'   (default 2).
-#' @param title Optional plot title.
-#' @param margin Named numeric vector.
-#' @param background Background color.
-#' @param seed Integer for reproducible jitter (default 42). The function
-#'   calls \code{set.seed(seed)} before drawing the jittered ticks, which
-#'   also resets the random number stream of the calling session.
+#' @return The plot is drawn on the current device. The function returns,
+#'   invisibly, an object of class `snake_layout`: a list describing the drawn
+#'   geometry, with `bands` (a data frame with one row per item band and
+#'   columns `i`, `y_center`, `y_top`, `y_bottom`, `x_left`, `x_right`,
+#'   `direction` and `read_direction`), `arcs` (a list with one element per
+#'   U-turn), `canvas` and `plot_area` (dimensions in plot units),
+#'   `orientation`, `flow` and `params` (the sizes used).
 #'
-#' @return Called for its side effect of drawing a plot. Invisibly returns a
-#'   list of class \code{snake_layout} with the computed geometry:
-#'   \code{bands} (a data.frame with one row per band and columns \code{i},
-#'   \code{y_center}, \code{y_top}, \code{y_bottom}, \code{x_left},
-#'   \code{x_right}, \code{direction}, \code{read_direction}), \code{arcs}
-#'   (a list with one element per U-turn), \code{canvas}, \code{plot_area},
-#'   \code{orientation}, \code{flow} and \code{params}. With
-#'   \code{arc_fill = "correlation"} it also holds \code{correlations}, a
-#'   data.frame with one row per U-turn and columns \code{from}, \code{to}
-#'   (item names), \code{r} (Pearson correlation; \code{NA} when fewer than
-#'   three respondents answered both items or either is constant among them)
-#'   and \code{n} (respondents who answered both). When
-#'   \code{facet} is used, a named list of such objects, one per facet
-#'   group.
+#'   With `arc_fill = "correlation"` the list also holds `correlations`, a
+#'   data frame with one row per U-turn and columns `from` and `to` (the item
+#'   names), `r` (the Pearson correlation over the respondents who answered
+#'   both items; `NA` when fewer than three did or either item is constant
+#'   among them) and `n` (the number of those respondents). With other
+#'   `arc_fill` values the list has no `correlations` component.
+#'   [as.data.frame()][as.data.frame.snake_layout] returns these tables.
+#'
+#'   With `facet`, a named list of such objects, one per panel.
+#'
+#' @section Conditions:
+#'   An error of class `snakeplot_no_respondent_data` when
+#'   `arc_fill = "correlation"` and `counts` is a table of counts or `var`
+#'   and `day` are given.
+#'
+#' @seealso [as.data.frame.snake_layout()] for the tables of the returned
+#'   layout; [survey_sequence()] and [sequential_dist()] for stacked bars;
+#'   [snake_palette()] for level colors; [ema_emotions], [student_survey] and
+#'   [ema_beeps] for example data.
 #'
 #' @examples
-#' counts <- matrix(c(
-#'   110, 210, 79, 84, 42,
-#'   126, 205, 68, 100, 26,
-#'   184, 226, 47, 58, 10,
-#'   205, 210, 42, 53, 15,
-#'   197, 214, 53, 47, 14
-#' ), nrow = 5, byrow = TRUE)
-#' labels <- paste0("LOC", 1:5, " (n=525)")
-#' levs <- as.character(1:5)
-#' survey_snake(counts, labels, levs)
+#' # Raw responses: 280 students, ten emotion items rated 1-5
+#' survey_snake(ema_emotions, sort_by = "mean")
+#'
+#' # Correlations between adjacent items on the U-turns
+#' survey_snake(ema_emotions, arc_fill = "correlation", tick_shape = "dot")
+#'
+#' # Experience sampling: one band per study day, responses at their time
+#' survey_snake(ema_beeps, var = "happy", day = "day",
+#'              timestamp = "start_time")
+#'
+#' # A table of counts with named levels
+#' counts <- matrix(c(110, 210, 79,  84, 42,
+#'                    126, 205, 68, 100, 26,
+#'                    184, 226, 47,  58, 10),
+#'                  nrow = 3, byrow = TRUE,
+#'                  dimnames = list(c("LOC1", "LOC2", "LOC3"),
+#'                                  c("Never", "Rarely", "Sometimes",
+#'                                    "Often", "Always")))
+#' survey_snake(counts, tick_shape = "bar",
+#'              colors = snake_palette("earth", n = 5))
+#'
+#' # One panel per group of items
+#' survey_snake(student_survey, facet = TRUE, tick_shape = "bar")
 #'
 #' @export
 survey_snake <- function(counts, labels = NULL, levels = NULL,
@@ -201,7 +226,7 @@ survey_snake <- function(counts, labels = NULL, levels = NULL,
     tod <- if (has_time) {
       ts_col <- esm_df[[timestamp]]
       if (!inherits(ts_col, "POSIXct")) ts_col <- as.POSIXct(ts_col)
-      dates <- as.Date(ts_col)
+      dates <- .local_date(ts_col)
       day_start <- as.POSIXct(paste(dates, "00:00:00"),
                                tz = if (is.null(attr(ts_col, "tzone"))) "" else attr(ts_col, "tzone"))
       as.numeric(difftime(ts_col, day_start, units = "hours")) / 24

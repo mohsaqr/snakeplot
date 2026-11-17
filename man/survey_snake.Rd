@@ -2,7 +2,7 @@
 % Please edit documentation in R/survey_snake.R
 \name{survey_snake}
 \alias{survey_snake}
-\title{Survey Snake Plot}
+\title{Plot survey responses as a serpentine band per item}
 \usage{
 survey_snake(
   counts,
@@ -48,190 +48,215 @@ survey_snake(
 )
 }
 \arguments{
-\item{counts}{Input in one of four formats:
+\item{counts}{Responses, in one of four forms:
+\itemize{
+\item a data frame of raw responses, one row per respondent and one column
+per item;
+\item a numeric matrix of counts, items in rows and response levels in
+columns;
+\item a data frame of counts, converted to a matrix;
+\item a long data frame of experience-sampling responses, used with \code{var}
+and \code{day}.
+}
 
-\strong{Raw responses} (data.frame): each column is a survey item, each row
-is a respondent. Responses are auto-tabulated into counts.
-\code{labels} and \code{levels} are inferred from column names and
-unique values. Simplest usage:
-\code{survey_snake(survey_df)}.
+A data frame is read as raw responses when its columns hold few distinct
+whole-number or categorical values relative to its number of rows, and
+as counts otherwise.}
 
-\strong{Counts matrix}: rows = items, columns = response levels.
+\item{labels}{Item labels, one per item. \code{NULL} (default) uses the row
+names of a count table, or, for raw responses, the column names with the
+number of responses.}
 
-\strong{Counts data.frame}: coerced to matrix.
+\item{levels}{Response levels in scale order. \code{NULL} (default) uses the
+column names of a count table, or, for raw responses, the factor levels
+or the sorted distinct values. For raw responses the levels must match
+the values in the data; use \code{level_labels} to relabel them.}
 
-\strong{ESM / longitudinal data.frame}: when \code{var} and \code{day} are
-provided, data is automatically pivoted by day and each band becomes
-one day. If \code{timestamp} is also given, ticks are positioned by
-time of day.}
+\item{var, day, timestamp}{Column names for experience-sampling data in long
+format: the response variable, the day (or other period) that defines
+each band, and optionally a POSIXct timestamp that places each response
+at its time of day. Bands are labelled \code{"Day 1"}, \code{"Day 2"}, and so on,
+and \code{title} defaults to \code{var}.}
 
-\item{labels}{Character vector of item labels (length = nrow(counts)).
-\code{NULL} (default) infers them from row or column names.}
+\item{level_labels}{Display labels for the response levels: a vector named
+by level, such as \code{c("1" = "Never", "5" = "Always")}, or an unnamed
+vector with one label per level.}
 
-\item{levels}{Character vector of level labels (length = ncol(counts)).
-\code{NULL} (default) infers them from column names or the unique
-response values.}
+\item{band_height, band_gap}{Height of each band and gap between bands, in
+plot units (defaults 28 and 18).}
 
-\item{var}{Character, column name of the response variable for ESM mode.
-When provided with \code{day}, data is auto-pivoted by period.}
+\item{plot_width}{Length of each band in plot units (default 500).}
 
-\item{day}{Character, column name for the day/period grouping variable
-(e.g. \code{"day"}). Each unique value becomes one band.}
+\item{tick_shape}{\code{"line"} (default), \code{"dot"} (jittered points) or
+\code{"bar"} (a stacked bar with percentages).}
 
-\item{timestamp}{Character, column name of a POSIXct timestamp for ESM
-mode. When provided alongside \code{var} and \code{day}, ticks are
-positioned by time-of-day within each band.}
+\item{bar_reverse}{For \code{tick_shape = "bar"}, draw the highest level first
+(default \code{FALSE}).}
 
-\item{level_labels}{Optional named character vector mapping raw level
-values to display labels (e.g.
-\code{c("1"="Str. Disagree", "5"="Str. Agree")}). Applied to legend
-and any level-based text. If unnamed and same length as levels, used
-positionally. Names that match no level are ignored.}
+\item{tick_opacity}{Opacity of the ticks, between 0 and 1 (default 0.75).}
 
-\item{band_height}{Numeric (default 28).}
+\item{level_gap}{Gap, in plot units, between the zones of adjacent
+response levels (default 15; 0 for none).}
 
-\item{band_gap}{Numeric (default 18).}
+\item{color_mode}{\code{"level"} (default) colors each tick by its response
+level; \code{"individual"} gives every tick its own hue.}
 
-\item{plot_width}{Numeric (default 500).}
+\item{colors}{One color per response level, in scale order. Only the first
+\code{length(levels)} colors are used, so pass
+\verb{snake_palette(name, n = <number of levels>)}. \code{NULL} (default) uses a
+red-to-blue diverging palette.}
 
-\item{tick_shape}{Character: "line" (default), "dot", or "bar"
-(stacked proportional bars with percentage labels).}
+\item{shade_band}{Has no effect at present: the band is always shaded by
+the item mean.}
 
-\item{bar_reverse}{Logical. When \code{TRUE} and \code{tick_shape = "bar"},
-draw segments from the highest level (left) to the lowest (right).
-Default \code{FALSE}.}
+\item{show_mean}{Draw a diamond at the item mean (default \code{TRUE}).}
 
-\item{tick_opacity}{Numeric 0-1 (default 0.75).}
+\item{show_median}{Draw a dashed line at the item median
+(default \code{FALSE}).}
 
-\item{level_gap}{Numeric. Gap between response-level zones in plot units
-(default 15). Set to 0 for no separation.}
+\item{show_correlation}{With \code{arc_fill = "correlation"}, print the
+correlation at each U-turn (default \code{TRUE}).}
 
-\item{color_mode}{Character, "level" (color by response level) or
-"individual" (unique hue per respondent). Default "level".}
+\item{jitter_range}{For \code{tick_shape = "dot"}, vertical scatter of the
+points as a fraction of half the band height (default 0.22).}
 
-\item{colors}{Character vector of colors, one per response level in level
-order. Only the first \code{length(levels)} colors are used, so pass
-\code{snake_palette(name, n = <number of levels>)} to spread a full
-palette over the scale. Default \code{NULL} uses a diverging palette.}
+\item{sort_by}{Order of the items: \code{"none"} (default, input order),
+\code{"mean"} (increasing item mean) or \code{"net"} (increasing share of
+responses above the middle level minus share below; the mean for scales
+with fewer than four levels).}
 
-\item{shade_band}{Logical. Shade band body by item mean (default TRUE).}
+\item{shadow}{Draw drop shadows (default \code{TRUE}).}
 
-\item{show_mean}{Logical. Diamond marker at mean (default TRUE).}
+\item{label_color, label_size}{Color and size multiplier of the item labels
+(defaults \code{"#333333"} and 0.85).}
 
-\item{show_median}{Logical. Vertical line at median (default FALSE).}
+\item{label_align}{Alignment of the item labels: \code{"left"} (default),
+\code{"right"}, or \code{"direction"} to follow each band's reading direction.}
 
-\item{show_correlation}{Logical. Print the Pearson r between adjacent items
-at each U-turn (default TRUE). Only has an effect when
-\code{arc_fill = "correlation"}.}
+\item{show_legend}{Draw the legend (default \code{TRUE}).}
 
-\item{jitter_range}{Numeric. Vertical jitter fraction (default 0.22).}
+\item{legend_text_size}{Size of the legend text (default 0.65).}
 
-\item{sort_by}{Character: "none" (input order, default), "mean" (ascending
-item mean), or "net" (ascending net score: share of responses above the
-scale midpoint minus share below; falls back to the mean for scales with
-fewer than four levels).}
+\item{arc_color}{Color of the U-turns for a positive correlation when
+\code{arc_fill = "correlation"}; a negative correlation uses its complement
+(default \code{"#2c3e6b"}).}
 
-\item{shadow}{Logical (default TRUE).}
+\item{arc_opacity}{Opacity of the U-turns for \code{arc_fill = "mean_prev"} and
+\code{"blend"}, and of U-turns without a correlation (default 0.80).}
 
-\item{label_color}{Character (default "#333333").}
+\item{arc_fill}{Fill of the U-turns: \code{"none"} (default) continues the
+shades of the two bands it joins; \code{"correlation"} tints it by the
+Pearson correlation between the two items, darker for a larger absolute
+value; \code{"mean_prev"} uses the shade of the preceding item; \code{"blend"}
+mixes the two shades.}
 
-\item{label_size}{Numeric (default 0.85).}
+\item{band_palette}{Two or more colors for the band shade, from low to
+high item mean. \code{NULL} (default) uses a dark brown-to-slate ramp.}
 
-\item{label_align}{Character. Label alignment: "left" (default), "right",
-or "direction" (follows band reading direction).}
+\item{start_from}{Side on which the first band starts: \code{"left"} (default)
+or \code{"right"}.}
 
-\item{show_legend}{Logical (default TRUE).}
+\item{flow}{\code{"snake"} (default): bands alternate direction. \code{"natural"}:
+every band reads in the same direction.}
 
-\item{legend_text_size}{Numeric, legend text size (default 0.65).}
+\item{facet}{\code{FALSE} (default) for one panel. \code{TRUE} groups the columns of
+raw responses by name prefix (\code{LOC1}, \code{LOC2} become \code{LOC}; \code{Emo_Happy}
+becomes \code{Emo}) and draws one panel per group, with the prefix removed
+from the item labels and one shared legend in a spare panel. A named list
+of column-name vectors gives the groups explicitly.}
 
-\item{arc_color}{Character. Arc tint used when
-\code{arc_fill = "correlation"} (default "#2c3e6b").}
+\item{facet_ncol}{Number of panel columns for \code{facet} (default 2).}
 
-\item{arc_opacity}{Numeric 0-1. Arc opacity for the "correlation",
-"mean_prev" and "blend" fills (default 0.80).}
+\item{title}{Plot title, or \code{NULL} (default) for none.}
 
-\item{arc_fill}{Character controlling arc fill style:
-\describe{
-\item{"none"}{(default) Two-tone split: upper half colored by the upper
-band's mean shade, lower half by the lower band's mean shade.}
-\item{"correlation"}{Tint by correlation sign (\code{arc_color} for
-positive r, its complement for negative r), darker for larger |r|.
-r is the Pearson correlation between the two items across the
-respondents who answered both. Requires raw responses; counts input
-and the \code{var}/\code{day} (ESM) mode raise an error of class
-\code{snakeplot_no_respondent_data}.}
-\item{"mean_prev"}{Solid fill using the upper (preceding) band's mean
-shade.}
-\item{"blend"}{Solid fill: 50/50 RGB average of adjacent band shades.}
-}}
+\item{margin}{Named numeric vector of \code{top}, \code{right}, \code{bottom} and \code{left}
+margins in plot units (default
+\code{c(top = 30, right = 10, bottom = 55, left = 100)}).}
 
-\item{band_palette}{Character vector of 2+ anchor colors for the band
-shading gradient. Low item means map to the first color, high means to
-the last. Default \code{NULL} uses the built-in brown-to-slate ramp.
-For darker plots try \code{c("#1a1228", "#1a2a42")}.}
+\item{background}{Background color (default \code{"white"}).}
 
-\item{start_from}{Character: "left" (default) or "right". Which side the
-first band starts from.}
-
-\item{flow}{Character, \code{"snake"} (default) or \code{"natural"}.
-\code{"snake"} uses alternating boustrophedon direction;
-\code{"natural"} reads all bands in the same direction.}
-
-\item{facet}{Logical or named list. When \code{TRUE}, columns are
-auto-grouped by their name prefix (e.g. LOC1-LOC5 become "LOC", or
-Emo_Happy becomes "Emo" when the prefix ends in an underscore) and each
-group is drawn as a facet panel. A named list of column-name vectors
-gives explicit grouping. Default \code{FALSE}.}
-
-\item{facet_ncol}{Integer, number of columns in the facet grid
-(default 2).}
-
-\item{title}{Optional plot title.}
-
-\item{margin}{Named numeric vector.}
-
-\item{background}{Background color.}
-
-\item{seed}{Integer for reproducible jitter (default 42). The function
-calls \code{set.seed(seed)} before drawing the jittered ticks, which
-also resets the random number stream of the calling session.}
+\item{seed}{Seed for the random placement of ticks within their zones
+(default 42). It is set with \code{\link[=set.seed]{set.seed()}}, which changes the random
+number stream of the session.}
 }
 \value{
-Called for its side effect of drawing a plot. Invisibly returns a
-list of class \code{snake_layout} with the computed geometry:
-\code{bands} (a data.frame with one row per band and columns \code{i},
-\code{y_center}, \code{y_top}, \code{y_bottom}, \code{x_left},
-\code{x_right}, \code{direction}, \code{read_direction}), \code{arcs}
-(a list with one element per U-turn), \code{canvas}, \code{plot_area},
-\code{orientation}, \code{flow} and \code{params}. With
-\code{arc_fill = "correlation"} it also holds \code{correlations}, a
-data.frame with one row per U-turn and columns \code{from}, \code{to}
-(item names), \code{r} (Pearson correlation; \code{NA} when fewer than
-three respondents answered both items or either is constant among them)
-and \code{n} (respondents who answered both). When
-\code{facet} is used, a named list of such objects, one per facet
-group.
+The plot is drawn on the current device. The function returns,
+invisibly, an object of class \code{snake_layout}: a list describing the drawn
+geometry, with \code{bands} (a data frame with one row per item band and
+columns \code{i}, \code{y_center}, \code{y_top}, \code{y_bottom}, \code{x_left}, \code{x_right},
+\code{direction} and \code{read_direction}), \code{arcs} (a list with one element per
+U-turn), \code{canvas} and \code{plot_area} (dimensions in plot units),
+\code{orientation}, \code{flow} and \code{params} (the sizes used).
+
+With \code{arc_fill = "correlation"} the list also holds \code{correlations}, a
+data frame with one row per U-turn and columns \code{from} and \code{to} (the item
+names), \code{r} (the Pearson correlation over the respondents who answered
+both items; \code{NA} when fewer than three did or either item is constant
+among them) and \code{n} (the number of those respondents). With other
+\code{arc_fill} values the list has no \code{correlations} component.
+\link[=as.data.frame.snake_layout]{as.data.frame()} returns these tables.
+
+With \code{facet}, a named list of such objects, one per panel.
 }
 \description{
-Each survey item is a horizontal band in a serpentine layout. The band body
-is shaded by item mean (warm = low, cool = high). Individual responses are
-shown as colored tick marks. With \code{arc_fill = "correlation"}, the
-Pearson correlation between adjacent items is printed at each U-turn, so
-items that move together can be read off the arcs. The correlation is
-computed across respondents, so it requires raw responses (one row per
-respondent); a counts table does not record which respondent gave which
-answer.
-}
-\examples{
-counts <- matrix(c(
-  110, 210, 79, 84, 42,
-  126, 205, 68, 100, 26,
-  184, 226, 47, 58, 10,
-  205, 210, 42, 53, 15,
-  197, 214, 53, 47, 14
-), nrow = 5, byrow = TRUE)
-labels <- paste0("LOC", 1:5, " (n=525)")
-levs <- as.character(1:5)
-survey_snake(counts, labels, levs)
+A survey snake shows the distribution of responses to a set of rating
+items, one band per item, with consecutive items joined by U-turns so that
+a long instrument fits in one panel in its item order. Each band shows
+every response as a tick placed in the zone of its response level, the
+item mean as a diamond, and a shade running from warm (low mean) to cool
+(high mean). The display shows how responses are spread on each item and
+how the items compare.
 
+\code{survey_snake()} accepts raw responses (one row per respondent, one column
+per item), a table of counts (one row per item, one column per response
+level), or experience-sampling data in long format, where \code{var} and \code{day}
+make each day a band and \code{timestamp} places each response at its time of
+day. Responses can be drawn as lines, jittered dots, or a stacked bar with
+percentages. The U-turns can carry the Pearson correlation between the two
+items they join (\code{arc_fill = "correlation"}); this needs raw responses,
+because a table of counts does not record which respondent gave which
+answer. With \code{facet}, groups of items are drawn as separate panels.
+
+For a compact 100\% stacked bar per item use \code{\link[=survey_sequence]{survey_sequence()}}, or
+\code{\link[=sequential_dist]{sequential_dist()}} for scales without a neutral midpoint. Palettes for
+the response levels are given by \code{\link[=snake_palette]{snake_palette()}}.
+}
+\section{Conditions}{
+
+An error of class \code{snakeplot_no_respondent_data} when
+\code{arc_fill = "correlation"} and \code{counts} is a table of counts or \code{var}
+and \code{day} are given.
+}
+
+\examples{
+# Raw responses: 280 students, ten emotion items rated 1-5
+survey_snake(ema_emotions, sort_by = "mean")
+
+# Correlations between adjacent items on the U-turns
+survey_snake(ema_emotions, arc_fill = "correlation", tick_shape = "dot")
+
+# Experience sampling: one band per study day, responses at their time
+survey_snake(ema_beeps, var = "happy", day = "day",
+             timestamp = "start_time")
+
+# A table of counts with named levels
+counts <- matrix(c(110, 210, 79,  84, 42,
+                   126, 205, 68, 100, 26,
+                   184, 226, 47,  58, 10),
+                 nrow = 3, byrow = TRUE,
+                 dimnames = list(c("LOC1", "LOC2", "LOC3"),
+                                 c("Never", "Rarely", "Sometimes",
+                                   "Often", "Always")))
+survey_snake(counts, tick_shape = "bar",
+             colors = snake_palette("earth", n = 5))
+
+# One panel per group of items
+survey_snake(student_survey, facet = TRUE, tick_shape = "bar")
+
+}
+\seealso{
+\code{\link[=as.data.frame.snake_layout]{as.data.frame.snake_layout()}} for the tables of the returned
+layout; \code{\link[=survey_sequence]{survey_sequence()}} and \code{\link[=sequential_dist]{sequential_dist()}} for stacked bars;
+\code{\link[=snake_palette]{snake_palette()}} for level colors; \link{ema_emotions}, \link{student_survey} and
+\link{ema_beeps} for example data.
 }

@@ -16,3 +16,6 @@
 ^_pkgdown\.yml$
 ^\.mini-ci$
 ^\.ci$
+^README\.Rmd$
+^vignettes/articles$
+^Project_docs$

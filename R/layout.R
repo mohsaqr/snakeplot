@@ -294,3 +294,63 @@ end_cap_polygon <- function(x, y, radius, side = "left", n_pts = 40L) {
     )
   }
 }
+
+#' Tables of a serpentine plot's layout
+#'
+#' @description
+#' The plot functions return their layout invisibly as a `snake_layout`
+#' object. `as.data.frame()` gives its tables: the geometry of the bands, the
+#' correlations printed at the U-turns, or the size of the canvas.
+#'
+#' @param x A `snake_layout`, as returned by [survey_snake()],
+#'   [survey_sequence()], [sequential_dist()], [activity_snake()] or
+#'   [line_snake()].
+#' @param row.names,optional Not used; present for compatibility with the
+#'   generic.
+#' @param what Which table: `"bands"` (default), `"correlations"` or
+#'   `"canvas"`.
+#' @param ... Not used.
+#' @return A data frame.
+#'   * `"bands"`: one row per band, in drawing order, with columns `i`
+#'     (band index from 0), `y_center`, `y_top`, `y_bottom`, `x_left`,
+#'     `x_right` (plot units), `direction` (`"ltr"` or `"rtl"`, the direction
+#'     of the U-turn geometry) and `read_direction` (the direction in which the
+#'     band's content is read).
+#'   * `"correlations"`: one row per U-turn with columns `from`, `to` (item
+#'     names), `r` (Pearson correlation across the respondents who answered
+#'     both items) and `n` (their number); available for
+#'     `survey_snake(arc_fill = "correlation")`.
+#'   * `"canvas"`: one row with the `width` and `height` of the canvas in
+#'     plot units.
+#' @section Conditions:
+#'   `snakeplot_no_table` when `what = "correlations"` and the plot was not
+#'   drawn with `arc_fill = "correlation"`.
+#' @seealso [survey_snake()] for the correlation arcs.
+#' @examples
+#' layout <- survey_snake(ema_emotions, sort_by = "mean",
+#'                        arc_fill = "correlation")
+#' as.data.frame(layout, what = "correlations")
+#' as.data.frame(layout)
+#' @export
+as.data.frame.snake_layout <- function(x, row.names = NULL, optional = FALSE,
+                                       what = c("bands", "correlations",
+                                                "canvas"),
+                                       ...) {
+  stopifnot("`x` must be a snake_layout" = inherits(x, "snake_layout"))
+  what <- match.arg(what)
+  switch(what,
+    bands = x[["bands"]],
+    canvas = data.frame(width = x[["canvas"]][["width"]],
+                        height = x[["canvas"]][["height"]]),
+    correlations = {
+      if (is.null(x[["correlations"]])) {
+        stop(errorCondition(
+          paste("This plot has no correlations; draw it with",
+                "`survey_snake(arc_fill = \"correlation\")`."),
+          class = "snakeplot_no_table", call = NULL
+        ))
+      }
+      x[["correlations"]]
+    }
+  )
+}

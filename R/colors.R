@@ -77,32 +77,32 @@ cycle_colors <- function(colors, n) {
   rep_len(colors, n)
 }
 
-#' Built-in Color Palettes
+#' Built-in color palettes for snake plots
 #'
-#' A named list of 10 color palettes for snake plots. Each palette contains
-#' 7 anchor colors that can be interpolated to any length with
-#' \code{\link{snake_palette}}.
+#' @description
+#' `snake_palettes` is a named list of ten palettes for the response levels of
+#' rating scales. Each palette has seven anchor colors ordered from the low to
+#' the high end of the scale; [snake_palette()] returns a palette by name and
+#' interpolates it to the number of levels in the data.
 #'
-#' \describe{
-#'   \item{classic}{Diverging red-to-blue. Clean Likert default.}
-#'   \item{earth}{Diverging brown-to-teal. Natural, understated.}
-#'   \item{ocean}{Diverging coral-to-navy. Warm/cool contrast.}
-#'   \item{sunset}{Diverging orange-to-indigo. Vivid but balanced.}
-#'   \item{berry}{Diverging rose-to-green. High contrast.}
-#'   \item{blues}{Sequential light-to-dark blue.}
-#'   \item{greens}{Sequential light-to-dark green.}
-#'   \item{grays}{Sequential light-to-dark gray.}
-#'   \item{warm}{Sequential cream-to-dark red.}
-#'   \item{viridis}{Sequential yellow-green-blue-purple (viridis-inspired).}
-#' }
+#' Five palettes are diverging, with a grey midpoint, for bipolar scales such
+#' as agree-disagree: `classic` (red to blue), `earth` (brown to teal),
+#' `ocean` (red to blue through orange), `sunset` (orange to purple) and
+#' `berry` (pink to green). Five are sequential, light to dark, for unipolar
+#' scales such as frequency or intensity: `blues`, `greens`, `grays`, `warm`
+#' (cream to dark red) and `viridis` (yellow to blue, colors from the viridis
+#' scale).
 #'
-#' @format A named list of 10 character vectors, each with 7 hex color strings.
+#' @format A named list of 10 character vectors, each holding 7 hex color
+#'   strings from the low to the high end of the scale.
+#'
+#' @seealso [snake_palette()] to get a palette with a given number of colors;
+#'   [survey_snake()], [survey_sequence()] and [sequential_dist()], which take
+#'   the colors through their `colors` argument.
 #'
 #' @examples
 #' names(snake_palettes)
-#' # snake_palette() returns a palette by name; with the default n = 7 it
-#' # gives the 7 anchor colors unchanged
-#' snake_palette("ocean")
+#'
 #' # ema_emotions has 5 levels, so interpolate the palette to 5 colors
 #' survey_snake(ema_emotions, colors = snake_palette("earth", n = 5),
 #'              tick_shape = "bar", sort_by = "mean")
@@ -131,24 +131,37 @@ snake_palettes <- list(
               "#21918C", "#2C728E", "#3B528B")
 )
 
-#' Get a Snake Plot Palette
+#' Get a built-in palette for snake plots
 #'
-#' Returns a color palette interpolated to \code{n} colors.
+#' @description
+#' `snake_palette()` returns one of the palettes in [snake_palettes],
+#' interpolated to `n` colors. The survey plots match colors to response
+#' levels by position and use only the first `length(levels)` colors, so `n`
+#' should equal the number of response levels for a palette to span the whole
+#' scale; a diverging palette then has its midpoint at the middle level.
 #'
-#' @param name Character, palette name: one of \code{names(snake_palettes)}
-#'   (default \code{"classic"}). An unknown name is an error that lists the
-#'   available palettes.
-#' @param n Integer, number of colors to return (default 7). With \code{n = 7}
-#'   the anchor colors are returned unchanged; other values interpolate
-#'   between them with \code{grDevices::colorRampPalette()}. Pass the number
-#'   of response levels so a diverging palette spans the whole scale.
-#' @return Character vector of \code{n} hex color strings, ordered from the
-#'   first (low) to the last (high) anchor color.
+#' Diverging palettes (`classic`, `earth`, `ocean`, `sunset`, `berry`) suit
+#' bipolar scales; sequential palettes (`blues`, `greens`, `grays`, `warm`,
+#' `viridis`) suit unipolar scales and [sequential_dist()].
+#'
+#' @param name Palette name, one of `names(snake_palettes)` (default
+#'   `"classic"`). An unknown name is an error that lists the available
+#'   names.
+#' @param n Number of colors (default 7). With 7 the anchor colors are
+#'   returned unchanged; other values interpolate between them with
+#'   [grDevices::colorRampPalette()].
+#'
+#' @return A character vector of `n` hex colors, ordered from the low to the
+#'   high end of the scale.
+#'
+#' @seealso [snake_palettes] for the anchor colors; [survey_snake()],
+#'   [survey_sequence()] and [sequential_dist()], which take the colors
+#'   through their `colors` argument.
 #'
 #' @examples
-#' snake_palette("ocean", 5)
-#' snake_palette("earth", 7)
-#' snake_palette("blues", 3)
+#' snake_palette("ocean", n = 5)
+#' snake_palette("blues", n = 3)
+#' survey_sequence(ema_emotions, colors = snake_palette("berry", n = 5))
 #'
 #' @export
 snake_palette <- function(name = "classic", n = 7L) {

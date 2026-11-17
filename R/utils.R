@@ -447,6 +447,21 @@ coerce_survey_input <- function(counts, labels, levels) {
   list(counts = counts, labels = labels, levels = levels, scores = NULL) # nocov
 }
 
+#' Calendar date of a date-time in its own time zone
+#'
+#' \code{as.Date()} on a POSIXct converts through UTC unless \code{tz} is
+#' given, so a local midnight east of UTC becomes the previous day. Formatting
+#' first keeps the calendar date of the time zone the date-time is in (its
+#' \code{tzone} attribute, else the session time zone).
+#'
+#' @param x A POSIXct or POSIXlt vector.
+#' @return A Date vector of the same length.
+#' @noRd
+.local_date <- function(x) {
+  stopifnot("`x` must be a date-time (POSIXt)" = inherits(x, "POSIXt"))
+  as.Date(format(x, "%Y-%m-%d"))
+}
+
 #' Pearson correlations between adjacent items
 #'
 #' Correlates each pair of items joined by a U-turn, using the respondents
@@ -509,7 +524,7 @@ prepare_timestamps <- function(data, day_format = NULL) {
   if (is.null(ts_col)) return(NULL)
 
   ts <- data[[ts_col]]
-  dates <- as.Date(ts)
+  dates <- .local_date(ts)
 
   # Day labels: auto-detect or use provided format
   if (is.null(day_format)) {

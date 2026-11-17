@@ -3,11 +3,11 @@
 \docType{data}
 \name{ema_emotions}
 \alias{ema_emotions}
-\title{EMA Emotion Ratings (Person-Level)}
+\title{Person-level emotion ratings from an experience-sampling study}
 \format{
-A data.frame with 280 rows and 10 columns (integers 1--5):
-Happy, Afraid, Sad, Balanced, Exhausted, Cheerful, Worried, Lively,
-Angry, Relaxed.
+A data frame with 280 rows (students) and 10 integer columns with
+values 1-5: \code{Happy}, \code{Afraid}, \code{Sad}, \code{Balanced}, \code{Exhausted},
+\code{Cheerful}, \code{Worried}, \code{Lively}, \code{Angry}, \code{Relaxed}.
 }
 \source{
 Neubauer, A. B., & Schmiedek, F. (2024). Approaching academic adjustment
@@ -23,13 +23,26 @@ License: CC-BY 4.0
 ema_emotions
 }
 \description{
-Person-level mean emotion ratings (rounded to integers) from a 14-day
-experience sampling study of 280 university students. Ten emotion items
-rescaled to a 1--5 Likert scale (original study used 1--7; rescaled via
-linear transformation for simplicity). Ready to pass directly to
-\code{\link{survey_snake}}.
+Mean ratings of ten emotions for 280 university students who took part in
+a 14-day experience-sampling study (Neubauer & Schmiedek, 2024). Each
+value is a student's mean rating of one emotion over all prompts, rounded
+to a whole number and rescaled from the original 1-7 scale to 1-5 by
+\code{round(1 + (x - 1) * 4 / 6)}. Students without a mean on every item of
+\link{student_survey} were excluded.
+
+The data have one row per student and one column per emotion, the raw
+response format read by \code{\link[=survey_snake]{survey_snake()}}, \code{\link[=survey_sequence]{survey_sequence()}} and
+\code{\link[=sequential_dist]{sequential_dist()}}. Because the rows keep each student's answers
+together, correlations between items can be shown with
+\code{survey_snake(arc_fill = "correlation")}. The same values form the \code{Emo_}
+columns of \link{student_survey}.
 }
 \examples{
 survey_snake(ema_emotions, tick_shape = "bar", sort_by = "mean")
+survey_snake(ema_emotions, arc_fill = "correlation")
+}
+\seealso{
+\link{student_survey} for all 34 items; \link{ema_beeps} for the
+prompt-level data; \code{\link[=survey_snake]{survey_snake()}}.
 }
 \keyword{datasets}

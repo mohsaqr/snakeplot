@@ -1,4 +1,4 @@
-# snakeplot 0.3.3
+# snakeplot 0.3.4
 
 ## Changes
 
@@ -15,6 +15,22 @@
   row per U-turn (`from`, `to`, `r`, `n`), so the printed values can be
   checked and reported.
 * The legend entry for the arcs reads "Item r (arc)" and uses `arc_color`.
+* Dates of date-times are taken in the time zone of the data. `as.Date()`
+  converted through UTC, so in time zones east of UTC `timeline_snake()`
+  labelled each phase one month early (a phase starting 2016-10 as
+  "Sep 2016"), and the `timestamp` mode of `survey_snake()` measured the
+  time of day of a prompt answered shortly after midnight from the previous
+  midnight, placing its tick beyond the end of the band.
+
+## Documentation
+
+* Help pages rewritten: each opens with what the display represents and
+  when to use it, with cross-references, references and examples on the
+  bundled data.
+* New vignettes "Serpentine plots" and "Survey and experience sampling
+  responses"; guides on sequences and timelines, daily activity, and
+  palettes and layout; case studies on the bundled experience sampling
+  data. The README is generated from `README.Rmd`.
 
 ## Packaging
 

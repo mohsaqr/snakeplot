@@ -2,30 +2,42 @@
 % Please edit documentation in R/colors.R
 \name{snake_palette}
 \alias{snake_palette}
-\title{Get a Snake Plot Palette}
+\title{Get a built-in palette for snake plots}
 \usage{
 snake_palette(name = "classic", n = 7L)
 }
 \arguments{
-\item{name}{Character, palette name: one of \code{names(snake_palettes)}
-(default \code{"classic"}). An unknown name is an error that lists the
-available palettes.}
+\item{name}{Palette name, one of \code{names(snake_palettes)} (default
+\code{"classic"}). An unknown name is an error that lists the available
+names.}
 
-\item{n}{Integer, number of colors to return (default 7). With \code{n = 7}
-the anchor colors are returned unchanged; other values interpolate
-between them with \code{grDevices::colorRampPalette()}. Pass the number
-of response levels so a diverging palette spans the whole scale.}
+\item{n}{Number of colors (default 7). With 7 the anchor colors are
+returned unchanged; other values interpolate between them with
+\code{\link[grDevices:colorRampPalette]{grDevices::colorRampPalette()}}.}
 }
 \value{
-Character vector of \code{n} hex color strings, ordered from the
-first (low) to the last (high) anchor color.
+A character vector of \code{n} hex colors, ordered from the low to the
+high end of the scale.
 }
 \description{
-Returns a color palette interpolated to \code{n} colors.
+\code{snake_palette()} returns one of the palettes in \link{snake_palettes},
+interpolated to \code{n} colors. The survey plots match colors to response
+levels by position and use only the first \code{length(levels)} colors, so \code{n}
+should equal the number of response levels for a palette to span the whole
+scale; a diverging palette then has its midpoint at the middle level.
+
+Diverging palettes (\code{classic}, \code{earth}, \code{ocean}, \code{sunset}, \code{berry}) suit
+bipolar scales; sequential palettes (\code{blues}, \code{greens}, \code{grays}, \code{warm},
+\code{viridis}) suit unipolar scales and \code{\link[=sequential_dist]{sequential_dist()}}.
 }
 \examples{
-snake_palette("ocean", 5)
-snake_palette("earth", 7)
-snake_palette("blues", 3)
+snake_palette("ocean", n = 5)
+snake_palette("blues", n = 3)
+survey_sequence(ema_emotions, colors = snake_palette("berry", n = 5))
 
+}
+\seealso{
+\link{snake_palettes} for the anchor colors; \code{\link[=survey_snake]{survey_snake()}},
+\code{\link[=survey_sequence]{survey_sequence()}} and \code{\link[=sequential_dist]{sequential_dist()}}, which take the colors
+through their \code{colors} argument.
 }
