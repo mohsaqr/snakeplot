@@ -1,4 +1,4 @@
-# snakeplot 0.3.6
+# snakeplot 0.4.0
 
 ## Changes
 
@@ -27,33 +27,10 @@
 
 ## Documentation
 
-* Help pages rewritten: each opens with what the display represents and
-  when to use it, with cross-references, references and examples on the
-  bundled data.
 * New vignettes "Serpentine plots" and "Survey and experience sampling
   responses"; guides on sequences and timelines, daily activity, and
   palettes and layout; case studies on the bundled experience sampling
-  data. The README is generated from `README.Rmd`.
-
-## Packaging
-
-* README figures in `man/figures/` are now included in the package; a
-  `.Rbuildignore` pattern for `.png` files had excluded them, so the README
-  showed broken images on CRAN.
-
-# snakeplot 0.3.2
-
-* Documentation revision: corrected stale defaults (`survey_snake()`
-  `tick_opacity`, `timeline_snake()` `band_gap`, `tick_color`, `tick_length`,
-  `rows`), described the structure of every returned object, documented that
-  `colors` uses only the first `length(levels)` colors and that
-  `show_correlation` only acts with `arc_fill = "correlation"`, and fixed the
-  `sequence_snake()` rug-style description (light gray band; `band_color` is
-  currently unused).
-* Examples, README and vignette use `snake_palette(name, n = 5)` instead of
-  `snake_palettes$name`, so diverging palettes span the bundled 1-5 scales;
-  the README uses 5-point level labels to match the data and lists
-  `multi_snake()`. The vignette explains why to use each plot.
+  data.
 
 # snakeplot 0.3.0
 
